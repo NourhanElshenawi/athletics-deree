@@ -1,11 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: antony
- * Date: 5/30/16
- * Time: 3:31 PM
- */
-namespace Kourtis\Router;
+namespace Nourhan\Router;
 
 class Router
 {
@@ -60,7 +54,7 @@ class Router
                     //echo $key . ' => ' . $value; //See what the $path returns
 
                     //Instantiate Controller
-                    $controller = 'Kourtis\Controllers\\' . $this->_getController[$key];
+                    $controller = 'Nourhan\Controllers\\' . $this->_getController[$key];
                     $controller = new $controller();
 
                     //Call the appropriate method
@@ -79,7 +73,7 @@ class Router
                     //echo $key . ' => ' . $value; //See what the $path returns
 
                     //Instantiate Controller
-                    $controller = 'Kourtis\Controllers\\' . $this->_postController[$key];
+                    $controller = 'Nourhan\Controllers\\' . $this->_postController[$key];
                     $controller = new $controller();
 
                     //Call the appropriate method
