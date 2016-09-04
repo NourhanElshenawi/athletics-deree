@@ -11,7 +11,8 @@ $router = new Router\Router();
 
 
 //$router->get('/', 'MainController', 'home');
-$router->get('/test', 'MainController', 'index');
+$router->get('/', 'MainController', 'index');
+$router->get('/fitnessProgram', 'MainController', 'fitnessProgram');
 $router->get('/', 'MainController', 'test');
 //$router->get('/admin', 'MainController', 'admin');
 //$router->get('/admin2', 'MainController', 'admin2');

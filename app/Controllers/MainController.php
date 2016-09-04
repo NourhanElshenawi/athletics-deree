@@ -12,14 +12,16 @@ class MainController extends Controller
         parent::__construct();
     }
 
+
+
     public function index()
     {
-        echo $this->twig->render('test2.twig');
+        echo $this->twig->render('index.twig');
     }
 
-    public function test()
+    public function fitnessProgram()
     {
-        echo $this->twig->render('index.twig');
+        echo $this->twig->render('fitnessProgram.twig');
     }
 
     public function home()
