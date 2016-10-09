@@ -1,0 +1,33 @@
+{% extends "master.twig" %}
+
+{% block title %} Log-in {% endblock title %}
+
+{% block content %}
+
+<center>
+    <div style="background-color: #a1a4a7; border-radius: 25px; height: 400px; padding: 50px; margin-bottom: 20px;">
+    <form style="">
+        <h1>Login Form</h1>
+        <div>
+            <input type="text" class="form-control" placeholder="Username" required="" style="margin: 3px; width: 600px; height: 60px; background-color: #333367;" />
+        </div>
+        <div>
+            <input type="password" class="form-control" placeholder="Password" required="" style="margin: 3px; width: 600px; height: 60px; background-color: #333367;" />
+        </div>
+
+        <br>
+        <div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" style="border-radius: 25px; width: 200px; height: 60px;">Login</button>
+            <a href="#" style="font-weight: bold;">Lost your password?</a>
+        </div>
+
+        <div class="clearfix"></div>
+    </form>
+    </div>
+</center>
+
+{% endblock content %}
+
+{% block info %}
+    {{ include('info.twig') }}
+{% endblock info %}

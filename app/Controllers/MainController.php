@@ -12,11 +12,14 @@ class MainController extends Controller
         parent::__construct();
     }
 
-
-
     public function index()
     {
         echo $this->twig->render('index.twig');
+    }
+
+    public function calendar()
+    {
+        echo $this->twig->render('calendar.twig');
     }
 
     public function fitnessProgram()
@@ -40,15 +43,9 @@ class MainController extends Controller
         echo $this->twig->render('admin.twig', array('carouselImages'=> $carouselImages, 'allCarouselImages'=> $allCarouselImages));
     }
 
-    public function admin2()
+    public function login()
     {
-        var_dump($_POST);
-
-
-        $DB = new DB();
-        $carouselImages = $DB->getCarousel();
-        $notIncludedCarouselImages = $DB->getNotIncludedCarousel();
-        echo $this->twig->render('admin2.twig', array('carouselImages'=> $carouselImages, 'notIncludedCarouselImages'=> $notIncludedCarouselImages));
+        echo $this->twig->render('login.twig');
     }
 
     public function car()
