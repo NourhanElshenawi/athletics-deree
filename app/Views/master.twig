@@ -2,10 +2,11 @@
 <html lang="en-US" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#" itemscope="itemscope" itemtype="http://schema.org/WebPage" class="">
 <head>
 
+    {{ include('head.twig') }}
     {% block head %}
-        {{ include('head.twig') }}
-        <title> {% block title %}{% endblock %} </title>
     {% endblock %}
+        <title> {% block title %}{% endblock %} </title>
+
 
 </head>
 <body class="home page page-id-6 page-template page-template-template-homepage page-template-template-homepage-php wp-custom-logo _masterslider _msp_version_2.29.0 siteorigin-panels siteorigin-panels-home fully-background group-blog no-wc-breadcrumb storefront-full-width-content right-sidebar page-home yesp-youtube-iframe-ready mg_new_loader">
@@ -27,8 +28,11 @@
         {{ include('nav.twig') }}
     {% endblock nav %}
 
-    {% block content %}
-    {% endblock content %}
+    <div style="padding: 2%">
+        {% block content %}
+        {% endblock content %}
+    </div>
+
 
     {% block info %}
     {% endblock info %}

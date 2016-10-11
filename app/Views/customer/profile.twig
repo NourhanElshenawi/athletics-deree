@@ -1,0 +1,91 @@
+{% extends "master.twig" %}
+
+
+{% block head %}
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    {#<link href="css/font-awesome.min.css" rel="stylesheet">#}
+    <!-- NProgress -->
+    <link href="css/nprogress.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="css/custom.min.css" rel="stylesheet">
+
+{% endblock head %}
+
+    {% block title %} Profile{% endblock title %}
+
+
+{#{% endblock head %}#}
+
+{% block content %}
+   
+    <div>
+        <img src="http://placehold.it/300x300" alt="">
+        <p style="font-weight: bold; font-size: large; padding: 0;">Name: </p>
+        <p style="font-weight: bold; font-size: large; padding: 0;">ID: </p>
+    </div>
+
+    <div style="width: 50%; height: 50%;">
+        <canvas id="mybarChart">
+
+        </canvas>
+    </div>
+
+    <!-- jQuery -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="js/bootstrap.js"></script>
+    <!-- FastClick -->
+    <script src="js/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="js/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="js/Chart.min.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="js/custom.min.js"></script>
+
+
+    <script>
+        Chart.defaults.global.legend = {
+            enabled: false
+        };
+
+        var ctx = document.getElementById("mybarChart");
+        var mybarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [{
+                    label: '# of Votes',
+                    backgroundColor: "#26B99A",
+                    data: [51, 30, 40, 28, 92, 50, 45]
+                }, {
+                    label: '# of Votes',
+                    backgroundColor: "#03586A",
+                    data: [41, 56, 25, 48, 72, 34, 12]
+                }]
+            },
+
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+{% endblock content %}
+
+{% block info %}
+    {{ include('info.twig') }}
+{% endblock info %}
+
+
+
+

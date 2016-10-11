@@ -1,8 +1,14 @@
 <?php
 namespace Nourhan\Controllers;
 
+
+
+
+
+
 use Nourhan\Database\DB;
 use Nourhan\Services\Upload;
+use Nourhan\ReCaptcha;
 use Nourhan\Services\ChangeCarousel;
 
 class MainController extends Controller
@@ -48,6 +54,36 @@ class MainController extends Controller
         echo $this->twig->render('login.twig');
     }
 
+    public function adminLogin()
+    {
+// your secret key
+        $secret = "6Lel3ggUAAAAACT3Xz7dfhUhvFGALwDrXgtwFeON";
+// empty response
+        $response = null;
+// check secret key
+        $reCaptcha = new ReCaptcha\ReCaptcha($secret);
+
+// if submitted check response
+        if ($_POST["g-recaptcha-response"]) {
+            $response = $reCaptcha->verifyResponse(
+                $_SERVER["REMOTE_ADDR"],
+                $_POST["g-recaptcha-response"]
+            );
+        }
+
+        if ($response != null && $response->success) {
+            //REDIRECT TO PROFILE
+            echo "Hi " . $_POST["username"] . " (" . $_POST["password"] . "), thanks for submitting the form!";
+        } else {
+            //REDIRECT TO ERROR'
+            echo "not submitted";
+        }
+    }
+
+    public function profile()
+    {
+        echo $this->twig->render('customer/profile.twig');
+    }
     public function car()
     {
         var_dump($_POST);
