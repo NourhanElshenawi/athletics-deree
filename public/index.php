@@ -2,17 +2,25 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../app/setup.php';
 
+require_once __DIR__ . '/../app/recaptchalib.php';
+
+
+
 use Nourhan\Controllers;
 use Nourhan\Router;
+//use Nourhan\ReCaptcha;
 
 $router = new Router\Router();
 
 
 
-
-//$router->get('/', 'MainController', 'home');
-$router->get('/test', 'MainController', 'index');
-$router->get('/', 'MainController', 'test');
+$router->get('/', 'MainController', 'index');
+$router->get('/login', 'MainController', 'login');
+$router->post('/admin/login', 'MainController', 'adminLogin');
+$router->get('/calendar', 'MainController', 'calendar');
+$router->get('/fitnessProgram', 'MainController', 'fitnessProgram');
+$router->get('/profile', 'MainController', 'profile');
+//$router->get('/', 'MainController', 'test');
 //$router->get('/admin', 'MainController', 'admin');
 //$router->get('/admin2', 'MainController', 'admin2');
 //$router->post('/admin2', 'MainController', 'admin2');

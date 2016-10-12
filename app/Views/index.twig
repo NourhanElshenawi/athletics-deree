@@ -1,6 +1,6 @@
 {% extends "master.twig" %}
 
-{% block title %} Kourtaros {% endblock title %}
+{% block title %} Home {% endblock title %}
 
 {% block content %}
     {#<div>#}
@@ -10,9 +10,12 @@
     {#</div>#}
     {#<p>HIIIIIIIIIIIIII</p>#}
 
-    <div id='calendar'></div>
 
 {% endblock content %}
+
+{% block info %}
+    {{ include('info.twig') }}
+{% endblock info %}
 
 
 

@@ -1,8 +1,14 @@
 <?php
 namespace Nourhan\Controllers;
 
+
+
+
+
+
 use Nourhan\Database\DB;
 use Nourhan\Services\Upload;
+use Nourhan\ReCaptcha;
 use Nourhan\Services\ChangeCarousel;
 
 class MainController extends Controller
@@ -14,12 +20,17 @@ class MainController extends Controller
 
     public function index()
     {
-        echo $this->twig->render('test2.twig');
+        echo $this->twig->render('index.twig');
     }
 
-    public function test()
+    public function calendar()
     {
-        echo $this->twig->render('index.twig');
+        echo $this->twig->render('calendar.twig');
+    }
+
+    public function fitnessProgram()
+    {
+        echo $this->twig->render('fitnessProgram.twig');
     }
 
     public function home()
@@ -38,17 +49,41 @@ class MainController extends Controller
         echo $this->twig->render('admin.twig', array('carouselImages'=> $carouselImages, 'allCarouselImages'=> $allCarouselImages));
     }
 
-    public function admin2()
+    public function login()
     {
-        var_dump($_POST);
-
-
-        $DB = new DB();
-        $carouselImages = $DB->getCarousel();
-        $notIncludedCarouselImages = $DB->getNotIncludedCarousel();
-        echo $this->twig->render('admin2.twig', array('carouselImages'=> $carouselImages, 'notIncludedCarouselImages'=> $notIncludedCarouselImages));
+        echo $this->twig->render('login.twig');
     }
 
+    public function adminLogin()
+    {
+// your secret key
+        $secret = "6Lel3ggUAAAAACT3Xz7dfhUhvFGALwDrXgtwFeON";
+// empty response
+        $response = null;
+// check secret key
+        $reCaptcha = new ReCaptcha\ReCaptcha($secret);
+
+// if submitted check response
+        if ($_POST["g-recaptcha-response"]) {
+            $response = $reCaptcha->verifyResponse(
+                $_SERVER["REMOTE_ADDR"],
+                $_POST["g-recaptcha-response"]
+            );
+        }
+
+        if ($response != null && $response->success) {
+            //REDIRECT TO PROFILE
+            echo "Hi " . $_POST["username"] . " (" . $_POST["password"] . "), thanks for submitting the form!";
+        } else {
+            //REDIRECT TO ERROR'
+            echo "not submitted";
+        }
+    }
+
+    public function profile()
+    {
+        echo $this->twig->render('customer/profile.twig');
+    }
     public function car()
     {
         var_dump($_POST);
