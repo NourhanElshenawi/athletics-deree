@@ -33,12 +33,42 @@ class MainController extends Controller
         echo $this->twig->render('fitnessProgram.twig');
     }
 
-    public function home()
+    public function profileStats()
     {
-        $DB = new DB();
-        $carouselImages = $DB->getCarousel();
+//        $DB = new DB();
+//        $carouselImages = $DB->getCarousel();
 
-        echo $this->twig->render('home.twig', array('carouselImages'=> $carouselImages));
+      /*  $date = "2016-06-09 00:38:47";
+        //below i get the year, month and the rest of the DateTime format (day and time)
+//        $array = explode('-',$date,3);
+        //below i add the day to the date array
+//        $temp = $array[2];
+//        $array[2] = explode(' ',$array[2],2)[0];
+
+//        echo "date </br>";
+//        var_dump($date);
+//        echo "split array </br>";
+//        var_dump($array);
+//        echo "complete </br>";
+//        var_dump($array);
+//        $monthNum  = $array[1];
+//        $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
+//        $monthName = $dateObj->format('F'); // March
+
+*/
+//        $array[1] = $monthName;
+//        var_dump($array);
+
+        $array = array("January", "January", "January", "February", "February", "March");
+        $vals = array_count_values($array);
+        var_dump($vals);
+        for ($x=0; $x<count($array);){
+//            echo $array[$x];
+//            echo "</br>";
+            $x++;
+        }
+
+        echo $this->twig->render('customer/profile.twig', array('vals'=>$vals));
     }
 
     public function admin()
