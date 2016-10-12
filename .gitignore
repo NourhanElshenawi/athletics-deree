@@ -1,3 +1,5 @@
 /vendor/
 .idea
 /TemplatePagesDemo/
+node_modules/
+public/bower_components/
