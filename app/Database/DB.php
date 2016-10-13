@@ -23,7 +23,7 @@ class DB
      * @param string $password
      */
 
-    public function __construct($serverName = "127.0.0.1", $port = "33060", $dbName = "project1",$username = "homestead", $password = "secret" )
+    public function __construct($serverName = "127.0.0.1", $port = "33060", $dbName = "dereeAthletics",$username = "homestead", $password = "secret" )
     {
         $this->serverName = $serverName;
         $this->port = $port;
@@ -54,16 +54,38 @@ class DB
     }
 
 
-    public function uploadCarousel($name)
+    public function getClasses()
     {
-        $stmt = $this->conn->prepare("insert into project1.carousel(name) VALUES (?)");
-        try{
-            $stmt->bindValue(1,$name);
-            $stmt->execute();
-            echo "DONE!";
-        }   catch(Exception $e){
-                              echo "ERROR";
-        }
+        $stmt = $this->conn->prepare("select * from dereeAthletics.classes");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function getInstructors()
+    {
+        $stmt = $this->conn->prepare("select * from dereeAthletics.instructors");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function getInstructor($id)
+    {
+        $stmt = $this->conn->prepare("select * from dereeAthletics.instructors WHERE id=?");
+        $stmt->bindValue(1,$id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
+
+        return $result;
     }
 
     public function getCarousel()

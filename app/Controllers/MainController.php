@@ -95,79 +95,31 @@ class MainController extends Controller
         echo $this->twig->render('carousel.twig', array('carouselImages'=> $carouselImages, 'notIncludedCarouselImages'=> $notIncludedCarouselImages));
     }
 
-     //////////////////////
-    public function includeInCarousel()
+    public function schedule()
     {
-        echo "HIIII";
-//        $arr = $_POST['inc'];
-        $incl = $_GET['key1'];
-        echo ".........";
-//        var_dump($_GET);
-        $position = $_GET['position'];
-        echo "ID: ".$incl;
-        echo "POSITION".$position;
-//        echo "ID: "+$incl;
-//        echo "POSITION: "+$position;
         $DB = new DB();
-            $DB->includeInCarousel($incl, $position);
+        $classes = $DB->getClasses();
 
-        $carouselImages = $DB->getCarousel();
-        $notIncludedCarouselImages = $DB->getNotIncludedCarousel();
-        echo $this->twig->render('admin2.twig', array('carouselImages'=> $carouselImages, 'notIncludedCarouselImages'=> $notIncludedCarouselImages));
-    }
-   /////////////////////////////
+        foreach ($classes as $key=>$class ){
 
+            $temp = ($class['currentCapacity']*100)/$class['capacity'];
 
-    //////////////////////
-    public function removeFromCarousel()
-    {
-        echo "RIIII";
-        $notIncl = $_GET['key1'];
-
-        echo ".........";
-//        echo "ID: ".$notIncl;
-//        echo "POSITION: "+$position;
-        $DB = new DB();
-        $DB->removeFromCarousel($notIncl);
-
-        $carouselImages = $DB->getCarousel();
-        $notIncludedCarouselImages = $DB->getNotIncludedCarousel();
-        echo $this->twig->render('admin2.twig', array('carouselImages'=> $carouselImages, 'notIncludedCarouselImages'=> $notIncludedCarouselImages));
-    }
-    /////////////////////////////
-
-
-    public function deleteFromCarousel()
-    {
-        echo "DIIII";
-        $del = $_GET['key1'];
-
-        echo ".........";
-//        echo "ID: ".$notIncl;
-//        echo "POSITION: "+$position;
-        $DB = new DB();
-        $DB->deleteCarouselImage($del);
-
-        $carouselImages = $DB->getCarousel();
-        $notIncludedCarouselImages = $DB->getNotIncludedCarousel();
-        echo $this->twig->render('admin2.twig', array('carouselImages'=> $carouselImages, 'notIncludedCarouselImages'=> $notIncludedCarouselImages));
-    }
-    /////////////////////////////
-
-    public function upload()
-    {
-        if(isset($_POST['submit'])){
-            $upload = new Upload();
-        }  else {
-            if($_POST['included'] == "Included"){
-                $included = 1;
-            } else $included = 0;
-            $DB = new DB();
-            $DB->updateCarousel($_POST['id'], $_POST['position'], $included) ;
+            $classes[$key]['currentCapacity'] = $temp;
         }
 
-        $carouselImages = $DB->getCarousel();
-        $allCarouselImages = $DB->getAllCarousel();
-        echo $this->twig->render('admin.twig', array('carouselImages'=> $carouselImages, 'allCarouselImages'=> $allCarouselImages));
+
+        $instructors = array();
+
+        foreach ($classes as $class ){
+
+            $id = "".$class["instructorID"]."";
+            $instructors[]= $DB->getInstructor($id);
+
     }
+
+        var_dump($instructors);
+        echo $this->twig->render('customer/editSchedule.twig', array('classes'=> $classes, 'instructors'=> $instructors));
+    }
+
+
 }

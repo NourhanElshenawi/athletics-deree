@@ -2459,7 +2459,7 @@ textarea {
 body {
     background-color: #333367!important;
     overflow-x: hidden;
-    color:#fff!important;
+    /*color:#fff!important;*/
 }
 .clearfix::after {
     clear: both;

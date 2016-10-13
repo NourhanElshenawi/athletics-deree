@@ -37,9 +37,9 @@
             padding: 0 !important;
         }
     </style>
-    <link rel="stylesheet" href="acg/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" id="mgom-overlays-css-css" href="acg/css/overlays.css" type="text/css" media="all">
-    <link rel="stylesheet" id="fontawesome-css" href="acg/css/mediagrid-font-awesome/css/font-awesome.min.css" type="text/css" media="all">
+    <link rel="stylesheet" id="fontawesome-css" href="css/font-awesome.min.css" type="text/css" media="all">
     <link rel="stylesheet" id="mg-custom-css-css" href="acg/css/mediagrid-custom.css" type="text/css" media="all">
     <link rel="stylesheet" id="google-fonts-open-sans-css" href="//fonts.googleapis.com/css?family=Open+Sans%3A400%2C700&amp;ver=4.5.2" type="text/css" media="all">
     <link rel="stylesheet" id="ytp-icons-css" href="acg/css/icons.min.css" type="text/css" media="all">
@@ -264,23 +264,23 @@
     <style type="text/css">
     </style>
     <script>var $ = jQuery.noConflict();
-        $(document).ready(function () {
+        jQuery(document).ready(function () {
 
-            $('.hide').click(function () {
+            jQuery('.hide').click(function () {
                 '(show)' == $(this).text() ? $(this).text('(hide)')  : $(this).text('(show)'),
                         $(this).parent().next('.showHide').toggle('slow')
             }),
-                    $('.here').click(function () {
+                    jQuery('.here').click(function () {
                         '(Click Here)' == $(this).text() ? $(this).text('(Hide)')  : $(this).text('(Click Here)'),
                                 $(this).parent().next('.showHide').toggle('slow')
                     })
-            $(".tabAnchor").click(
+            jQuery(".tabAnchor").click(
                     function() {
                         $(".tab1").css("display",
                                 "none"), $(".tab2").toggle(
                                 "slow")
                     })
-            $(".tabAnchor2").click(
+            jQuery(".tabAnchor2").click(
                     function() {
                         $(".tab2").css("display",
                                 "none"), $(".tab1").toggle(
@@ -288,22 +288,22 @@
                     })
 
             //Change the Course Schedules
-            $('.group').hide();
-            $('#option1').show();
-            $('#selectMe').change(function () {
-                $('.group').hide();
-                $('#'+$(this).val()).show();
+            jQuery('.group').hide();
+            jQuery('#option1').show();
+            jQuery('#selectMe').change(function () {
+                jQuery('.group').hide();
+                jQuery('#'+jQuery(this).val()).show();
             })
 
             if ((document.location.pathname.indexOf("/current-students/student-services/student-life/") == 0) || (document.location.pathname.indexOf("/current-students/student-services/career-services/") == 0) || (document.location.pathname.indexOf("/current-students/registrar-academic-services/") == 0) || (document.location.pathname.indexOf("/current-students/financial-assistance/undergraduate-financial-assistance/") == 0) || (document.location.pathname.indexOf("/current-students/financial-assistance/graduate-financial-assistance/") == 0) || (document.location.pathname.indexOf("/current-students/financial-services/tuition-and-fees/tuition-fees-undergraduate-students/") == 0) ||(document.location.pathname.indexOf("/current-students/financial-services/tuition-and-fees/tuition-fees-graduate-students") == 0) ||(document.location.pathname.indexOf("/current-students/textbooks/") == 0) ||(document.location.pathname.indexOf("/current-students/outbound-study-abroad/") == 0) ||(document.location.pathname.indexOf("/admissions/undergraduate-admissions/greek-students/") == 0)) {
                 // script body here
                 var src = "http://www.acg.edu/wp-content/uploads/2016/06/dereelogo.png";
-                $(".custom-logo").attr("src", src);
-                $(".headerright").css("margin-top", "-120px");
+                jQuery(".custom-logo").attr("src", src);
+                jQuery(".headerright").css("margin-top", "-120px");
             }
 
             $(document).on('click', '.mg_item_content .yesp-fullscreen', function() {
-                $('body').toggleClass('mejs-fullscreen');
+                jQuery('body').toggleClass('mejs-fullscreen');
             });
 
         });</script>
@@ -381,7 +381,7 @@
                     });
                 },1000);
             });
-            jQuery('body').on('click','#cboxLoadedContent img',function(){
+            $('body').on('click','#cboxLoadedContent img',function(){
                 setTimeout(function(){
                     var src = jQuery('img.cboxPhoto').attr('src');
                     jQuery('a.cboxElement').each(function(){
@@ -481,13 +481,21 @@ document.write('<scr'+'ipt src="HTTP://bs.serving-sys.com/Serving/ActivityServer
     <meta charset='utf-8' />
     <link href='fc/fullcalendar.css' rel='stylesheet' />
     <link href='fc/fullcalendar.print.css' rel='stylesheet' media='print' />
-    <script src='fc/moment.min.js'></script>
-    <script src='fc/jquery.js'></script>
-    <script src='fc/fullcalendar.js'></script>
+    {#<script src='fc/jquery.js'></script>#}
+    {#<script src='fc/moment.min.js'></script>#}
+    <script>jQuery.noConflict();</script>
+    {#<script src='fc/fullcalendar.js'></script>#}
+
+    <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/moment.min.js'></script>
+    <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery.min.js'></script>
+    <script src="http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery-ui.custom.min.js"></script>
+    <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/fullcalendar.min.js'></script>
+
     {#<link href='fc/jquery-ui.theme.min.css' rel='stylesheet' />#}
     <script>
-        $(document).ready(function() {
-            $('#calendar').fullCalendar({
+        jQuery.noConflict();
+        jQuery(document).ready(function() {
+            jQuery('#calendar').fullCalendar({
                 defaultDate: '2016-06-12',
                 editable: true,
                 theme: false,

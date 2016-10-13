@@ -1,0 +1,175 @@
+{% extends "master.twig" %}
+
+{% block head %}
+
+    {#<!-- Bootstrap -->#}
+    {#<link href="css/bootstrap.min.css" rel="stylesheet">#}
+    {#<!-- Font Awesome -->#}
+    {#<link href="css/font-awesome.min.css" rel="stylesheet">#}
+    {#<!-- NProgress -->#}
+    {#<link href="css/nprogress.css" rel="stylesheet">#}
+    {#<!-- iCheck -->#}
+    {#<link href="css/green.css" rel="stylesheet">#}
+
+    {#<!-- Custom Theme Style -->#}
+    {#<link href="css/custom.min.css" rel="stylesheet">#}
+
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="css/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="css/green.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="css/custom.min.css" rel="stylesheet">
+    <style>
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+{% endblock head %}
+
+{% block title %} Edit Schedule {% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Classes</h2>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    <p>Simple table with project listing with progress and editing options</p>
+
+                    <!-- start project list -->
+                    <table class="table table-striped projects">
+                        <thead>
+                        <tr>
+                            <th style="width: 1%">#</th>
+                            <th style="width: 20%">Project Name</th>
+                            <th>Team Members</th>
+                            <th>Project Progress</th>
+                            <th>Status</th>
+                            <th style="width: 20%">#Edit</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+
+                        {% for class in classes %}
+                            <tr>
+
+                                <li>{{ user.username|e }}</li>
+
+
+                                <td>{{ loop.index }}</td>
+                                <td>
+                                    <a>{{ class.name }}</a>
+                                    <br />
+                                    <small>Instructor ID: {{ class.instructorID }}</small>
+                                            {{ instructors.loop.parent.loop.index0.name }}
+                                </td>
+                                <td>
+                                    <ul class="list-inline">
+                                        <li>
+                                            <img src="images/user.png" class="avatar" alt="Avatar">
+                                        </li>
+                                        <li>
+                                            <img src="images/user.png" class="avatar" alt="Avatar">
+                                        </li>
+                                        <li>
+                                            <img src="images/user.png" class="avatar" alt="Avatar">
+                                        </li>
+                                        <li>
+                                            <img src="images/user.png" class="avatar" alt="Avatar">
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td class="project_progress">
+                                    <div class="progress progress_sm">
+                                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{ class.currentCapacity }}"></div>
+                                    </div>
+                                    <small>{{ class.currentCapacity }}% Complete</small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-success btn-xs">Success</button>
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                    <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                    <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+
+                        </tbody>
+                    </table>
+                    <!-- end project list -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {#<script>jQuery.noConflict();</script>#}
+    {#<!-- jQuery -->#}
+    {#<script src="js/jquery.min.js"></script>#}
+    {#<script>jQuery.noConflict();</script>#}
+    {#<!-- Bootstrap -->#}
+    {#<script src="js/bootstrap.js"></script>#}
+    {#<script>jQuery.noConflict();</script>#}
+    {#<!-- FastClick -->#}
+    {#<script src="js/fastclick.js"></script>#}
+    {#<script>jQuery.noConflict();</script>#}
+    {#<!-- NProgress -->#}
+    {#<script src="js/nprogress.js"></script>#}
+    {#<!-- bootstrap-progressbar -->#}
+    {#<script>jQuery.noConflict();</script>#}
+    {#<script src="js/bootstrap-progressbar.min.js"></script>#}
+    {#<script>jQuery.noConflict();</script>#}
+    {#<!-- Custom Theme Scripts -->#}
+    {#<script src="js/custom.min.js"></script>#}
+
+
+
+
+
+
+
+
+<!-- jQuery -->
+<script src="js/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="js/fastclick.js"></script>
+<!-- NProgress -->
+<script src="js/nprogress.js"></script>
+<!-- bootstrap-progressbar -->
+<script>jQuery.noConflict();</script>
+<script src="js/bootstrap-progressbar.js"></script>
+
+<!-- Custom Theme Scripts -->
+<script>jQuery.noConflict();</script>
+<script src="js/custom.min.js"></script>
+
+
+
+
+{% endblock content %}
+
+{% block info %}
+{{ include('info.twig') }}
+{% endblock info %}
+
