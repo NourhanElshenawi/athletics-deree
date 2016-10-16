@@ -95,7 +95,9 @@ class MainController extends Controller
         echo $this->twig->render('carousel.twig', array('carouselImages'=> $carouselImages, 'notIncludedCarouselImages'=> $notIncludedCarouselImages));
     }
 
-    public function schedule()
+    /***********ADMIN************/
+
+    public function editSchedule()
     {
         $DB = new DB();
         $classes = $DB->getClasses();
@@ -117,9 +119,25 @@ class MainController extends Controller
 
     }
 
-        var_dump($instructors);
-        echo $this->twig->render('customer/editSchedule.twig', array('classes'=> $classes, 'instructors'=> $instructors));
+        echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'instructors'=> $instructors));
     }
 
+
+    public function editClass()
+    {
+//        var_dump()
+
+        if(isset($_GET['edit'])){
+            echo "edit working!!!";
+        }
+        elseif (isset($_GET['view'])){
+            echo "view working!!!";
+        }
+        elseif (isset($_GET['delete'])){
+            echo "delete working!!!";
+        }
+
+        echo $this->twig->render('admin/editClass.twig');
+    }
 
 }

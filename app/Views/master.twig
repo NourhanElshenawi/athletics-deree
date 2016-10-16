@@ -9,6 +9,12 @@
         <title> {% block title %}{% endblock %} </title>
 
 
+    <style>
+        body{
+            color: white;
+        }
+
+    </style>
 </head>
 
 
@@ -31,10 +37,10 @@
         {{ include('nav.twig') }}
     {% endblock nav %}
 
-    {#<div style="padding: 2%">#}
+    <div style="padding: 2%;">
         {% block content %}
         {% endblock content %}
-    {#</div>#}
+    </div>
 
 
     {% block info %}

@@ -2636,7 +2636,7 @@ h6 {
     clear: both;
     font-weight: 700;
     margin: 0 0 .53em;
-    color: #fff!important;
+    /*color: #fff!important;*/
 }
 h1 a,
 h2 a,

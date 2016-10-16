@@ -15,23 +15,16 @@ $router = new Router\Router();
 
 $router->get('/', 'MainController', 'index');
 $router->get('/login', 'MainController', 'login');
-$router->post('/admin/login', 'MainController', 'adminLogin');
+
 $router->get('/calendar', 'MainController', 'calendar');
 $router->get('/fitnessProgram', 'MainController', 'fitnessProgram');
 $router->get('/profile', 'MainController', 'profile');
-$router->get('/editschedule', 'MainController', 'schedule');
-//$router->get('/', 'MainController', 'test');
-//$router->get('/admin', 'MainController', 'admin');
-//$router->get('/admin2', 'MainController', 'admin2');
-//$router->post('/admin2', 'MainController', 'admin2');
-//$router->get('/car', 'MainController', 'car');
-//$router->post('/car', 'MainController', 'car');
 
-//$router->post('/admin', 'MainController', 'upload');
+/********ADMIN**********/
 
-//$router->get('/test', 'MainController', 'includeInCarousel');
-//$router->get('/remove', 'MainController', 'removeFromCarousel');
-//$router->get('/delete', 'MainController', 'deleteFromCarousel');
+$router->post('/admin/login', 'MainController', 'adminLogin');
+$router->get('/editschedule', 'MainController', 'editSchedule');
+$router->get('/editclass', 'MainController', 'editClass');
 
 ////See inside $router
 //echo "<pre>";
