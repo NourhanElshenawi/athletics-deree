@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-US" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#" itemscope="itemscope" itemtype="http://schema.org/WebPage" class="">
+
 <head>
 
     {{ include('head.twig') }}
@@ -9,6 +10,8 @@
 
 
 </head>
+
+
 <body class="home page page-id-6 page-template page-template-template-homepage page-template-template-homepage-php wp-custom-logo _masterslider _msp_version_2.29.0 siteorigin-panels siteorigin-panels-home fully-background group-blog no-wc-breadcrumb storefront-full-width-content right-sidebar page-home yesp-youtube-iframe-ready mg_new_loader">
 <!-- Google Tag Manager -->
 <noscript>&lt;iframe src="//www.googletagmanager.com/ns.html?id=GTM-5563K6"
@@ -22,16 +25,16 @@
 
 
 
-<div id="page" class="hfeed site">
+{#<div id="page" class="hfeed site">#}
 
     {% block nav %}
         {{ include('nav.twig') }}
     {% endblock nav %}
 
-    <div style="padding: 2%">
+    {#<div style="padding: 2%">#}
         {% block content %}
         {% endblock content %}
-    </div>
+    {#</div>#}
 
 
     {% block info %}
@@ -224,4 +227,6 @@ Remarketing tags may not be associated with personally identifiable information 
         <div style="clear: left;">
             <div id="cboxBottomLeft" style="float: left;">
 
-            </div><div id="cboxBottomCenter" style="float: left;"></div><div id="cboxBottomRight" style="float: left;"></div></div></div><div style="position: absolute; width: 9999px; visibility: hidden; display: none; max-width: none;"></div></div><div class="evo_lightbox evo_popup"><div class="evo_content_in"><div class="evo_content_inin"><div class="evo_lightbox_content"><a class="evolbclose">X</a><div class="evo_lightbox_body eventon_list_event evo_pop_body evcal_eventcard"></div></div></div></div></div><script type="text/javascript" id="mediaelement-js" src="http://www.acg.edu/wp-content/plugins/media-grid/js/mediaelement/mediaelement-and-player.min.js"></script></body></html>
+            </div><div id="cboxBottomCenter" style="float: left;"></div><div id="cboxBottomRight" style="float: left;"></div></div></div><div style="position: absolute; width: 9999px; visibility: hidden; display: none; max-width: none;"></div></div><div class="evo_lightbox evo_popup"><div class="evo_content_in"><div class="evo_content_inin"><div class="evo_lightbox_content"><a class="evolbclose">X</a><div class="evo_lightbox_body eventon_list_event evo_pop_body evcal_eventcard"></div></div></div></div></div><script type="text/javascript" id="mediaelement-js" src="http://www.acg.edu/wp-content/plugins/media-grid/js/mediaelement/mediaelement-and-player.min.js"></script>
+</body>
+</html>
