@@ -105,8 +105,10 @@ class MainController extends Controller
         foreach ($classes as $key=>$class ){
 
             $temp = ($class['currentCapacity']*100)/$class['capacity'];
+            $temp2 = $class['currentCapacity'];
 
-            $classes[$key]['currentCapacity'] = $temp;
+            $classes[$key]['currentCapacityPercentage'] = $temp;
+            $classes[$key]['currentCapacity'] = $temp2;
         }
 
 
