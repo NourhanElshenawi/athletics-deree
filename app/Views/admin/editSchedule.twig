@@ -32,10 +32,11 @@
             margin: 0;
             padding: 0;
         }
+
     </style>
 
     {#<script src="js/jquery.js"></script>#}
-    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.js"></script>
 
 {% endblock head %}
 
@@ -47,6 +48,22 @@
             <div class="x_panel">
                 <div class="x_title">
                     <h2>Classes</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                <i class="fa fa-wrench"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Settings 1</a>
+                                </li>
+                                <li><a href="#">Settings 2</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
 
                     <div class="clearfix"></div>
                 </div>
@@ -135,6 +152,57 @@
                                 </td>
                             </tr>
                         {% endfor %}
+                        <tr>
+                            <td colspan="6" style="border: none;">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>Stripped table <small>Stripped table subtitle</small></h2>
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>
+                                            <li class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="#">Settings 1</a>
+                                                    </li>
+                                                    <li><a href="#">Settings 2</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                            </li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Duration</th>
+                                                <th>Start Time</th>
+                                                <th>End Time</th>
+                                                <th>Max. Capacity</th>
+                                                <th>Current Capacity</th>
+                                                <th>Location</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <th scope="row">{{ class.duration }}</th>
+                                                <td>{{ class.startTime }}</td>
+                                                <td>{{ class.endTime }}</td>
+                                                <td>@{{ class.capacity }}</td>
+                                                <td>@{{ class.currentCapacity }}</td>
+                                                <td>@{{ class.location }}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
 
 
@@ -167,7 +235,39 @@
     {#<script src="js/custom.min.js"></script>#}
 
 
+    <script>
+        jQuery(document).ready(function() {
+            console.log("HIII");
 
+//            jQuery('.x_content').toggle();
+
+            jQuery('.collapse-link').click(function() {
+                var $BOX_PANEL = jQuery(this).closest('.x_panel'),
+                        $ICON = jQuery(this).find('i'),
+                        $BOX_CONTENT = $BOX_PANEL.find('.x_content');
+
+                if ($BOX_PANEL.attr('style')) {
+                    $BOX_CONTENT.slideToggle(200, function(){
+                        $BOX_PANEL.removeAttr('style');
+                    });
+                } else {
+                    $BOX_CONTENT.slideToggle(200);
+                    $BOX_PANEL.css('height', 'auto');
+                }
+
+                $ICON.toggleClass('fa-chevron-down');
+                $ICON.toggleClass('fa-chevron-up');
+
+
+            })  ;
+
+            jQuery('.close-link').click(function () {
+                var $BOX_PANEL = jQuery(this).closest('.x_panel');
+
+                $BOX_PANEL.remove();
+            });
+        });
+    </script>
 
 
 
