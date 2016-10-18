@@ -2,19 +2,6 @@
 
 {% block head %}
 
-    {#<!-- Bootstrap -->#}
-    {#<link href="css/bootstrap.min.css" rel="stylesheet">#}
-    {#<!-- Font Awesome -->#}
-    {#<link href="css/font-awesome.min.css" rel="stylesheet">#}
-    {#<!-- NProgress -->#}
-    {#<link href="css/nprogress.css" rel="stylesheet">#}
-    {#<!-- iCheck -->#}
-    {#<link href="css/green.css" rel="stylesheet">#}
-
-    {#<!-- Custom Theme Style -->#}
-    {#<link href="css/custom.min.css" rel="stylesheet">#}
-
-
     <!-- Bootstrap -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -34,7 +21,6 @@
         }
 
         .split {
-            /*width: 25%;*/
             display: inline-block;
         }
 
@@ -59,22 +45,6 @@
             <div class="x_panel2">
                 <div class="x_title">
                     <h2>Classes</h2>
-                    {#<ul class="nav navbar-right panel_toolbox">#}
-                        {#<li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a>#}
-                        {#</li>#}
-                        {#<li class="dropdown">#}
-                            {#<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">#}
-                                {#<i class="fa fa-wrench"></i></a>#}
-                            {#<ul class="dropdown-menu" role="menu">#}
-                                {#<li><a href="#">Settings 1</a>#}
-                                {#</li>#}
-                                {#<li><a href="#">Settings 2</a>#}
-                                {#</li>#}
-                            {#</ul>#}
-                        {#</li>#}
-                        {#<li><a class="close-link"><i class="fa fa-close"></i></a>#}
-                        {#</li>#}
-                    {#</ul>#}
 
                     <div class="clearfix"></div>
                 </div>
@@ -86,14 +56,13 @@
                     <table class="table table-striped projects">
                         <thead>
                         <tr>
-                            {#<th style="width: 1%">#</th>#}
+
                             <th>#</th>
                             <th>Project Name</th>
-                            {#<th style="width: 20%">Project Name</th>#}
+
                             <th>Team Members</th>
                             <th>Project Progress</th>
-                            {#<th>Status</th>#}
-                            {#<th style="width: 20%">#Edit</th>#}
+
                         </tr>
                         </thead>
                         <tbody>
@@ -201,7 +170,7 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr>
-                                                    {#<th scope="row">{{ class.duration }}</th>#}
+                                                    
                                                     <td>
                                                         {% for instructor in allInstructors %}
                                                             {% if class.instructorID == instructor.id %}
@@ -366,15 +335,9 @@
 
         function toggleUpdate($this) {
 
-//            alert(this);
-//            alert(jQuery(this).closest('.updateInfo').attr('id'));
-
-//            alert(jQuery('.edit').closest('.updateInfo').attr('id'));
-//            jQuery('.edit').closest('.updateInfo').css('display','block');
             var $B = jQuery($this).closest('.x_content').closest('.x_content');
             console.log($B);
-//            jQuery($this).closest('.updateInfo').toggle();
-//            jQuery('.updateInfo').toggle();
+
         }
 
 
@@ -383,42 +346,13 @@
     <script>
         jQuery('.edit').click(function() {
 
-//            alert("boooo");
-//            console.log("edit clicked!");
-
             var $id = jQuery(this).attr('value');
-//            alert($id);
 
-//            if(jQuery(this).closest('.x_panel').css('display', 'none')) {
-//                alert("Not Expanded");
-//                jQuery(this).closest('.x_panel').slideToggle(200);
-//
-//            }
-
-
-//            jQuery('.updateInfo').slideToggle();
             jQuery(this).closest('.x_content').css('display','block');
             jQuery(this).closest('.x_content').css('style','');
 
-
-//            if (jQuery(this).closest('.x_panel').attr('style')) {
-//                jQuery(this).closest('.x_panel').slideToggle(200, function(){
-//                    jQuery(this).closest('.x_panel').removeAttr('style');
-//                });
-//            }
-
-
         });
-//        jQuery('#updateClass').click(function() {
-//
-//            alert("updating");
-////            console.log("edit clicked!");
-//
-//            var $id = jQuery(this).attr('value');
-//            alert($id);
-//
-//
-//        });
+
     </script>
 
 
