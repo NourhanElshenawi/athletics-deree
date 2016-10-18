@@ -88,6 +88,31 @@ class DB
         return $result;
     }
 
+
+    public function updateClass($id, $duration, $startTime, $capacity,$instructorID)
+    {
+        $stmt = $this->conn->prepare("update dereeAthletics.classes set duration = ?, startTime = ?, capacity = ?, instructorID = ?  WHERE id = ? ");
+
+//        duration' => string '50' (length=2)
+//  'startTime' => string '11:00' (length=5)
+//  'endTime' => string '' (length=0)
+//  'capacity' => string '10' (length=2)
+//  'location' => string 'studio 1' (length=8)
+//  'id' => string '1' (length=1)
+
+        try{
+            $stmt->bindValue(1, $duration);
+            $stmt->bindValue(2, $startTime);
+            $stmt->bindValue(3, $capacity);
+            $stmt->bindValue(4, $instructorID);
+            $stmt->bindValue(5, $id);
+            $stmt->execute();
+        } catch (Exception $e) {
+        }
+    }
+
+
+
     public function getCarousel()
     {
         $stmt = $this->conn->prepare("select * from project1.carousel WHERE included='1' ORDER by POSITION ASC ");

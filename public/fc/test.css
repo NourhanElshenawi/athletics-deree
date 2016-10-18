@@ -3585,11 +3585,11 @@ table tbody tr:nth-child(2n) td {
     text-indent: -10000px;
 }
 .tabAnchor, .tabAnchor2 { text-decoration:none!important; }
-input[type=text] { background:#fff!important; color:#A1A4A7!important;
+input[type=text] { background:#fff!important; color:black!important;
     /*border:1px solid #A1A4A7!important; */
 }
 .page article input[type=search] { background:#333367!important; color:#A1A4A7!important; border:1px solid #A1A4A7!important; }
-input[type=text]:focus { background:#333367!important; color:#A1A4A7!important; }
+input[type=text]:focus { background:#fff!important; color:#A1A4A7!important; }
 #new_user input[type="submit"], .bsearchform input[type="submit"] { background:#a8a9ad!important; }
 #new_user input[type="submit"]:focus, .bsearchform input[type="submit"]:focus, #new_user input[type="submit"]:hover, .bsearchform input[type="submit"]:hover { background:#a8a9ad!important; outline:none!important; }
 .eventon_fullcal p { font-family: 'cf_asty_stdregular'!important; }

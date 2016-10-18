@@ -101,6 +101,7 @@ class MainController extends Controller
     {
         $DB = new DB();
         $classes = $DB->getClasses();
+        $allInstructor = $DB->getInstructors();
 
         foreach ($classes as $key=>$class ){
 
@@ -121,25 +122,49 @@ class MainController extends Controller
 
     }
 
-        echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'instructors'=> $instructors));
+        echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'instructors'=> $instructors, 'allInstructors'=>$allInstructor));
     }
 
 
     public function editClass()
     {
-//        var_dump()
+//        var_dump($_POST);
 
-        if(isset($_GET['edit'])){
+        if(isset($_POST['edit'])){
             echo "edit working!!!";
         }
-        elseif (isset($_GET['view'])){
-            echo "view working!!!";
-        }
-        elseif (isset($_GET['delete'])){
-            echo "delete working!!!";
-        }
+//        elseif (isset($_GET['view'])){
+//            echo "view working!!!";
+//        }
+//        elseif (isset($_GET['delete'])){
+//            echo "delete working!!!";
+//        }
 
         echo $this->twig->render('admin/editClass.twig');
     }
+
+
+    public function updateClass()
+    {
+        var_dump($_POST);
+
+        $DB = new DB();
+        if($DB->updateClass($_POST['id'],$_POST['duration'],$_POST['startTime'],$_POST['capacity'], $_POST['instructor'])) {
+            echo "Success";
+    }
+
+//        if(isset($_POST['edit'])){
+//            echo "edit working!!!";
+//        }
+//        elseif (isset($_GET['view'])){
+//            echo "view working!!!";
+//        }
+//        elseif (isset($_GET['delete'])){
+//            echo "delete working!!!";
+//        }
+
+//        echo $this->twig->render('admin/editClass.twig');
+    }
+
 
 }

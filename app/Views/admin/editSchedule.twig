@@ -55,7 +55,7 @@
 
     <div class="row">
         {#<div class="col-md-12">#}
-            <div class="x_panel">
+            <div class="x_panel2">
                 <div class="x_title">
                     <h2>Classes</h2>
                     {#<ul class="nav navbar-right panel_toolbox">#}
@@ -99,62 +99,6 @@
 
 
                         {% for class in classes %}
-                            {#<form action="/editclass" method="get">#}
-                                {#<tr>#}
-                                    {#<td>{{ loop.index }}</td>#}
-                                    {#<td>#}
-                                        {#<a>{{ class.name }}</a>#}
-                                        {#<br />#}
-                                        {#<small>Instructor Name:#}
-                                        {#{% for instructor in instructors %}#}
-                                            {#{% if class.instructorID == instructor.id %}#}
-                                                {#{{ instructor.name }}#}
-                                            {#{% endif %}#}
-                                        {#{% endfor %}#}
-                                        {#</small>#}
-                                    {#</td>#}
-                                    {#<td>#}
-                                        {#<ul class="list-inline">#}
-                                            {#<li>#}
-                                                {#<img src="images/user.png" class="avatar" alt="Avatar">#}
-                                            {#</li>#}
-                                            {#<li>#}
-                                                {#<img src="images/user.png" class="avatar" alt="Avatar">#}
-                                            {#</li>#}
-                                            {#<li>#}
-                                                {#<img src="images/user.png" class="avatar" alt="Avatar">#}
-                                            {#</li>#}
-                                            {#<li>#}
-                                                {#<img src="images/user.png" class="avatar" alt="Avatar">#}
-                                            {#</li>#}
-                                        {#</ul>#}
-                                    {#</td>#}
-                                    {#<td class="project_progress">#}
-                                        {#<div class="progress progress_sm">#}
-                                            {#<div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{ class.currentCapacity }}"></div>#}
-                                        {#</div>#}
-                                        {#<small>{{ class.currentCapacity }}% Complete</small>#}
-                                    {#</td>#}
-                                    {#<td>#}
-                                        {#<button type="button" class="btn btn-success btn-xs">Success</button>#}
-                                    {#</td>#}
-                                    {#<td>#}
-                                        {#<a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>#}
-                                        {#<a href="/editclass" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>#}
-                                        {#<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>#}
-                                        {#<input type="hidden" value="{{ class.id }}" name="classID">#}
-                                        {#<button type="button" data-toggle="collapse" data-target="#demo"><i class="fa fa-folder"></i> View Details</button>#}
-                                        {#<div id="demo" class="collapse">#}
-                                            {#Lorem ipsum dolor sit amet, consectetur adipisicing elit,#}
-                                            {#sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,#}
-                                            {#quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.#}
-                                        {#</div>#}
-                                        {#<button type="submit" name="edit" value="edit"><i class="fa fa-pencil"></i> Edit</button>#}
-                                        {#<button type="submit" name="delete" value="delete"><i class="fa fa-trash-o"></i> Delete</button>#}
-                                    {#</td>#}
-                                {#</tr>#}
-                            {#</form>#}
-
                             <tr style="padding: 0;">
 
                                 <td colspan="4" style="border: none; padding: 0;">
@@ -172,7 +116,7 @@
                                                 <a>{{ class.name }}</a>
                                                 <br />
                                                 <small>Instructor Name:
-                                                    {% for instructor in instructors %}
+                                                    {% for instructor in allInstructors %}
                                                         {% if class.instructorID == instructor.id %}
                                                             {{ instructor.name }}
                                                         {% endif %}
@@ -213,28 +157,42 @@
                                                     <a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
                                                 </li>
                                                 <li class="dropdown">
-                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                        <i class="fa fa-wrench"></i>
+                                                    </a>
                                                     <ul class="dropdown-menu" role="menu">
-                                                        <li><a href="#">Settings 1</a>
+
+                                                        {#<form action="/editclass" method="post" style="margin: 0;">#}
+                                                        <li>
+
+                                                            <input type="hidden" id="edit" name="edit" value="{{ class.id }}">
+                                                            <a href="#" onclick="jQuery(this).closest('form').submit()" class="edit" value="{{ class.id }}">Edit Class</a>
+
                                                         </li>
-                                                        <li><a href="#">Settings 2</a>
+                                                        <li>
+                                                            <input type="hidden" name="hold" value="{{ class.id }}">
+                                                            <a href="#" onclick="jQuery(this).closest('form').submit()" class="edit" value="{{ class.id }}" >Hold</a>
                                                         </li>
+
+                                                        {#</form>#}
                                                     </ul>
                                                 </li>
-                                                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                                <li>
+                                                    <a class="close-link" onclick="alert('Are you sure you want to delete this class?')">
+                                                        <i class="fa fa-close"></i></a>
                                                 </li>
                                             </ul>
                                             <div class="clearfix"></div>
                                         </div>
 
-                                        <div class="x_content" style="padding: 0;">
+                                        <div class="x_content update" style="padding: 0; display: none;">
 
                                             <table class="table table-striped">
                                                 <thead>
                                                 <tr>
-                                                    <th>Duration</th>
-                                                    <th>Start Time</th>
-                                                    <th>End Time</th>
+                                                    <th>Instructor</th>
+                                                    <th>Duration/Min</th>
+                                                    <th>Start Time/24:00</th>
                                                     <th>Max. Capacity</th>
                                                     <th>Current Capacity</th>
                                                     <th>Location</th>
@@ -242,12 +200,69 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr>
-                                                    <th scope="row">{{ class.duration }}</th>
-                                                    <td>{{ class.startTime }} Min</td>
-                                                    <td>{{ class.endTime }}</td>
+                                                    {#<th scope="row">{{ class.duration }}</th>#}
+                                                    <td>
+                                                        {% for instructor in allInstructors %}
+                                                            {% if class.instructorID == instructor.id %}
+                                                                {{ instructor.name }}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td>{{ class.duration }}</td>
+                                                    <td>{{ class.startTime }}</td>
                                                     <td>{{ class.capacity }}</td>
                                                     <td>{{ class.currentCapacity }}</td>
                                                     <td>{{ class.location }}</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr style="display: none;" class="updateInfo">
+                                                    <form action="/updateclass" method="post">
+
+                                                        <td>
+                                                            {#make sure to add that#}
+                                                            {#<input type="" id="endTime" name="instructor" min="08:00" max="21:00" value="{{ class.endTime }}">#}
+                                                            <select name="instructor" id="">
+                                                                {% for instructor in allInstructors %}
+                                                                    {% if instructor.id == class.instructorID %}
+
+                                                                        <option value="{{ instructor.id }}" selected>{{ instructor.name }} </option>
+                                                                {% else %}
+
+                                                                    <option value="{{ instructor.id }}">{{ instructor.name }}</option>
+                                                                {% endif %}
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="number" id="duration" name="duration" min="1" max="100" value="{{ class.duration }}">
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="time" id="startTime" name="startTime" min="08:00" max="21:00" value="{{ class.startTime }}">
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="number" id="capacity" name="capacity" min="1" max="30" value="{{ class.capacity }}">
+                                                        </td>
+
+                                                        <td>
+                                                            {{ class.currentCapacity }}
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="text" id="location" name="location" value="{{ class.location }}">
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="hidden" name="id" value="{{ class.id }}">
+
+                                                            {#remove unnecessary attributes#}
+                                                            <button type="submit" value="{{ class.id }}">Update</button>
+                                                        </td>
+
+                                                    </form>
+
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -272,53 +287,14 @@
         </div>
     </div>
 
-    {#<script>jQuery.noConflict();</script>#}
-    {#<!-- jQuery -->#}
-    {#<script src="js/jquery.min.js"></script>#}
-    {#<script>jQuery.noConflict();</script>#}
-    {#<!-- Bootstrap -->#}
-    {#<script src="js/bootstrap.js"></script>#}
-    {#<script>jQuery.noConflict();</script>#}
-    {#<!-- FastClick -->#}
-    {#<script src="js/fastclick.js"></script>#}
-    {#<script>jQuery.noConflict();</script>#}
-    {#<!-- NProgress -->#}
-    {#<script src="js/nprogress.js"></script>#}
-    {#<!-- bootstrap-progressbar -->#}
-    {#<script>jQuery.noConflict();</script>#}
-    {#<script src="js/bootstrap-progressbar.min.js"></script>#}
-    {#<script>jQuery.noConflict();</script>#}
-    {#<!-- Custom Theme Scripts -->#}
-    {#<script src="js/custom.min.js"></script>#}
 
 
     <script>
         jQuery(document).ready(function() {
             console.log("HIII");
 
-            jQuery('.x_content').toggle();
-
             jQuery('.collapse-link').click(function() {
-                var $BOX_PANEL = jQuery(this).closest('.x_panel'),
-                        $ICON = jQuery(this).find('i'),
-                        $BOX_CONTENT = $BOX_PANEL.find('.x_content');
-
-                if ($BOX_PANEL.attr('style')) {
-                    $BOX_CONTENT.slideToggle(200, function(){
-                        $BOX_PANEL.removeAttr('style');
-                    });
-                } else {
-                    $BOX_CONTENT.slideToggle(200);
-                    $BOX_PANEL.css('height', 'auto');
-                }
-
-                $ICON.toggleClass('fa-chevron-down');
-                $ICON.toggleClass('fa-chevron-up');
-
-                jQuery('.x_title').css('border-bottom', '2px solid');
-//                jQuery('.x_title').css('padding', '1 7');
-//                jQuery('.x_panel').css('padding', '1px 7px');
-//                jQuery('.x_panel').css('padding', '4px');
+                toggle(this);
 
             })  ;
 
@@ -328,7 +304,117 @@
 
                 $BOX_PANEL.remove();
             });
+
+
+
+
+
+
         });
+
+
+
+        jQuery('.edit').click(function() {
+
+            toggleOnce(this);
+            jQuery('.updateInfo').toggle();
+
+        });
+
+        function toggle($this) {
+
+            var $BOX_PANEL = jQuery($this).closest('.x_panel'),
+                    $ICON = jQuery($this).find('i'),
+                    $BOX_CONTENT = $BOX_PANEL.find('.x_content');
+
+            if ($BOX_PANEL.attr('style')) {
+                $BOX_CONTENT.slideToggle(200, function(){
+                    $BOX_PANEL.removeAttr('style');
+                });
+            } else {
+                $BOX_CONTENT.slideToggle(200);
+                $BOX_PANEL.css('height', 'auto');
+            }
+
+            $ICON.toggleClass('fa-chevron-down');
+            $ICON.toggleClass('fa-chevron-up');
+
+            jQuery('.x_title').css('border-bottom', '2px solid');
+
+        }
+
+        function toggleOnce($this) {
+
+            var $BOX_PANEL = jQuery($this).closest('.x_panel'),
+                    $ICON = jQuery($this).find('i'),
+                    $BOX_CONTENT = $BOX_PANEL.find('.x_content');
+
+            if ($BOX_PANEL.attr('style')) {
+                $BOX_CONTENT.slideToggle(200, function(){
+                    $BOX_PANEL.removeAttr('style');
+                });
+            }
+
+            $ICON.toggleClass('fa-chevron-down');
+            $ICON.toggleClass('fa-chevron-up');
+
+        }
+
+        function toggleUpdate($this) {
+
+//            alert(this);
+//            alert(jQuery(this).closest('.updateInfo').attr('id'));
+
+//            alert(jQuery('.edit').closest('.updateInfo').attr('id'));
+//            jQuery('.edit').closest('.updateInfo').css('display','block');
+            var $B = jQuery($this).closest('.x_content').closest('.x_content');
+            console.log($B);
+//            jQuery($this).closest('.updateInfo').toggle();
+//            jQuery('.updateInfo').toggle();
+        }
+
+
+    </script>
+
+    <script>
+        jQuery('.edit').click(function() {
+
+//            alert("boooo");
+//            console.log("edit clicked!");
+
+            var $id = jQuery(this).attr('value');
+//            alert($id);
+
+//            if(jQuery(this).closest('.x_panel').css('display', 'none')) {
+//                alert("Not Expanded");
+//                jQuery(this).closest('.x_panel').slideToggle(200);
+//
+//            }
+
+
+//            jQuery('.updateInfo').slideToggle();
+            jQuery(this).closest('.x_content').css('display','block');
+            jQuery(this).closest('.x_content').css('style','');
+
+
+//            if (jQuery(this).closest('.x_panel').attr('style')) {
+//                jQuery(this).closest('.x_panel').slideToggle(200, function(){
+//                    jQuery(this).closest('.x_panel').removeAttr('style');
+//                });
+//            }
+
+
+        });
+//        jQuery('#updateClass').click(function() {
+//
+//            alert("updating");
+////            console.log("edit clicked!");
+//
+//            var $id = jQuery(this).attr('value');
+//            alert($id);
+//
+//
+//        });
     </script>
 
 
