@@ -27,7 +27,7 @@
 
     </style>
 
-    {#<script src="js/jquery.js"></script>#}
+    <script src="js/jquery.js"></script>
     <script src="js/bootstrap.js"></script>
 
 
@@ -257,16 +257,14 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
 
 
     <script>
         jQuery(document).ready(function() {
-            console.log("HIII");
 
             jQuery('.collapse-link').click(function() {
+                console.log("kkkkkk");
                 toggle(this);
 
             })  ;
@@ -279,18 +277,21 @@
             });
 
 
-
-
-
-
         });
-
 
 
         jQuery('.edit').click(function() {
 
-            toggleOnce(this);
+            alert("BOO");
+//            toggleOnce(this);
+            toggle(this);
             jQuery('.updateInfo').toggle();
+            if(jQuery('.updateInfo').css('display','none')) {
+                jQuery('.updateInfo').toggle();
+            }
+//            jQuery(this).closest('.updateInfo').toggle();
+
+
 
         });
 
@@ -361,9 +362,9 @@
 
     <script>jQuery.noConflict();</script>
 <!-- jQuery -->
-<script src="js/jquery.min.js"></script>
+<script src="js/jquery.js"></script>
 <!-- Bootstrap -->
-<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.js"></script>
 <!-- FastClick -->
 <script src="js/fastclick.js"></script>
 <!-- NProgress -->
