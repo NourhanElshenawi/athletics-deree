@@ -286,6 +286,8 @@
         jQuery('.edit').click(function() {
 
             toggleOnce(this);
+            jQuery(this).toggleClass('fa-chevron-down');
+            jQuery(this).find('i').toggleClass('fa-chevron-up');
             jQuery('.updateInfo').toggle();
 
         });
@@ -296,17 +298,20 @@
                     $ICON = jQuery($this).find('i'),
                     $BOX_CONTENT = $BOX_PANEL.find('.x_content');
 
+//            console.log($ICON);
             if ($BOX_PANEL.attr('style')) {
                 $BOX_CONTENT.slideToggle(200, function(){
                     $BOX_PANEL.removeAttr('style');
+
+                    $ICON.toggleClass('fa-chevron-down');
+                    $ICON.addClass('fa-chevron-up');
                 });
             } else {
                 $BOX_CONTENT.slideToggle(200);
                 $BOX_PANEL.css('height', 'auto');
+                $ICON.toggleClass('fa-chevron-up');
+                $ICON.addClass('fa-chevron-down');
             }
-
-            $ICON.toggleClass('fa-chevron-down');
-            $ICON.toggleClass('fa-chevron-up');
 
             jQuery('.x_title').css('border-bottom', '2px solid');
 
@@ -315,12 +320,20 @@
         function toggleOnce($this) {
 
             var $BOX_PANEL = jQuery($this).closest('.x_panel'),
-                    $ICON = jQuery($this).find('i'),
+//                    $ICON = jQuery($this).parent().parent().parent().first().find('i'),
+                    $ICON = jQuery($this).closest('.collapse-link'),
                     $BOX_CONTENT = $BOX_PANEL.find('.x_content');
 
             if ($BOX_PANEL.attr('style')) {
                 $BOX_CONTENT.slideToggle(200, function(){
                     $BOX_PANEL.removeAttr('style');
+
+
+                    console.log($ICON);
+                    $ICON.toggleClass('fa-chevron-down');
+                    console.log($ICON);
+                    $ICON.addClass('fa-chevron-up');
+                    console.log($ICON);
                 });
             }
 
