@@ -32,6 +32,7 @@
             margin: 0;
             padding: 0;
         }
+
         .split {
             /*width: 25%;*/
             display: inline-block;
@@ -50,112 +51,6 @@
 {% block title %} Edit Schedule {% endblock title %}
 
 {% block content %}
-<<<<<<< HEAD
-    {#<div class="clearfix"></div>#}
-    <div class="row">
-            <div style="width: 100%;">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Classes</h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Settings 1</a>
-                                    </li>
-                                    <li><a href="#">Settings 2</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a class="close-link"><i class="fa fa-close"></i></a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-
-                        <p>Simple table with project listing with progress and editing options</p>
-
-                        <!-- start project list -->
-                        <table class="table table-striped projects">
-                            <thead>
-                            <tr>
-                                <th style="width: 1%">#</th>
-                                <th style="width: 20%">Project Name</th>
-                                <th>Team Members</th>
-                                <th>Project Progress</th>
-                                <th>Status</th>
-                                <th style="width: 20%">#Edit</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-
-                            {% for class in classes %}
-                                <form action="/editclass" method="get">
-                                    <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td>
-                                            <a>{{ class.name }}</a>
-                                            <br />
-                                            <small>Instructor Name:
-                                            {% for instructor in instructors %}
-                                                {% if class.instructorID == instructor.id %}
-                                                    {{ instructor.name }}
-                                                {% endif %}
-                                            {% endfor %}
-                                            </small>
-                                        </td>
-                                        <td>
-                                            <ul class="list-inline">
-                                                <li>
-                                                    <img src="images/user.png" class="avatar" alt="Avatar">
-                                                </li>
-                                                <li>
-                                                    <img src="images/user.png" class="avatar" alt="Avatar">
-                                                </li>
-                                                <li>
-                                                    <img src="images/user.png" class="avatar" alt="Avatar">
-                                                </li>
-                                                <li>
-                                                    <img src="images/user.png" class="avatar" alt="Avatar">
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <td class="project_progress">
-                                            <div class="progress progress_sm">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{ class.currentCapacity }}"></div>
-                                            </div>
-                                            <small>{{ class.currentCapacity }}% Complete</small>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-success btn-xs">Success</button>
-                                        </td>
-                                        <td>
-                                            <input type="hidden" value="{{ class.id }}" name="classID">
-                                            <button type="button" data-toggle="collapse" data-target=".collapse" id="test"><i class="fa fa-folder"></i> View Details</button>
-
-                                            <button type="submit" name="edit" value="edit"><i class="fa fa-pencil"></i> Edit</button>
-                                            <button type="submit" name="delete" value="delete"><i class="fa fa-trash-o"></i> Delete</button>
-                                        </td>
-                                    </tr>
-                                </form>
-
-                                {#<tr>#}
-                                    {#<td colspan="6">#}
-                                        {#<div id="demo" class="collapse">#}
-                                            {#Lorem ipsum dolor sit amet, consectetur adipisicing elit,#}
-                                            {#sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,#}
-                                            {#quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.#}
-                                        {#</div>#}
-                                    {#</td>#}
-
-                                {#</tr>#}
-                            {% endfor %}
-
-=======
 
     <div class="clearfix"></div>
 
@@ -380,20 +275,13 @@
 
 
                         {% endfor %}
->>>>>>> origin/viewClassDetails
 
 
                             </tbody>
 
-<<<<<<< HEAD
-                        </table>
-                        <!-- end project list -->
-=======
-
                         </tbody>
                     </table>
                     <!-- end project list -->
->>>>>>> origin/viewClassDetails
 
 
                         <div class="collapse">dsfgdfg</div>
