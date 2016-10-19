@@ -56,16 +56,45 @@
         var mybarChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels: [
+                    {% for key,value in vals %}
+//                        "January", "February", "March", "April", "May", "June", "July"
+                        {% if loop.last %}
+                        "{{ key }}"
+                            {% else %}
+                        "{{ key }}",
+                        {% endif %}
+
+                    {% endfor %}
+                ],
+
+                 {#{% for key,value in vals %}#}
+                {##}
+                 {#{% endfor %}#}
+
                 datasets: [{
-                    label: '# of Votes',
+                    label: '# of Visits',
                     backgroundColor: "#26B99A",
-                    data: [51, 30, 40, 28, 92, 50, 45]
-                }, {
-                    label: '# of Votes',
-                    backgroundColor: "#03586A",
-                    data: [41, 56, 25, 48, 72, 34, 12]
-                }]
+                    data: [
+//                            51, 30, 40, 28, 92, 50, 45
+                        {% for key,value in vals %}
+//                        "January", "February", "March", "April", "May", "June", "July"
+                        {% if loop.last %}
+                        {{ value }}
+                        {% else %}
+                        {{ value }},
+                        {% endif %}
+
+                        {% endfor %}
+                    ]
+                }
+//                , {
+//                    label: '# of Votes',
+//                    backgroundColor: "#03586A",
+//                    data: [41, 56, 25, 48, 72, 34, 12]
+//                }
+
+                ]
             },
 
             options: {
@@ -79,6 +108,12 @@
             }
         });
     </script>
+
+    {#{{ dump(array) }}#}
+    {% for key,value in vals %}
+        Key: {{ key }}
+        Value: {{ value }}
+    {% endfor %}
 
 {% endblock content %}
 

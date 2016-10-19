@@ -28,6 +28,8 @@ $router->get('/editclass', 'MainController', 'editClass');
 $router->post('/editclass', 'MainController', 'editClass');
 $router->post('/updateclass', 'MainController', 'updateClass');
 
+$router->get('/profile', 'MainController', 'profileStats');
+
 ////See inside $router
 //echo "<pre>";
 //print_r($router);
