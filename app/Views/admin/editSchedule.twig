@@ -262,9 +262,9 @@
 
     <script>
         jQuery(document).ready(function() {
+            console.log("HIII");
 
             jQuery('.collapse-link').click(function() {
-                console.log("kkkkkk");
                 toggle(this);
 
             })  ;
@@ -277,22 +277,20 @@
             });
 
 
+
+
+
+
         });
 
 
-        jQuery('.edit').click(function() {
 
+        jQuery('.edit').click(function() {
 
             toggleOnce(this);
             jQuery(this).toggleClass('fa-chevron-down');
             jQuery(this).find('i').toggleClass('fa-chevron-up');
             jQuery('.updateInfo').toggle();
-            if(jQuery('.updateInfo').css('display','none')) {
-                jQuery('.updateInfo').toggle();
-            }
-//            jQuery(this).closest('.updateInfo').toggle();
-
-
 
         });
 
@@ -372,29 +370,28 @@
 
 
 
+    <!-- jQuery -->
+    {#<script src="js/jquery.min.js"></script>#}
+    <!-- Bootstrap -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="js/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="js/nprogress.js"></script>
+    <!-- bootstrap-progressbar -->
     <script>jQuery.noConflict();</script>
-<!-- jQuery -->
-<script src="js/jquery.js"></script>
-<!-- Bootstrap -->
-<script src="js/bootstrap.js"></script>
-<!-- FastClick -->
-<script src="js/fastclick.js"></script>
-<!-- NProgress -->
-<script src="js/nprogress.js"></script>
-<!-- bootstrap-progressbar -->
-<script>jQuery.noConflict();</script>
-<script src="js/bootstrap-progressbar.js"></script>
+    <script src="js/bootstrap-progressbar.js"></script>
 
+    <!-- Custom Theme Scripts -->
+    <script>jQuery.noConflict();</script>
+    <script src="js/custom.min.js"></script>
 
-<!-- Custom Theme Scripts -->
-<script>jQuery.noConflict();</script>
-<script src="js/custom.js"></script>
 
 
 
 {% endblock content %}
 
 {% block info %}
-{{ include('info.twig') }}
+    {{ include('info.twig') }}
 {% endblock info %}
 
