@@ -17,7 +17,7 @@ class MainController extends Controller
     {
         parent::__construct();
     }
-
+/*****HOME*****/
     public function index()
     {
         echo $this->twig->render('index.twig');
@@ -30,53 +30,49 @@ class MainController extends Controller
 
     public function fitnessProgram()
     {
-        echo $this->twig->render('fitnessProgram.twig');
-    }
+        $db = new DB();
+        $classes = $db->getClasses();
+//        $days[]= array();
+//        var_dump($classes);
+        foreach ($classes as $key=>$class) {
+//            var_dump($class);
 
+            $class['days']=array();
+
+            if($class['monday']){
+                $classes[$key]['days'][]="1";
+//                echo $class['monday'];
+            }
+            if($class['tuesday']){
+                $classes[$key]['days'][]="2";
+            }
+            if($class['wednesday']){
+                $classes[$key]['days'][]="3";
+            }
+            if($class['thursday']){
+                $classes[$key]['days'][]="4";
+            }
+            if($class['friday']){
+                $classes[$key]['days'][]="5";
+            }
+    }
+//    var_dump($classes[0]['days']);
+//        if ($classes[])
+
+        echo $this->twig->render('fitnessProgram.twig', array('classes'=> $classes));
+    }
+/*****CUSTOMER*****/
     public function profileStats()
     {
-//        $DB = new DB();
-//        $carouselImages = $DB->getCarousel();
-
-      /*  $date = "2016-06-09 00:38:47";
-        //below i get the year, month and the rest of the DateTime format (day and time)
-//        $array = explode('-',$date,3);
-        //below i add the day to the date array
-//        $temp = $array[2];
-//        $array[2] = explode(' ',$array[2],2)[0];
-
-//        echo "date </br>";
-//        var_dump($date);
-//        echo "split array </br>";
-//        var_dump($array);
-//        echo "complete </br>";
-//        var_dump($array);
-//        $monthNum  = $array[1];
-//        $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
-//        $monthName = $dateObj->format('F'); // March
-
-*/
-//        $array[1] = $monthName;
-//        var_dump($array);
-
         $array = array("January", "January", "January", "February", "February", "March");
         $vals = array_count_values($array);
         var_dump($vals);
         for ($x=0; $x<count($array);){
-//            echo $array[$x];
-//            echo "</br>";
+
             $x++;
         }
 
         echo $this->twig->render('customer/profile.twig', array('vals'=>$vals));
-    }
-
-    public function admin()
-    {
-        $DB = new DB();
-        $carouselImages = $DB->getCarousel();
-        $allCarouselImages = $DB->getAllCarousel();
-        echo $this->twig->render('admin.twig', array('carouselImages'=> $carouselImages, 'allCarouselImages'=> $allCarouselImages));
     }
 
     public function login()
@@ -113,16 +109,6 @@ class MainController extends Controller
     public function profile()
     {
         echo $this->twig->render('customer/profile.twig');
-    }
-    public function car()
-    {
-        var_dump($_POST);
-
-
-        $DB = new DB();
-        $carouselImages = $DB->getCarousel();
-        $notIncludedCarouselImages = $DB->getNotIncludedCarousel();
-        echo $this->twig->render('carousel.twig', array('carouselImages'=> $carouselImages, 'notIncludedCarouselImages'=> $notIncludedCarouselImages));
     }
 
     /***********ADMIN************/
@@ -163,9 +149,6 @@ class MainController extends Controller
         if(isset($_POST['edit'])){
             echo "edit working!!!";
         }
-//        elseif (isset($_GET['view'])){
-//            echo "view working!!!";
-//        }
 //        elseif (isset($_GET['delete'])){
 //            echo "delete working!!!";
 //        }
@@ -183,17 +166,6 @@ class MainController extends Controller
             echo "Success";
     }
 
-//        if(isset($_POST['edit'])){
-//            echo "edit working!!!";
-//        }
-//        elseif (isset($_GET['view'])){
-//            echo "view working!!!";
-//        }
-//        elseif (isset($_GET['delete'])){
-//            echo "delete working!!!";
-//        }
-
-//        echo $this->twig->render('admin/editClass.twig');
     }
 
 
