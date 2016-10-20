@@ -41,19 +41,24 @@ class MainController extends Controller
 
             if($class['monday']){
                 $classes[$key]['days'][]="1";
+//                $classes[$key]['days'][]="monday";
 //                echo $class['monday'];
             }
             if($class['tuesday']){
                 $classes[$key]['days'][]="2";
+//                $classes[$key]['days'][]="tuesday";
             }
             if($class['wednesday']){
                 $classes[$key]['days'][]="3";
+//                $classes[$key]['days'][]="wednesday";
             }
             if($class['thursday']){
                 $classes[$key]['days'][]="4";
+//                $classes[$key]['days'][]="thursday";
             }
             if($class['friday']){
                 $classes[$key]['days'][]="5";
+//                $classes[$key]['days'][]="friday";
             }
     }
 //    var_dump($classes[0]['days']);

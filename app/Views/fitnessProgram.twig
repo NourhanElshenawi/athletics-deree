@@ -78,9 +78,10 @@
                     maxTime: "21:00:00",
 
                     eventClick: function(data, event, view) {
-                        var content = '<h3>'+data.title+'</h3>' +
-                                '<p><b>Start:</b> '+data.start+'<br />' +
-                                (data.end && '<p><b>End:</b> '+data.end+'</p>' || '');
+                        var content = '<h3>'+data.title+'       </h3>' +
+                                '<p><b>Start:</b> '+data.time+'<br />' +
+                                '<p><b>Duration:</b> '+data.duration+' Min<br /></p>'+
+                                '<p><b>Location:</b> '+data.location+'<br /></p>';
 
                         tooltip.set({
                             'content.text': content
@@ -91,25 +92,26 @@
                     eventResizeStart: function() { tooltip.hide() },
                     eventDragStart: function() { tooltip.hide() },
                     viewDisplay: function() { tooltip.hide() },
-                    events: [
-                {% for class in classes %}
-                        {
-                            title: {{ class.name }},
-                            start: {{ class.startTime }}
-//                            ,
+                    {#events: [#}
+                {#{% for class in classes %}#}
+
+                        {#{% if loop.last %}#}
+                        {#{#}
+                            {#title: '{{ class.name }}',#}
+                            {#start: "2016-02-01"#}
+                            {#,#}
                             {#dow:[#}
-                {#{% for key, value in class.days %}#}
-                                {#{{ value }},#}
+                            {#{% for key, value in class.days %}#}
+                            {#{{ value }},#}
+                            {#{% endfor %}#}
+                        {#]#}
+
+                        {#}#}
+                        {#{% else %}#}
+
+                        {#{% endif %}#}
+
                 {#{% endfor %}#}
-//                        ]
-
-                        }
-                        {% if loop.last %}
-
-                        {% else %}
-                            ,
-                        {% endif %}
-                {% endfor %}
 //                        {
 //                            title: 'All Day Event',
 //                            start: new Date(y, m, 1)
@@ -136,9 +138,94 @@
 //                            end: new Date(y, m, d+1, 22, 30),
 //                            allDay: false
 //                        }
-                    ]
+//                    ]
+
                 });
-//                $('#fullcalendar').fullCalendar('changeView', 'agendaWeek');
+
+                {% for class in classes %}
+
+                    {% for key, value in class.days %}
+                {#{% if value == monday %}#}
+                alert("MONDAY");
+
+                $('#fullcalendar').fullCalendar( 'addEventSource',
+                        function(start, end, callback) {
+                            // When requested, dynamically generate a
+                            // repeatable event for every monday.
+                            var events = [];
+//                            var monday = 1;
+                            var one_day = (24 * 60 * 60 * 1000);
+
+                            for (loop = start.getTime();
+                                 loop <= end.getTime();
+                                 loop = loop + one_day) {
+
+                                var column_date = new Date(loop);
+
+                                if (column_date.getDay() == {{ value }}) {
+                                    // we're in Moday, create the event
+                                    var time = "{{ class.startTime }}";
+                                    var parseTime = time.split(":");
+                                    console.log(parseTime[0]);
+                                    events.push({
+                                        title: '{{ class.name }}',
+                                        start: new Date(column_date.setHours(parseTime[0], parseTime[1])),
+//                                        end: new Date(column_date.setHours(10, 40)),
+                                        allDay: false,
+                                        location: "{{ class.location }}",
+                                        time: "{{ class.startTime }}",
+                                        duration: "{{ class.duration }}"
+                                    });
+                                }
+
+
+
+
+                            } // for loop
+
+                            // return events generated
+                            callback( events );
+                        }
+                );
+                {#{% endif %}#}
+
+                    {% endfor %}
+
+                {% endfor %}
+//                $('#fullcalendar').fullCalendar( 'addEventSource',
+//                        function(start, end, callback) {
+//                            // When requested, dynamically generate a
+//                            // repeatable event for every monday.
+//                            var events = [];
+//                            var monday = 1;
+//                            var one_day = (24 * 60 * 60 * 1000);
+//
+//                            for (loop = start.getTime();
+//                                 loop <= end.getTime();
+//                                 loop = loop + one_day) {
+//
+//                                var column_date = new Date(loop);
+//
+//                                if (column_date.getDay() == monday) {
+//                                    // we're in Moday, create the event
+//                                    events.push({
+//                                        title: 'Morning Meeting',
+//                                        start: new Date(column_date.setHours(10, 00)),
+//                                        end: new Date(column_date.setHours(10, 40)),
+//                                        allDay: false
+//                                    });
+//                                }
+//
+//
+//
+//
+//                            } // for loop
+//
+//                            // return events generated
+//                            callback( events );
+//                        }
+//                );
+                $('#fullcalendar').fullCalendar('changeView', 'agendaWeek');
 
             }());
         });//]]>
