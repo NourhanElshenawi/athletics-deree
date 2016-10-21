@@ -22,7 +22,8 @@ $router->get('/fitnessProgram', 'MainController', 'fitnessProgram');
 
 /********ADMIN**********/
 
-$router->post('/admin/login', 'MainController', 'adminLogin');
+$router->post('/profileLogin', 'MainController', 'profileLogin');
+$router->get('/admin/login', 'MainController', 'adminLogin');
 $router->get('/editschedule', 'MainController', 'editSchedule');
 $router->get('/editclass', 'MainController', 'editClass');
 $router->post('/editclass', 'MainController', 'editClass');

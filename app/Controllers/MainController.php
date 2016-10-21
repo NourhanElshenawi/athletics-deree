@@ -85,7 +85,7 @@ class MainController extends Controller
         echo $this->twig->render('login.twig');
     }
 
-    public function adminLogin()
+    public function verifyResponse()
     {
 // your secret key
         $secret = "6Lel3ggUAAAAACT3Xz7dfhUhvFGALwDrXgtwFeON";
@@ -105,33 +105,31 @@ class MainController extends Controller
         if ($response != null && $response->success) {
             //REDIRECT TO PROFILE
 //            echo "Hi " . $_POST["username"] . " (" . $_POST["password"] . "), thanks for submitting the form!";
-            $db = new DB();
-            $user = $db->getUser($_POST["username"], $_POST["password"]);
-//            echo $this->twig->render('customer/profile.twig');
+            return true;
 
-//            if(empty($user)){
-//                echo "user does not exist";
 //            }
-//            else {
-//
-////                $array = array("January", "January", "January", "February", "February", "March");
-////                $vals = array_count_values($array);
-////                var_dump($vals);
-////                for ($x=0; $x<count($array);){
-//////            echo $array[$x];
-//////            echo "</br>";
-////                    $x++;
-////                }
-////                echo $this->twig->render('customer/profile.twig', array('user'=>$user, 'vals'=>$vals));
-//                echo $this->twig->render('login.twig');
-//            }
-            $this->profileStats();
         } else {
+            return false;
             //REDIRECT TO ERROR'
             echo "not submitted";
         }
     }
 
+    public function profileLogin(){
+        if ($this->verifyResponse()){
+            $db = new DB();
+            $user = $db->getUser($_POST["username"], $_POST["password"]);
+            var_dump($user);
+
+            echo $this->twig->render('customer/profile.twig', array('user'=>$user));
+
+
+        }
+    }
+
+    public function login2(){
+        echo $this->twig->render('customer/profile.twig');
+    }
     public function profile()
     {
         echo $this->twig->render('customer/profile.twig');
