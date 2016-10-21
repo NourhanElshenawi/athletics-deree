@@ -92,61 +92,11 @@
                     eventResizeStart: function() { tooltip.hide() },
                     eventDragStart: function() { tooltip.hide() },
                     viewDisplay: function() { tooltip.hide() },
-                    {#events: [#}
-                {#{% for class in classes %}#}
-
-                        {#{% if loop.last %}#}
-                        {#{#}
-                            {#title: '{{ class.name }}',#}
-                            {#start: "2016-02-01"#}
-                            {#,#}
-                            {#dow:[#}
-                            {#{% for key, value in class.days %}#}
-                            {#{{ value }},#}
-                            {#{% endfor %}#}
-                        {#]#}
-
-                        {#}#}
-                        {#{% else %}#}
-
-                        {#{% endif %}#}
-
-                {#{% endfor %}#}
-//                        {
-//                            title: 'All Day Event',
-//                            start: new Date(y, m, 1)
-//                        },
-//                        {
-//                            title: 'Long Event',
-//                            start: new Date(y, m, d-5),
-//                            end: new Date(y, m, d-2)
-//                        },
-//                        {
-//                            id: 999,
-//                            title: 'Repeating Event',
-//                            start: new Date(y, m, d+4, 16, 0),
-//                            allDay: false
-//                        },
-//                        {
-//                            title: 'Meeting',
-//                            start: new Date(y, m, d, 10, 30),
-//                            allDay: false
-//                        },
-//                        {
-//                            title: 'Birthday Party',
-//                            start: new Date(y, m, d+1, 19, 0),
-//                            end: new Date(y, m, d+1, 22, 30),
-//                            allDay: false
-//                        }
-//                    ]
-
                 });
 
                 {% for class in classes %}
 
                     {% for key, value in class.days %}
-                {#{% if value == monday %}#}
-                alert("MONDAY");
 
                 $('#fullcalendar').fullCalendar( 'addEventSource',
                         function(start, end, callback) {
@@ -163,14 +113,15 @@
                                 var column_date = new Date(loop);
 
                                 if (column_date.getDay() == {{ value }}) {
-                                    // we're in Moday, create the event
+                                    // we're in Monday, create the event
                                     var time = "{{ class.startTime }}";
                                     var parseTime = time.split(":");
                                     console.log(parseTime[0]);
                                     events.push({
                                         title: '{{ class.name }}',
                                         start: new Date(column_date.setHours(parseTime[0], parseTime[1])),
-//                                        end: new Date(column_date.setHours(10, 40)),
+                                        end: new Date(column_date.setMinutes({{ class.duration }})),
+//                                        end: new Date(column_date.setMinutes(90)),
                                         allDay: false,
                                         location: "{{ class.location }}",
                                         time: "{{ class.startTime }}",
