@@ -1,0 +1,209 @@
+{% extends "master.twig" %}
+
+
+{% block head %}
+
+
+
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.8.3.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+    <script type="text/javascript" src="http://qtip2.com/v/stable/jquery.qtip.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="http://qtip2.com/v/stable/jquery.qtip.css">
+
+    <link rel="stylesheet" type="text/css" href="http://qtip2.com/static/stylesheets/libs/jquery.fullcalendar.css">
+
+    <script type="text/javascript" src="http://qtip2.com/static/javascripts/libs/jquery.fullcalendar.min.js"></script>
+
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script>
+
+
+
+    <style type="text/css">
+        body{
+            padding: 50px;
+        }
+
+    </style>
+
+    <script type="text/javascript">//<![CDATA[
+        $(window).load(function(){
+// Setup FullCalendar
+            (function() {
+                var date = new Date();
+                var d = date.getDate();
+                var m = date.getMonth();
+                var y = date.getFullYear();
+
+                var tooltip = $('<div/>').qtip({
+                    id: 'fullcalendar',
+                    prerender: true,
+                    content: {
+                        text: ' ',
+                        title: {
+                            button: true
+                        }
+                    },
+                    position: {
+                        my: 'bottom center',
+                        at: 'top center',
+                        target: 'mouse',
+                        viewport: $('#fullcalendar'),
+                        adjust: {
+                            mouse: false,
+                            scroll: false
+                        }
+                    },
+                    show: false,
+                    hide: false,
+                    style: 'qtip-light'
+                }).qtip('api');
+
+                $('#fullcalendar').fullCalendar({
+//                    editable: true,
+                    height: 600,
+                    buttons: false,
+                    header: false
+//                    {
+//                        left: 'title',
+//                        center: '',
+//                        right: 'today prev,next'
+//                    }
+                    ,
+                    minTime: "07:00:00",
+                    maxTime: "21:00:00",
+
+                    eventClick: function(data, event, view) {
+                        var content = '<h3>'+data.title+'       </h3>' +
+                                '<p><b>Start:</b> '+data.time+'<br />' +
+                                '<p><b>Duration:</b> '+data.duration+' Min<br /></p>'+
+                                '<p><b>Location:</b> '+data.location+'<br /></p>';
+
+                        tooltip.set({
+                            'content.text': content
+                        })
+                                .reposition(event).show(event);
+                    },
+                    dayClick: function() { tooltip.hide() },
+                    eventResizeStart: function() { tooltip.hide() },
+                    eventDragStart: function() { tooltip.hide() },
+                    viewDisplay: function() { tooltip.hide() },
+                });
+
+                {% for class in classes %}
+
+                    {% for key, value in class.days %}
+
+                $('#fullcalendar').fullCalendar( 'addEventSource',
+                        function(start, end, callback) {
+                            // When requested, dynamically generate a
+                            // repeatable event for every monday.
+                            var events = [];
+//                            var monday = 1;
+                            var one_day = (24 * 60 * 60 * 1000);
+
+                            for (loop = start.getTime();
+                                 loop <= end.getTime();
+                                 loop = loop + one_day) {
+
+                                var column_date = new Date(loop);
+
+                                if (column_date.getDay() == {{ value }}) {
+                                    // we're in Monday, create the event
+                                    var time = "{{ class.startTime }}";
+                                    var parseTime = time.split(":");
+                                    console.log(parseTime[0]);
+                                    events.push({
+                                        title: '{{ class.name }}',
+                                        start: new Date(column_date.setHours(parseTime[0], parseTime[1])),
+                                        end: new Date(column_date.setMinutes({{ class.duration }})),
+//                                        end: new Date(column_date.setMinutes(90)),
+                                        allDay: false,
+                                        location: "{{ class.location }}",
+                                        time: "{{ class.startTime }}",
+                                        duration: "{{ class.duration }}"
+                                    });
+                                }
+
+
+
+
+                            } // for loop
+
+                            // return events generated
+                            callback( events );
+                        }
+                );
+                {#{% endif %}#}
+
+                    {% endfor %}
+
+                {% endfor %}
+//                $('#fullcalendar').fullCalendar( 'addEventSource',
+//                        function(start, end, callback) {
+//                            // When requested, dynamically generate a
+//                            // repeatable event for every monday.
+//                            var events = [];
+//                            var monday = 1;
+//                            var one_day = (24 * 60 * 60 * 1000);
+//
+//                            for (loop = start.getTime();
+//                                 loop <= end.getTime();
+//                                 loop = loop + one_day) {
+//
+//                                var column_date = new Date(loop);
+//
+//                                if (column_date.getDay() == monday) {
+//                                    // we're in Moday, create the event
+//                                    events.push({
+//                                        title: 'Morning Meeting',
+//                                        start: new Date(column_date.setHours(10, 00)),
+//                                        end: new Date(column_date.setHours(10, 40)),
+//                                        allDay: false
+//                                    });
+//                                }
+//
+//
+//
+//
+//                            } // for loop
+//
+//                            // return events generated
+//                            callback( events );
+//                        }
+//                );
+                $('#fullcalendar').fullCalendar('changeView', 'agendaWeek');
+
+            }());
+        });//]]>
+
+
+
+
+    </script>
+
+{% endblock head %}
+
+{% block title %} Fitness Program {% endblock title %}
+
+{% block content %}
+
+    {% for class in classes %}
+        {{ class.name }}:
+        {#<br>#}
+        {% for key, value in class.days %}
+            {{ value }}
+        {% endfor %}
+        <br>
+    {% endfor %}
+<div id="fullcalendar"></div>
+
+{% endblock content %}
+
+
+
+
