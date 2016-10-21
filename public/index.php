@@ -18,7 +18,7 @@ $router->get('/login', 'MainController', 'login');
 
 $router->get('/calendar', 'MainController', 'calendar');
 $router->get('/fitnessProgram', 'MainController', 'fitnessProgram');
-$router->get('/profile', 'MainController', 'profile');
+//$router->get('/profile', 'MainController', 'profile');
 
 /********ADMIN**********/
 

@@ -71,13 +71,6 @@ class MainController extends Controller
         echo $this->twig->render('customer/profile.twig', array('vals'=>$vals));
     }
 
-    public function admin()
-    {
-        $DB = new DB();
-        $carouselImages = $DB->getCarousel();
-        $allCarouselImages = $DB->getAllCarousel();
-        echo $this->twig->render('admin.twig', array('carouselImages'=> $carouselImages, 'allCarouselImages'=> $allCarouselImages));
-    }
 
     public function login()
     {
@@ -103,7 +96,28 @@ class MainController extends Controller
 
         if ($response != null && $response->success) {
             //REDIRECT TO PROFILE
-            echo "Hi " . $_POST["username"] . " (" . $_POST["password"] . "), thanks for submitting the form!";
+//            echo "Hi " . $_POST["username"] . " (" . $_POST["password"] . "), thanks for submitting the form!";
+            $db = new DB();
+            $user = $db->getUser($_POST["username"], $_POST["password"]);
+//            echo $this->twig->render('customer/profile.twig');
+
+//            if(empty($user)){
+//                echo "user does not exist";
+//            }
+//            else {
+//
+////                $array = array("January", "January", "January", "February", "February", "March");
+////                $vals = array_count_values($array);
+////                var_dump($vals);
+////                for ($x=0; $x<count($array);){
+//////            echo $array[$x];
+//////            echo "</br>";
+////                    $x++;
+////                }
+////                echo $this->twig->render('customer/profile.twig', array('user'=>$user, 'vals'=>$vals));
+//                echo $this->twig->render('login.twig');
+//            }
+            $this->profileStats();
         } else {
             //REDIRECT TO ERROR'
             echo "not submitted";
