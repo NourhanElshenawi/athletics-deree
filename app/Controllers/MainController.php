@@ -185,6 +185,13 @@ class MainController extends Controller
         echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'instructors'=> $instructors, 'allInstructors'=>$allInstructor));
     }
 
+    public function deleteClass()
+    {
+        $db = new DB();
+        $db->deleteClass($_POST['id']);
+
+    }
+
 
 //    public function editClass()
 //    {

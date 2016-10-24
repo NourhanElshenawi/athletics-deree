@@ -28,6 +28,7 @@ $router->get('/logout', 'MainController', 'logout');
 
 $router->get('/editschedule', 'MainController', 'editSchedule');
 $router->get('/editclass', 'MainController', 'editClass');
+$router->post('/deleteclass', 'MainController', 'deleteClass');
 //$router->post('/editclass', 'MainController', 'editClass');
 $router->post('/updateclass', 'MainController', 'updateClass');
 
