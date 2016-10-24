@@ -147,28 +147,27 @@ class MainController extends Controller
     }
 
 
-    public function editClass()
-    {
-//        var_dump($_POST);
-
-        if(isset($_POST['edit'])){
-            echo "edit working!!!";
-        }
-//        elseif (isset($_GET['delete'])){
-//            echo "delete working!!!";
+//    public function editClass()
+//    {
+////        var_dump($_POST);
+//
+//        if(isset($_POST['edit'])){
+//            echo "edit working!!!";
 //        }
-
-        echo $this->twig->render('admin/editClass.twig');
-    }
+////        elseif (isset($_GET['delete'])){
+////            echo "delete working!!!";
+////        }
+//
+//        echo $this->twig->render('admin/editClass.twig');
+//    }
 
 
     public function updateClass()
     {
-        var_dump($_POST);
-
         $DB = new DB();
         if($DB->updateClass($_POST['id'],$_POST['duration'],$_POST['startTime'],$_POST['capacity'], $_POST['instructor'])) {
-            echo "Success";
+
+            $this->editSchedule();
     }
 
     }

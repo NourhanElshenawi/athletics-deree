@@ -25,7 +25,7 @@ $router->get('/profile', 'MainController', 'profile');
 $router->post('/admin/login', 'MainController', 'adminLogin');
 $router->get('/editschedule', 'MainController', 'editSchedule');
 $router->get('/editclass', 'MainController', 'editClass');
-$router->post('/editclass', 'MainController', 'editClass');
+//$router->post('/editclass', 'MainController', 'editClass');
 $router->post('/updateclass', 'MainController', 'updateClass');
 
 $router->get('/profile', 'MainController', 'profileStats');
