@@ -9,7 +9,17 @@
                     <li id="menu-item-15534" class="top-library menu-item menu-item-type-custom menu-item-object-custom menu-item-15534"><a href="/fitnessProgram">Fitness Program</a></li>
                     <i class="fa fa-sign-in"></i>
                     {#<li id="menu-item-600" class="top-myacg menu-item menu-item-type-post_type menu-item-object-page menu-item-600"><a href="http://www.acg.edu/current-students/myacg-apply-now-register-online/">myACG / Apply now</a></li>#}
-                    <li id="menu-item-600" class="top-myacg menu-item menu-item-type-post_type menu-item-object-page menu-item-600"><a href="/login">Log-in</a></li>
+
+
+                    {% if session.user is defined %}
+
+                        <li id="menu-item-600" class="top-myacg menu-item menu-item-type-post_type menu-item-object-page menu-item-600"><a href="/logout">Logout</a></li>
+
+                        {% else %}
+
+                            <li id="menu-item-600" class="top-myacg menu-item menu-item-type-post_type menu-item-object-page menu-item-600"><a href="/login">Log-in</a></li>
+
+                    {% endif %}
 
                 </ul></div>		</nav><!-- #site-navigation --><div class="headerright">
             <div><form role="search" method="get" class="search-form" action="http://www.acg.edu/">

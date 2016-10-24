@@ -20,10 +20,11 @@ $router->get('/calendar', 'MainController', 'calendar');
 $router->get('/fitnessProgram', 'MainController', 'fitnessProgram');
 //$router->get('/profile', 'MainController', 'profile');
 
-/********ADMIN**********/
+/******USER****/
+$router->post('/profile', 'MainController', 'userLogin');
+$router->get('/logout', 'MainController', 'logout');
 
-$router->post('/profileLogin', 'MainController', 'profileLogin');
-$router->get('/admin/login', 'MainController', 'adminLogin');
+/********ADMIN**********/
 $router->get('/editschedule', 'MainController', 'editSchedule');
 $router->get('/editclass', 'MainController', 'editClass');
 //$router->post('/editclass', 'MainController', 'editClass');

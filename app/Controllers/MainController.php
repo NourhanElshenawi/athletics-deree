@@ -107,29 +107,50 @@ class MainController extends Controller
 //            echo "Hi " . $_POST["username"] . " (" . $_POST["password"] . "), thanks for submitting the form!";
             return true;
 
-//            }
         } else {
             return false;
             //REDIRECT TO ERROR'
-            echo "not submitted";
+//            echo "not submitted";
+            return false;
         }
     }
 
-    public function profileLogin(){
-        if ($this->verifyResponse()){
-            $db = new DB();
-            $user = $db->getUser($_POST["username"], $_POST["password"]);
-            var_dump($user);
+    public function userLogin()
+    {
 
-            echo $this->twig->render('customer/profile.twig', array('user'=>$user));
+        if(isset($_SESSION['user'])){
+
+            header('Location: /profile');
+        }
+        else {
+
+            if (($this->adminLogin())) {
+
+                $db = new DB();
+                $user = $db->getUser($_POST["username"], $_POST["password"]);
+
+                if (empty($user)) {
+                    echo "user not found";
+                } else {
+//                $this->profileStats();
+                    $_SESSION['user'] = $user;
+//                    echo $this->twig->render('customer/profile.twig');
+                    header('Location: /profile');
+                }
 
 
+            }
         }
     }
 
-    public function login2(){
-        echo $this->twig->render('customer/profile.twig');
+    public function logout()
+    {
+        unset($_SESSION['user']);
+//        echo $this->twig->render('login.twig');
+        header('Location: /login');
     }
+
+
     public function profile()
     {
         echo $this->twig->render('customer/profile.twig');

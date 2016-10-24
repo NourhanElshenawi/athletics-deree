@@ -19,9 +19,11 @@
 {% block content %}
    
     <div>
-        <img src="http://placehold.it/300x300" alt="">
-        <p style="font-weight: bold; font-size: large; padding: 0;">Name: {{ user.name }} </p>
-        <p style="font-weight: bold; font-size: large; padding: 0;">ID: {{ user.id }}</p>
+        {#<img src="http://placehold.it/300x300" alt="">#}
+        <img src="images/{{ session.user.picture }}" style="width: 20%; height: 20%;" alt="">
+        <p style="font-weight: bold; font-size: large; padding: 0;">Name: {{ session.user.name }}</p>
+        <p style="font-weight: bold; font-size: large; padding: 0;">ID: {{ session.user.id }}</p>
+
     </div>
 
     <div style="width: 50%; height: 50%;">

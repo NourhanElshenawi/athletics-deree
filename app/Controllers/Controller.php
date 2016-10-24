@@ -13,5 +13,6 @@ class Controller
     {
         $loader = new Twig_Loader_Filesystem(__DIR__ . '/../Views/');
         $this->twig = new Twig_Environment($loader);
+        $this->twig->addGlobal('session', $_SESSION);
     }
 }
