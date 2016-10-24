@@ -88,6 +88,19 @@ class DB
         return $result;
     }
 
+    public function getUser($email, $password)
+    {
+        $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE email = ? and password = ?");
+        $stmt->bindValue(1,$email);
+        $stmt->bindValue(2,$password);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
+
+        return $result;
+    }
+
 
     public function updateClass($id, $duration, $startTime, $capacity,$instructorID)
     {
