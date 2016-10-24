@@ -81,7 +81,99 @@ class DB
         return $result;
     }
 
-    public function getUser($username, $password)
+//    public function getUser($username, $password)
+
+//    public function updateClass($id, $duration, $startTime, $capacity,$instructorID)
+//    {
+//        $stmt = $this->conn->prepare("update dereeAthletics.classes set duration = ?, startTime = ?, capacity = ?, instructorID = ?  WHERE id = ? ");
+//
+//        try{
+//            $stmt->bindValue(1, $duration);
+//            $stmt->bindValue(2, $startTime);
+//            $stmt->bindValue(3, $capacity);
+//            $stmt->bindValue(4, $instructorID);
+//            $stmt->bindValue(5, $id);
+//            $stmt->execute();
+//
+//            return true;
+//        } catch (Exception $e) {
+//        }
+//
+//    }
+
+
+
+    public function getCarousel()
+    {
+        $stmt = $this->conn->prepare("select * from project1.carousel WHERE included='1' ORDER by POSITION ASC ");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function getNotIncludedCarousel()
+    {
+        $stmt = $this->conn->prepare("select * from project1.carousel WHERE included='0' ORDER by POSITION ASC ");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function getAllCarousel()
+    {
+        $stmt = $this->conn->prepare("select * from project1.carousel");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+
+        return $result;
+    }
+
+    public function getCarouselImageByPosition($position)
+    {
+        $stmt = $this->conn->prepare("select * from project1.carousel WHERE position = ?");
+        $stmt->bindValue(1,$position);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
+        return $result;
+    }
+    public function updateCarouselPosition($id, $position)
+    {
+        $stmt = $this->conn->prepare("insert into project1.carousel WHERE id = ? (position) VALUES (?)");
+
+        try{
+            $stmt->bindValue(1, $id);
+            $stmt->bindValue(2, $position);
+            $stmt->execute();
+        } catch (Exception $e) {
+        }
+    }
+
+
+    public function includeInCarousel($id, $position)
+    {
+        $stmt = $this->conn->prepare("update project1.carousel set included = ?, POSITION = ? WHERE id = ? ");
+
+        try{
+            $stmt->bindValue(1, "1");
+            $stmt->bindValue(2, $position);
+            $stmt->bindValue(3, $id);
+            $stmt->execute();
+        } catch (Exception $e) {
+        }
+    }
+
+    public function getUserCredentials($username, $password)
     {
         $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE email = ? and password = ?");
         $stmt->bindValue(1,$username);
