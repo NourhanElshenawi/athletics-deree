@@ -193,21 +193,37 @@ class MainController extends Controller
 
     }
 
+    public function searchClasses(){
+        $db = new DB();
 
-//    public function editClass()
-//    {
-////        var_dump($_POST);
-//
-//        if(isset($_POST['edit'])){
-//            echo "edit working!!!";
-//        }
-////        elseif (isset($_GET['delete'])){
-////            echo "delete working!!!";
-////        }
-//
-//        echo $this->twig->render('admin/editClass.twig');
-//    }
+        $result = $db->searchClasses($_GET['keyword']);
 
+//        var_dump($db->searchClasses($_GET['keyword']));
+        $allInstructor = $db->getInstructors();
+
+        foreach ($result as $key=>$class ){
+
+            $temp = ($class['currentCapacity']*100)/$class['capacity'];
+            $temp2 = $class['currentCapacity'];
+
+            $result[$key]['currentCapacityPercentage'] = $temp;
+            $result[$key]['currentCapacity'] = $temp2;
+        }
+
+
+        $instructors = array();
+
+        foreach ($result as $class ){
+
+            $id = "".$class["instructorID"]."";
+            $instructors[]= $db->getInstructor($id);
+
+        }
+
+        echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $result, 'instructors'=> $instructors, 'allInstructors'=>$allInstructor));
+
+
+    }
 
     public function updateClass()
     {

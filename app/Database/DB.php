@@ -150,4 +150,18 @@ class DB
         $stmt->execute();
     }
 
+    public function searchClasses($keyword)
+    {
+        $stmt = $this->conn->prepare("select * from dereeAthletics.classes WHERE name LIKE ?");
+
+            $stmt->bindValue(1, $keyword);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+
+        return $result;
+
+
+    }
+
 }

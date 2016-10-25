@@ -29,6 +29,7 @@ $router->get('/editschedule', 'MainController', 'editSchedule');
 $router->get('/editclass', 'MainController', 'editClass');
 $router->post('/deleteclass', 'MainController', 'deleteClass');
 $router->post('/updateclass', 'MainController', 'updateClass');
+$router->get('/adminsearchclasses', 'MainController', 'searchClasses');
 
 $router->get('/profile', 'MainController', 'profileStats');
 
