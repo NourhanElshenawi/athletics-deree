@@ -71,7 +71,7 @@ class MainController extends Controller
     {
         $array = array("January", "January", "January", "February", "February", "March");
         $vals = array_count_values($array);
-        var_dump($vals);
+//        var_dump($vals);
         for ($x=0; $x<count($array);){
 
             $x++;
@@ -124,7 +124,7 @@ class MainController extends Controller
         }
         else {
 
-            if (($this->adminLogin())) {
+            if (($this->verifyResponse())) {
 
                 $db = new DB();
                 $user = $db->getUser($_POST["username"], $_POST["password"]);
