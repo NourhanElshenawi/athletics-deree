@@ -27,6 +27,7 @@ $router->get('/logout', 'MainController', 'logout');
 /********ADMIN**********/
 $router->get('/editschedule', 'MainController', 'editSchedule');
 $router->get('/editclass', 'MainController', 'editClass');
+$router->post('/addclass', 'MainController', 'addClass');
 $router->post('/deleteclass', 'MainController', 'deleteClass');
 $router->post('/updateclass', 'MainController', 'updateClass');
 $router->get('/adminsearchclasses', 'MainController', 'searchClasses');

@@ -37,19 +37,16 @@
 
 {% block content %}
 
+    {% set classExample = classes|first %}
     <div class="clearfix"></div>
 
     <div class="row">
         {#<div class="col-md-12">#}
         <div class="x_panel2">
             <div class="x_title">
-                <h2>Classes</h2>
+                <h2 style="width: auto; margin-right: 3%;">Classes</h2>
 
-                <div class="clearfix"></div>
-            </div>
-            <div>
-                {#class="x_content"#}
-                <p>Simple table with project listing with progress and editing options</p>
+                <button class="fa fa-plus add" style="margin-top: 1%; border-radius: 25px;"></button>
 
                 <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/adminsearchclasses">
                     <label style="display: inline-block;">
@@ -58,6 +55,104 @@
                     </label>
                     <input type="submit" class="search-submit" value="Search">
                 </form>
+
+                <div class="clearfix"></div>
+            </div>
+            <div>
+                {#class="x_content"#}
+                {#<p>Simple table with project listing with progress and editing options</p>#}
+
+                <table class="addClass">
+                    <thead>
+                        <tr>
+
+                            <th>Name</th>
+                            <th>Duration</th>
+                            <th>Instructor</th>
+                            <th>Start Time</th>
+                            <th>Period</th>
+                            <th>Capacity</th>
+                            <th>Location</th>
+                            <th>Days</th>
+
+                        </tr>
+                    </thead>
+                        <tbody>
+                        <form action="/addclass" method="post">
+                            <tr>
+
+                                <form action="/addclass" method="post">
+
+                                <td>
+                                    <input type="text" style="width: 100%;" name="name" required>
+                                </td>
+
+                                <td>
+                                    <input type="number" min="1" style="width: 100%;" name="duration" required>
+                                </td>
+
+                                <td>
+
+                                    <select name="instructorID" id="" style="width: 100%;" name="instructor" required>
+
+                                        {% for instructor in allInstructors %}
+                                            <option value="{{ instructor.id }}">{{ instructor.name }}</option>
+                                        {% endfor %}
+
+                                    </select>
+
+                                </td>
+
+                                <td>
+                                    <input type="time"style="width: 100%;" name="startTime" required>
+                                </td>
+
+                                <td>
+                                    <select name="period" id="" style="width: 100%;" name="period" required>
+                                        <option value="fall">Fall Semester</option>
+                                        <option value="spring">Spring Semester</option>
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <input type="number" min="1" style="width: 100%;" name="capacity" required>
+                                </td>
+
+                                <td>
+                                    <input type="text" style="width: 100%;" name="location" required>
+                                </td>
+
+                                <td>
+                                    <select name="days[]" id="" multiple style="width: 120%;"required>
+
+
+
+                                        {{ classExample.name }}
+                                        {% for key, value in classExample.days %}
+                                            <option value="{{ key }}"> {{ key }}</option>
+                                        {% endfor %}
+
+
+                                    </select>
+
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr colspan="8">
+                                <td>
+                                    <button type="submit"> Add Class</button>
+                                </td>
+
+                        </form>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+
 
                 <!-- start project list -->
                 <table class="table table-striped projects">
@@ -73,6 +168,7 @@
                     </tr>
                     </thead>
                     <tbody>
+
 
 
                     {% for class in classes %}
@@ -174,6 +270,7 @@
                                                 <th>Max. Capacity</th>
                                                 <th>Current Capacity</th>
                                                 <th>Location</th>
+                                                <th>Days</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -191,7 +288,15 @@
                                                 <td>{{ class.capacity }}</td>
                                                 <td>{{ class.currentCapacity }}</td>
                                                 <td>{{ class.location }}</td>
-                                                <td></td>
+                                                <td>
+                                                    <ul>
+                                                        {% for key, value in class.days %}
+                                                            {% if value == 1 %}
+                                                                <li>{{ key }}</li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </td>
                                             </tr>
                                             <tr style="display: none;" class="updateInfo">
                                                 <form action="/updateclass" method="post">
@@ -199,7 +304,7 @@
                                                     <td>
                                                         {#make sure to add that#}
                                                         {#<input type="" id="endTime" name="instructor" min="08:00" max="21:00" value="{{ class.endTime }}">#}
-                                                        <select name="instructor" id="">
+                                                        <select name="instructor" id="" style="width: 100%;">
                                                             {% for instructor in allInstructors %}
                                                                 {% if instructor.id == class.instructorID %}
 
@@ -213,15 +318,15 @@
                                                     </td>
 
                                                     <td>
-                                                        <input type="number" id="duration" name="duration" min="1" max="100" value="{{ class.duration }}">
+                                                        <input style="width: 100%;" type="number" id="duration" name="duration" min="1" max="100" value="{{ class.duration }}">
                                                     </td>
 
                                                     <td>
-                                                        <input type="time" id="startTime" name="startTime" min="08:00" max="21:00" value="{{ class.startTime }}">
+                                                        <input style="width: 100%;" type="time" id="startTime" name="startTime" min="08:00" max="21:00" value="{{ class.startTime }}">
                                                     </td>
 
                                                     <td>
-                                                        <input type="number" id="capacity" name="capacity" min="1" max="30" value="{{ class.capacity }}">
+                                                        <input style="width: 100%;" type="number" id="capacity" name="capacity" min="1" max="30" value="{{ class.capacity }}">
                                                     </td>
 
                                                     <td>
@@ -229,14 +334,33 @@
                                                     </td>
 
                                                     <td>
-                                                        <input type="text" id="location" name="location" value="{{ class.location }}">
+                                                        <input style="width: 100%;" type="text" id="location" name="location" value="{{ class.location }}">
                                                     </td>
 
                                                     <td>
-                                                        <input type="hidden" name="id" value="{{ class.id }}">
+                                                        <input style="width: 100%;" type="hidden" name="id" value="{{ class.id }}">
 
                                                         {#remove unnecessary attributes#}
                                                         <button type="submit" value="{{ class.id }}">Update</button>
+                                                    </td>
+
+                                                    <td>
+
+                                                        <select name="" id="" multiple>
+
+
+
+                                                            {% for key, value in class.days %}
+                                                                {% if value == 1 %}
+
+                                                                    <option value="{{ key }}" selected> {{ key }}</option>
+                                                                    {% else %}
+
+                                                                        <option value="{{ key }}"> {{ key }}</option>
+                                                                {% endif %}
+                                                            {% endfor %}
+
+                                                        </select>
                                                     </td>
 
                                                 </form>
@@ -290,8 +414,16 @@
 
 
         });
+        jQuery('.addClass').toggle();
+        jQuery('.add').click(function() {
 
+            jQuery('.addClass').toggle();
+//            toggleOnce(this);
+//            jQuery(this).toggleClass('fa-chevron-down');
+//            jQuery(this).find('i').toggleClass('fa-chevron-up');
+//            jQuery('.updateInfo').toggle();
 
+        });
 
         jQuery('.edit').click(function() {
 

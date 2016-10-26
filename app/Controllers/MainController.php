@@ -11,8 +11,10 @@ use Nourhan\Services\Upload;
 use Nourhan\ReCaptcha;
 use Nourhan\Services\ChangeCarousel;
 
+
 class MainController extends Controller
 {
+
     public function __construct()
     {
         parent::__construct();
@@ -171,7 +173,43 @@ class MainController extends Controller
 
             $classes[$key]['currentCapacityPercentage'] = $temp;
             $classes[$key]['currentCapacity'] = $temp2;
-        }
+
+//            var_dump($class);
+
+                $class['days']=array();
+
+                if($class['monday']){
+                    $classes[$key]['days']['monday']="1";
+//                $classes[$key]['days'][]="monday";
+//                echo $class['monday'];
+                } else {
+                    $classes[$key]['days']['monday']="0";
+                }
+                if($class['tuesday']){
+                    $classes[$key]['days']['tuesday']="1";
+//                $classes[$key]['days'][]="tuesday";
+                }else {
+                    $classes[$key]['days']['tuesday']="0";
+                }
+                if($class['wednesday']){
+                    $classes[$key]['days']['wednesday']="1";
+//                $classes[$key]['days'][]="wednesday";
+                }else {
+                    $classes[$key]['days']['wednesday']="0";
+                }
+                if($class['thursday']){
+                    $classes[$key]['days']['thursday']="1";
+//                $classes[$key]['days'][]="thursday";
+                }else {
+                    $classes[$key]['days']['thursday']="0";
+                }
+                if($class['friday']){
+                    $classes[$key]['days']['friday']="1";
+//                $classes[$key]['days'][]="friday";
+                }else {
+                    $classes[$key]['days']['friday']="0";
+                }
+            }
 
 
         $instructors = array();
@@ -190,6 +228,33 @@ class MainController extends Controller
     {
         $db = new DB();
         $db->deleteClass($_POST['id']);
+
+    }
+
+
+    public function addClass()
+    {
+
+//        var_dump($_POST);
+//        var_dump((int)in_array('thursday',$_POST['days']));
+//        var_dump((int)in_array('wednesday',$_POST['days']));
+//        var_dump(isset($_POST['days']));
+
+        $db = new DB();
+        $test = $db->addClass($_POST['name'], $_POST['duration'], $_POST['instructorID'], $_POST['startTime'],
+            $_POST['period'],
+            $_POST['capacity'],$_POST['location'],(int)in_array('monday',$_POST['days']),
+            (int)in_array('tuesday',$_POST['days']), (int)in_array('wednesday',$_POST['days']),
+            (int)in_array('thursday',$_POST['days']), (int)in_array('friday',$_POST['days']));
+
+
+        if($test){
+
+            header('Location: /editschedule');
+
+        } else{
+            //ERROR
+        }
 
     }
 

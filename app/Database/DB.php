@@ -164,4 +164,33 @@ class DB
 
     }
 
+    public function addClass($name, $duration, $instructorID, $startTime, $period, $capacity, $location, $monday, $tuesday, $wednesday, $thursday, $friday)
+    {
+        $stmt = $this->conn->prepare("insert into dereeAthletics.classes (name, duration, instructorID, startTime, period, 
+capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+        try{
+            $stmt->bindValue(1, $name);
+            $stmt->bindValue(2, $duration);
+            $stmt->bindValue(3, $instructorID);
+            $stmt->bindValue(4, $startTime);
+            $stmt->bindValue(5, $period);
+            $stmt->bindValue(6, $capacity);
+            $stmt->bindValue(7, $location);
+            $stmt->bindValue(8, $monday);
+            $stmt->bindValue(9, $tuesday);
+            $stmt->bindValue(10, $wednesday);
+            $stmt->bindValue(11, $thursday);
+            $stmt->bindValue(12, $friday);
+
+            $stmt->execute();
+
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+
+
+    }
+
 }
