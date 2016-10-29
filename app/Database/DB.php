@@ -261,6 +261,26 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         $stmt->execute();
     }
 
+    public function unregisterClass($id, $classID)
+    {
+        $stmt = $this->conn->prepare("delete from dereeAthletics.registrations WHERE userID = ? and classID = ?");
+        $stmt->bindValue(1,$id);
+        $stmt->bindValue(2,$classID);
+        $stmt->execute();
+    }
+
+    public function registerClass($id, $classID)
+    {
+        try{
+            $stmt = $this->conn->prepare("insert into dereeAthletics.registrations (userID, classID) VALUES  (?, ?)");
+            $stmt->bindValue(1,$id);
+            $stmt->bindValue(2,$classID);
+            $stmt->execute();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
 
 
 

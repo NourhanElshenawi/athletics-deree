@@ -1,0 +1,759 @@
+{% extends "master.twig" %}
+
+
+{% block head %}
+    {#<link href="css/bootstrap.min.css" rel="stylesheet">#}
+    {##}
+    {#<script type="text/javascript" src="//code.jquery.com/jquery-1.8.3.js"></script>#}
+
+    {#<link rel="stylesheet" type="text/css" href="/css/normalize.css">#}
+
+    {#<link rel="stylesheet" type="text/css" href="/css/result-light.css">#}
+
+    {#<script type="text/javascript" src="http://qtip2.com/v/stable/jquery.qtip.js"></script>#}
+
+    {#<link rel="stylesheet" type="text/css" href="http://qtip2.com/v/stable/jquery.qtip.css">#}
+
+    {#<link rel="stylesheet" type="text/css" href="http://qtip2.com/static/stylesheets/libs/jquery.fullcalendar.css">#}
+
+    {#<script type="text/javascript" src="http://qtip2.com/static/javascripts/libs/jquery.fullcalendar.min.js"></script>#}
+
+    {#<script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script>#}
+
+    <!-- Bootstrap -->
+    {#<link href="css/bootstrap.css" rel="stylesheet">#}
+    <!-- Font Awesome -->
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="css/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="css/green.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="css/custom.min.css" rel="stylesheet">
+    <style>
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .split {
+            display: inline-block;
+        }
+
+
+
+    </style>
+
+    {#<script src="js/jquery.js"></script>#}
+    <script src="js/bootstrap.js"></script>
+
+    <script type="text/javascript">//<![CDATA[
+        $(window).load(function(){
+// Setup FullCalendar
+            (function() {
+                var date = new Date();
+                var d = date.getDate();
+                var m = date.getMonth();
+                var y = date.getFullYear();
+
+                var tooltip = $('<div/>').qtip({
+                    id: 'fullcalendar',
+                    prerender: true,
+                    content: {
+                        text: ' ',
+                        title: {
+                            button: true
+                        }
+                    },
+                    position: {
+                        my: 'bottom center',
+                        at: 'top center',
+                        target: 'mouse',
+                        viewport: $('#fullcalendar'),
+                        adjust: {
+                            mouse: false,
+                            scroll: false
+                        }
+                    },
+                    show: false,
+                    hide: false,
+                    style: 'qtip-light'
+                }).qtip('api');
+
+                $('#fullcalendar').fullCalendar({
+//                    editable: true,
+                    height: 600,
+//                    width: 100,
+                    buttons: false,
+                    header: false
+//                    {
+//                        left: 'title',
+//                        center: '',
+//                        right: 'today prev,next'
+//                    }
+                    ,
+                    minTime: "07:00:00",
+                    maxTime: "21:00:00",
+
+                    eventClick: function(data, event, view) {
+                        var content = '<h3>'+data.title+'       </h3>' +
+                                '<p><b>Start:</b> '+data.time+'<br />' +
+                                '<p><b>Duration:</b> '+data.duration+' Min<br /></p>'+
+                                '<p><b>Location:</b> '+data.location+'<br /></p>'
+//                                +'<p><input type="button" value="Register"></p>'
+                                ;
+
+                        tooltip.set({
+                            'content.text': content
+                        })
+                                .reposition(event).show(event);
+                    },
+                    dayClick: function() { tooltip.hide() },
+                    eventResizeStart: function() { tooltip.hide() },
+                    eventDragStart: function() { tooltip.hide() },
+                    viewDisplay: function() { tooltip.hide() },
+                });
+
+                {% for class in calendarClasses %}
+
+                {% for key, value in class.days %}
+
+                $('#fullcalendar').fullCalendar( 'addEventSource',
+                        function(start, end, callback) {
+                            // When requested, dynamically generate a
+                            // repeatable event for every monday.
+                            var events = [];
+//                            var monday = 1;
+                            var one_day = (24 * 60 * 60 * 1000);
+
+                            for (loop = start.getTime();
+                                 loop <= end.getTime();
+                                 loop = loop + one_day) {
+
+                                var column_date = new Date(loop);
+
+                                if (column_date.getDay() == {{ value }}) {
+                                    // we're in Monday, create the event
+                                    var time = "{{ class.startTime }}";
+                                    var parseTime = time.split(":");
+                                    console.log(parseTime[0]);
+                                    events.push({
+                                        title: '{{ class.name }}',
+                                        start: new Date(column_date.setHours(parseTime[0], parseTime[1])),
+                                        end: new Date(column_date.setMinutes({{ class.duration }})),
+//                                        end: new Date(column_date.setMinutes(90)),
+                                        allDay: false,
+                                        location: "{{ class.location }}",
+                                        time: "{{ class.startTime }}",
+                                        duration: "{{ class.duration }}"
+                                    });
+                                }
+
+
+
+
+                            } // for loop
+
+                            // return events generated
+                            callback( events );
+                        }
+                );
+                {#{% endif %}#}
+
+                {% endfor %}
+
+                {% endfor %}
+//                $('#fullcalendar').fullCalendar( 'addEventSource',
+//                        function(start, end, callback) {
+//                            // When requested, dynamically generate a
+//                            // repeatable event for every monday.
+//                            var events = [];
+//                            var monday = 1;
+//                            var one_day = (24 * 60 * 60 * 1000);
+//
+//                            for (loop = start.getTime();
+//                                 loop <= end.getTime();
+//                                 loop = loop + one_day) {
+//
+//                                var column_date = new Date(loop);
+//
+//                                if (column_date.getDay() == monday) {
+//                                    // we're in Moday, create the event
+//                                    events.push({
+//                                        title: 'Morning Meeting',
+//                                        start: new Date(column_date.setHours(10, 00)),
+//                                        end: new Date(column_date.setHours(10, 40)),
+//                                        allDay: false
+//                                    });
+//                                }
+//
+//
+//
+//
+//                            } // for loop
+//
+//                            // return events generated
+//                            callback( events );
+//                        }
+//                );
+                $('#fullcalendar').fullCalendar('changeView', 'agendaWeek');
+//                $('#fullcalendar').fullCalendar('option', 'aspectRatio', 3);
+
+            }());
+        });//]]>
+
+
+
+
+    </script>
+
+{% endblock head %}
+
+    {% block title %} Profile{% endblock title %}
+
+
+{% block content %}
+
+    <div>
+        {#<img src="http://placehold.it/300x300" alt="">#}
+        <img src="images/{{ session.user.picture }}" style="width: 5%; height: 10%;" alt="">
+        <p style="font-weight: bold; font-size: large; padding: 0;">Name: {{ session.user.name }}</p>
+        <p style="font-weight: bold; font-size: large; padding: 0;">ID: {{ session.user.id }}</p>
+
+    </div>
+
+    <div id="fullcalendar" style="width: 50%; display: inline-block;"></div>
+
+
+
+    <script>
+        Chart.defaults.global.legend = {
+            enabled: false
+        };
+
+        var ctx = document.getElementById("mybarChart");
+        var mybarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for key,value in vals %}
+//                        "January", "February", "March", "April", "May", "June", "July"
+                    {% if loop.last %}
+                    "{{ key }}"
+                    {% else %}
+                    "{{ key }}",
+                    {% endif %}
+
+                    {% endfor %}
+                ],
+
+                {#{% for key,value in vals %}#}
+                {##}
+                {#{% endfor %}#}
+
+                datasets: [{
+                    label: '# of Visits',
+                    backgroundColor: "#26B99A",
+                    data: [
+//                            51, 30, 40, 28, 92, 50, 45
+                        {% for key,value in vals %}
+//                        "January", "February", "March", "April", "May", "June", "July"
+                        {% if loop.last %}
+                        {{ value }}
+                        {% else %}
+                        {{ value }},
+                        {% endif %}
+
+                        {% endfor %}
+                    ]
+                }
+//                , {
+//                    label: '# of Votes',
+//                    backgroundColor: "#03586A",
+//                    data: [41, 56, 25, 48, 72, 34, 12]
+//                }
+
+                ]
+            },
+
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+
+    {% set classExample = classes|first %}
+    <div class="clearfix" style="width: 40%; display: inline-block;"></div>
+    {#style="width: 40%; display: inline-block;"#}
+    <div class="row">
+        {#<div class="col-md-12">#}
+        <div class="x_panel2">
+            <div class="x_title">
+                <h2 style="width: auto; margin-right: 3%;">Classes</h2>
+
+                <button class="fa fa-plus add" style="margin-top: 1%; border-radius: 25px;"></button>
+
+                <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/adminsearchclasses">
+                    <label style="display: inline-block;">
+                        <span class="screen-reader-text">Search for:</span>
+                        <input style="margin: 0;" type="search" class="search-field" placeholder="Search …" value="" name="keyword">
+                    </label>
+                    <input type="submit" class="search-submit" value="Search">
+                </form>
+
+                <div class="clearfix"></div>
+            </div>
+            <div>
+                {#class="x_content"#}
+                {#<p>Simple table with project listing with progress and editing options</p>#}
+
+
+                <!-- start project list -->
+                <table class="table table-striped projects">
+                    <thead>
+                    <tr>
+
+                        <th>#</th>
+                        <th>Class Name</th>
+
+                        <th>Team Members</th>
+                        <th>Project Progress</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+
+
+                    {% for class in classes %}
+                        <tr style="padding: 0;">
+
+                            <td colspan="4" style="border: none; padding: 0;">
+
+                                <div class="x_panel" style="padding: 0;">
+
+                                    <div class="x_title" style="padding: 4px; border-bottom: none;">
+
+                                        {#<h2>Stripped table <small>Stripped table subtitle</small></h2>#}
+                                        <div class="split" style="width: 5%; margin: 0;">
+                                            {{ loop.index }}
+                                        </div>
+
+                                        <div class="split" style="width: 32%; margin: 0;">
+                                            <a>{{ class.name }}</a>
+                                            <br />
+                                            <small>Instructor Name:
+                                                {% for instructor in allInstructors %}
+                                                    {% if class.instructorID == instructor.id %}
+                                                        {{ instructor.name }}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </small>
+                                        </div>
+
+                                        <div class="split" style="width: 25%; margin: 0;">
+                                            <ul class="list-inline">
+                                                <li>
+                                                    <img src="images/user.png" class="avatar" alt="Avatar">
+                                                </li>
+                                                <li>
+                                                    <img src="images/user.png" class="avatar" alt="Avatar">
+                                                </li>
+                                                <li>
+                                                    <img src="images/user.png" class="avatar" alt="Avatar">
+                                                </li>
+                                                <li>
+                                                    <img src="images/user.png" class="avatar" alt="Avatar">
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="split" style="width: 25%; margin: 0;">
+                                            <div class="project_progress">
+                                                <div class="progress progress_sm">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{ class.currentCapacityPercentage }}"></div>
+                                                </div>
+                                                <small>
+                                                    {{ class.currentCapacityPercentage }}% Complete
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li>
+                                                <a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
+                                            </li>
+
+                                            {% if class in userClasses %}
+                                                <li>
+                                                    <a class="dropdown-toggle unregisterClass" data-toggle="dropdown" role="button" aria-expanded="false" value="{{ class.id }}">
+                                                        <i class="fa fa-check-circle"></i>
+                                                    </a>
+                                                </li>
+                                                {% else %}
+
+                                                    <li>
+                                                        <a class="dropdown-toggle registerClass" data-toggle="dropdown" role="button" aria-expanded="false" value="{{ class.id }}">
+                                                            <i class="fa fa-plus"></i>
+                                                        </a>
+                                                    </li>
+
+                                            {% endif %}
+
+
+
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="x_content update" style="padding: 0; display: none;">
+
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Instructor</th>
+                                                <th>Duration/Min</th>
+                                                <th>Start Time/24:00</th>
+                                                <th>Max. Capacity</th>
+                                                <th>Current Capacity</th>
+                                                <th>Location</th>
+                                                <th>Days</th>
+                                                <th>  </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+
+                                                <td>
+                                                    {% for instructor in allInstructors %}
+                                                        {% if class.instructorID == instructor.id %}
+                                                            {{ instructor.name }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
+                                                <td>{{ class.duration }}</td>
+                                                <td>{{ class.startTime }}</td>
+                                                <td>{{ class.capacity }}</td>
+                                                <td>{{ class.currentCapacity }}</td>
+                                                <td>{{ class.location }}</td>
+                                                <td>
+                                                    <ul>
+                                                        {% for key, value in class.days %}
+                                                            {% if value == 1 %}
+                                                                <li>{{ key }}</li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </td>
+
+                                                <td></td>
+                                            </tr>
+                                            <tr style="display: none;" class="updateInfo">
+                                                <form action="/updateclass" method="post">
+
+                                                    <td>
+                                                        {#make sure to add that#}
+                                                        {#<input type="" id="endTime" name="instructor" min="08:00" max="21:00" value="{{ class.endTime }}">#}
+                                                        <select name="instructor" id="" style="width: 100%;">
+                                                            {% for instructor in allInstructors %}
+                                                                {% if instructor.id == class.instructorID %}
+
+                                                                    <option value="{{ instructor.id }}" selected>{{ instructor.name }} </option>
+                                                                {% else %}
+
+                                                                    <option value="{{ instructor.id }}">{{ instructor.name }}</option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </select>
+                                                    </td>
+
+                                                    <td>
+                                                        <input style="width: 100%;" type="number" id="duration" name="duration" min="1" max="100" value="{{ class.duration }}">
+                                                    </td>
+
+                                                    <td>
+                                                        <input style="width: 100%;" type="time" id="startTime" name="startTime" min="08:00" max="21:00" value="{{ class.startTime }}">
+                                                    </td>
+
+                                                    <td>
+                                                        <input style="width: 100%;" type="number" id="capacity" name="capacity" min="1" max="30" value="{{ class.capacity }}">
+                                                    </td>
+
+                                                    <td>
+                                                        {{ class.currentCapacity }}
+                                                    </td>
+
+                                                    <td>
+                                                        <input style="width: 100%;" type="text" id="location" name="location" value="{{ class.location }}">
+                                                    </td>
+
+                                                    <td>
+
+                                                        <select name="" id="" multiple>
+
+
+
+                                                            {% for key, value in class.days %}
+                                                                {% if value == 1 %}
+
+                                                                    <option value="{{ key }}" selected> {{ key }}</option>
+                                                                {% else %}
+
+                                                                    <option value="{{ key }}"> {{ key }}</option>
+                                                                {% endif %}
+                                                            {% endfor %}
+
+                                                        </select>
+                                                    </td>
+
+                                                    <td>
+                                                        <input style="width: 100%;" type="hidden" name="id" value="{{ class.id }}">
+
+                                                        {#remove unnecessary attributes#}
+                                                        <button type="submit" value="{{ class.id }}">Update</button>
+                                                    </td>
+
+
+
+                                                </form>
+
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+
+                    {% endfor %}
+
+
+
+
+                    </tbody>
+                </table>
+                <!-- end project list -->
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+    <script>
+        jQuery(document).ready(function() {
+            console.log("HIII");
+
+            jQuery('.collapse-link').click(function() {
+                toggle(this);
+
+            })  ;
+
+
+            jQuery('.close-link').click(function () {
+                var $BOX_PANEL = jQuery(this).closest('.x_panel');
+//                console.log(jQuery(this).closest('.delete').attr('value'));
+
+//                $BOX_PANEL.remove();
+            });
+
+
+
+
+
+
+        });
+        jQuery('.addClass').toggle();
+        jQuery('.add').click(function() {
+
+            jQuery('.addClass').toggle();
+//            toggleOnce(this);
+//            jQuery(this).toggleClass('fa-chevron-down');
+//            jQuery(this).find('i').toggleClass('fa-chevron-up');
+//            jQuery('.updateInfo').toggle();
+
+        });
+
+        jQuery('.edit').click(function() {
+
+            toggleOnce(this);
+            jQuery(this).toggleClass('fa-chevron-down');
+            jQuery(this).find('i').toggleClass('fa-chevron-up');
+            jQuery('.updateInfo').toggle();
+
+        });
+
+        jQuery('.unregisterClass').click(function() {
+
+
+            if (confirm("Are you sure you want to unregister for this class?")) {
+
+
+//                jQuery(this).closest('.x_panel').remove();
+                console.log(jQuery(this).attr('value'));
+                console.log({{ session.user.id }});
+
+                jQuery.ajax(
+                        {
+                            type: 'POST',
+                            url: '/unregisterclass',
+                            data: {
+                                classID: jQuery(this).attr('value'),
+                                userID: {{ session.user.id }}
+                            },
+                            success: function (msg) {
+
+                                console.log("SUCCESS AJAX!");
+
+                            }
+                        }
+                );
+                location.reload();
+            }
+
+        });
+
+        jQuery('.registerClass').click(function() {
+
+
+
+//                jQuery(this).closest('.x_panel').remove();
+                console.log(jQuery(this).attr('value'));
+                console.log({{ session.user.id }});
+
+                jQuery.ajax(
+                        {
+                            type: 'POST',
+                            url: '/registerclass',
+                            data: {
+                                classID: jQuery(this).attr('value'),
+                                userID: {{ session.user.id }}
+                            },
+                            success: function (msg) {
+
+                                console.log("SUCCESS AJAX!");
+
+                            }
+                        }
+                );
+                location.reload();
+        });
+
+        function toggle($this) {
+
+            var $BOX_PANEL = jQuery($this).closest('.x_panel'),
+                    $ICON = jQuery($this).find('i'),
+                    $BOX_CONTENT = $BOX_PANEL.find('.x_content');
+
+//            console.log($ICON);
+            if ($BOX_PANEL.attr('style')) {
+                $BOX_CONTENT.slideToggle(200, function(){
+                    $BOX_PANEL.removeAttr('style');
+
+                    $ICON.toggleClass('fa-chevron-down');
+                    $ICON.addClass('fa-chevron-up');
+                });
+            } else {
+                $BOX_CONTENT.slideToggle(200);
+                $BOX_PANEL.css('height', 'auto');
+                $ICON.toggleClass('fa-chevron-up');
+                $ICON.addClass('fa-chevron-down');
+            }
+
+            jQuery('.x_title').css('border-bottom', '2px solid');
+
+        }
+
+        function toggleOnce($this) {
+
+            var $BOX_PANEL = jQuery($this).closest('.x_panel'),
+//                    $ICON = jQuery($this).parent().parent().parent().first().find('i'),
+                    $ICON = jQuery($this).closest('.collapse-link'),
+                    $BOX_CONTENT = $BOX_PANEL.find('.x_content');
+
+            if ($BOX_PANEL.attr('style')) {
+                $BOX_CONTENT.slideToggle(200, function(){
+                    $BOX_PANEL.removeAttr('style');
+
+
+                    console.log($ICON);
+                    $ICON.toggleClass('fa-chevron-down');
+                    console.log($ICON);
+                    $ICON.addClass('fa-chevron-up');
+                    console.log($ICON);
+                });
+            }
+
+            $ICON.toggleClass('fa-chevron-down');
+            $ICON.toggleClass('fa-chevron-up');
+
+        }
+
+        function toggleUpdate($this) {
+
+            var $B = jQuery($this).closest('.x_content').closest('.x_content');
+            console.log($B);
+
+        }
+
+
+    </script>
+
+    <script>
+        jQuery('.edit').click(function() {
+
+            var $id = jQuery(this).attr('value');
+
+            jQuery(this).closest('.x_content').css('display','block');
+            jQuery(this).closest('.x_content').css('style','');
+
+        });
+
+    </script>
+
+
+
+
+
+
+
+    <!-- jQuery -->
+    {#<script src="js/jquery.min.js"></script>#}
+    <!-- Bootstrap -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="js/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="js/nprogress.js"></script>
+    <!-- bootstrap-progressbar -->
+    {#<script>jQuery.noConflict();</script>#}
+    <script src="js/bootstrap-progressbar.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    {#<script>jQuery.noConflict();</script>#}
+    <script src="js/custom.min.js"></script>
+
+
+
+
+{% endblock content %}
+
+{% block info %}
+    {{ include('info.twig') }}
+{% endblock info %}
+
+
+
+

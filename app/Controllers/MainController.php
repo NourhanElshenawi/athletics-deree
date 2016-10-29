@@ -110,6 +110,17 @@ class MainController extends Controller
             $x++;
         }
 
+        $classes = $this->getUserClasses();
+//        d($classes);
+        $classes = $this->beautifyClassesForCalendar($classes);
+
+        echo $this->twig->render('customer/profile.twig', array('vals'=>$vals, 'classes'=>$classes));
+    }
+
+    public function getUserClasses() {
+
+        $db = new DB();
+
         $userRegistrations = $db->getUserRegistrations($_SESSION['user']['id']);
 
         foreach ($userRegistrations as $registration){
@@ -117,10 +128,8 @@ class MainController extends Controller
             $classes[] = $db->getClass($registration['classID']);
 
         }
-//        d($classes);
-        $classes = $this->beautifyClassesForCalendar($classes);
 
-        echo $this->twig->render('customer/profile.twig', array('vals'=>$vals, 'classes'=>$classes));
+        return $classes;
     }
 
     public function login()
@@ -417,4 +426,39 @@ class MainController extends Controller
 
     }
 
+
+    /*********USER********/
+
+    public function register()
+    {
+        $db = new DB();
+        $calendarClasses = $db->getClasses();
+        $classes = $db->getClasses();
+        $userClasses = $this->getUserClasses();
+        $allInstructors = $db->getInstructors();
+
+        $classes = $this->beautifyClasses($classes);
+        $userClasses = $this->beautifyClasses($userClasses);
+
+        $calendarClasses = $this->beautifyClassesForCalendar($calendarClasses);
+
+        echo $this->twig->render('customer/register.twig', array('calendarClasses'=>$calendarClasses, 'classes'=>$classes, 'allInstructors'=>$allInstructors, 'userClasses'=>$userClasses));
+
+    }
+
+    public function unregisterClass()
+    {
+        $db = new DB();
+        $db->unregisterClass($_POST['userID'], $_POST['classID']);
+
+//        var_dump($_POST);
+
+    }
+
+    public function registerClass()
+    {
+        $db = new DB();
+        $db->registerClass($_POST['userID'], $_POST['classID']);
+
+    }
 }

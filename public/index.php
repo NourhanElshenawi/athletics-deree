@@ -23,6 +23,9 @@ $router->get('/fitnessProgram', 'MainController', 'fitnessProgram');
 /******USER****/
 $router->post('/profile', 'MainController', 'userLogin');
 $router->get('/logout', 'MainController', 'logout');
+$router->get('/register', 'MainController', 'register');
+$router->post('/unregisterclass', 'MainController', 'unregisterClass');
+$router->post('/registerclass', 'MainController', 'registerClass');
 
 /********ADMIN**********/
 ///////CLASSES SCHEDULE
