@@ -160,6 +160,8 @@ class MainController extends Controller
 
     /***********ADMIN************/
 
+    ////////EDIT CLASS SCHEDULE
+
     public function editSchedule()
     {
         $DB = new DB();
@@ -173,8 +175,6 @@ class MainController extends Controller
 
             $classes[$key]['currentCapacityPercentage'] = $temp;
             $classes[$key]['currentCapacity'] = $temp2;
-
-//            var_dump($class);
 
                 $class['days']=array();
 
@@ -231,14 +231,8 @@ class MainController extends Controller
 
     }
 
-
     public function addClass()
     {
-
-//        var_dump($_POST);
-//        var_dump((int)in_array('thursday',$_POST['days']));
-//        var_dump((int)in_array('wednesday',$_POST['days']));
-//        var_dump(isset($_POST['days']));
 
         $db = new DB();
         $test = $db->addClass($_POST['name'], $_POST['duration'], $_POST['instructorID'], $_POST['startTime'],
@@ -263,7 +257,6 @@ class MainController extends Controller
 
         $result = $db->searchClasses($_GET['keyword']);
 
-//        var_dump($db->searchClasses($_GET['keyword']));
         $allInstructor = $db->getInstructors();
 
         foreach ($result as $key=>$class ){
@@ -298,7 +291,86 @@ class MainController extends Controller
             $this->editSchedule();
     }
 
+
+
+
+
     }
 
+    ////////EDIT USERS
+
+
+
+    public function editUsers()
+    {
+        $db = new DB();
+
+        $users = $db->getUsers();
+
+        echo $this->twig->render('admin/editUsers.twig', array('users'=> $users));
+
+    }
+
+//    public function editUsers()
+//    {
+//        $DB = new DB();
+//        $users = $DB->getusers();
+//        $allInstructor = $DB->getInstructors();
+//
+//        foreach ($classes as $key=>$class ){
+//
+//            $temp = ($class['currentCapacity']*100)/$class['capacity'];
+//            $temp2 = $class['currentCapacity'];
+//
+//            $classes[$key]['currentCapacityPercentage'] = $temp;
+//            $classes[$key]['currentCapacity'] = $temp2;
+//
+//            $class['days']=array();
+//
+//            if($class['monday']){
+//                $classes[$key]['days']['monday']="1";
+////                $classes[$key]['days'][]="monday";
+////                echo $class['monday'];
+//            } else {
+//                $classes[$key]['days']['monday']="0";
+//            }
+//            if($class['tuesday']){
+//                $classes[$key]['days']['tuesday']="1";
+////                $classes[$key]['days'][]="tuesday";
+//            }else {
+//                $classes[$key]['days']['tuesday']="0";
+//            }
+//            if($class['wednesday']){
+//                $classes[$key]['days']['wednesday']="1";
+////                $classes[$key]['days'][]="wednesday";
+//            }else {
+//                $classes[$key]['days']['wednesday']="0";
+//            }
+//            if($class['thursday']){
+//                $classes[$key]['days']['thursday']="1";
+////                $classes[$key]['days'][]="thursday";
+//            }else {
+//                $classes[$key]['days']['thursday']="0";
+//            }
+//            if($class['friday']){
+//                $classes[$key]['days']['friday']="1";
+////                $classes[$key]['days'][]="friday";
+//            }else {
+//                $classes[$key]['days']['friday']="0";
+//            }
+//        }
+//
+//
+//        $instructors = array();
+//
+//        foreach ($classes as $class ){
+//
+//            $id = "".$class["instructorID"]."";
+//            $instructors[]= $DB->getInstructor($id);
+//
+//        }
+//
+//        echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'instructors'=> $instructors, 'allInstructors'=>$allInstructor));
+//    }
 
 }

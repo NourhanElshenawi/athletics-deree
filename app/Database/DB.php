@@ -94,25 +94,16 @@ class DB
         return $result;
     }
 
+    public function getUsers()
+    {
+        $stmt = $this->conn->prepare("select * from dereeAthletics.users");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
 
-//    public function updateClass($id, $duration, $startTime, $capacity,$instructorID)
-//    {
-//        $stmt = $this->conn->prepare("update dereeAthletics.classes set duration = ?, startTime = ?, capacity = ?, instructorID = ?  WHERE id = ? ");
-//
-//        try{
-//            $stmt->bindValue(1, $duration);
-//            $stmt->bindValue(2, $startTime);
-//            $stmt->bindValue(3, $capacity);
-//            $stmt->bindValue(4, $instructorID);
-//            $stmt->bindValue(5, $id);
-//            $stmt->execute();
-//
-//            return true;
-//        } catch (Exception $e) {
-//        }
-//
-//    }
-
+        return $result;
+    }
 
     public function getUserCredentials($username, $password)
     {
@@ -128,6 +119,8 @@ class DB
     }
 
  /*************ADMIN***************/
+
+ ////// EDIT CLASSES
     public function updateClass($id, $duration, $startTime, $capacity,$instructorID)
     {
         $stmt = $this->conn->prepare("update dereeAthletics.classes set duration = ?, startTime = ?, capacity = ?, instructorID = ?  WHERE id = ? ");

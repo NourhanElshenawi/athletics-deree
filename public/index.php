@@ -25,12 +25,15 @@ $router->post('/profile', 'MainController', 'userLogin');
 $router->get('/logout', 'MainController', 'logout');
 
 /********ADMIN**********/
+///////CLASSES SCHEDULE
 $router->get('/editschedule', 'MainController', 'editSchedule');
 $router->get('/editclass', 'MainController', 'editClass');
 $router->post('/addclass', 'MainController', 'addClass');
 $router->post('/deleteclass', 'MainController', 'deleteClass');
 $router->post('/updateclass', 'MainController', 'updateClass');
 $router->get('/adminsearchclasses', 'MainController', 'searchClasses');
+////////Users
+$router->get('/editusers', 'MainController', 'editUsers');
 
 $router->get('/profile', 'MainController', 'profileStats');
 

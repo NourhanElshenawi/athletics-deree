@@ -5,21 +5,46 @@
         <a class="skip-link screen-reader-text" href="#site-navigation">Skip to navigation</a>
         <a class="skip-link screen-reader-text" href="#content">Skip to content</a>
         <a href="http://www.acg.edu/" class="custom-logo-link" rel="home" itemprop="url"><img width="245" height="110" src="http://www.acg.edu/wp-content/uploads/2016/05/logo.png" class="custom-logo" alt="logo" itemprop="logo"></a>		<nav class="secondary-navigation" role="navigation" aria-label="Secondary Navigation">
-            <div class="menu-top-menu-container"><ul id="menu-top-menu" class="menu"><li id="menu-item-291" class="top-home menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-6 current_page_item menu-item-291"><a href="/">home</a></li>
-                    <li id="menu-item-15534" class="top-library menu-item menu-item-type-custom menu-item-object-custom menu-item-15534"><a href="/fitnessProgram">Fitness Program</a></li>
-                    <i class="fa fa-sign-in"></i>
-                    {#<li id="menu-item-600" class="top-myacg menu-item menu-item-type-post_type menu-item-object-page menu-item-600"><a href="http://www.acg.edu/current-students/myacg-apply-now-register-online/">myACG / Apply now</a></li>#}
+            <div class="menu-top-menu-container"><ul id="menu-top-menu" class="menu">
 
+                    <li id="menu-item-291" class="top-general menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-6 current_page_item menu-item-291">
+                        <i class="fa fa-home" style="margin-right: 4px;"></i>
+                        <a href="/">home</a>
+                    </li>
+
+
+                    <li id="menu-item-15534" class="top-general menu-item menu-item-type-custom menu-item-object-custom menu-item-15534"><i class="fa fa-list-alt" style="margin-right: 4px;"></i>
+                        <a href="/fitnessProgram">Fitness Program</a></li>
+
+
+                    {% if session.user.admin is defined %}
+                        <li id="menu-item-15534"
+                            class="top-general menu-item menu-item-type-custom menu-item-object-custom menu-item-15534">
+                            <i class="fa fa-pencil" style="margin-right: 4px;"></i>
+                                <a href="/editschedule">Edit Schedule</a>
+                        </li>
+                        <li id="menu-item-15534"
+                            class="top-general menu-item menu-item-type-custom menu-item-object-custom menu-item-15534">
+                            <i class="fa fa-users" style="margin-right: 4px;"></i>
+                            <a href="/editusers">Edit Users</a>
+                        </li>
+                    {% endif %}
 
                     {% if session.user is defined %}
 
-                        <li id="menu-item-600" class="top-myacg menu-item menu-item-type-post_type menu-item-object-page menu-item-600"><a href="/logout">Logout</a></li>
+                        <li id="menu-item-600" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-600"><a href="/logout">Logout</a>
+                            <i class="fa fa-sign-in"></i>
+                        </li>
 
                         {% else %}
 
-                            <li id="menu-item-600" class="top-myacg menu-item menu-item-type-post_type menu-item-object-page menu-item-600"><a href="/login">Log-in</a></li>
+                            <li id="menu-item-600" class=" menu-item menu-item-type-post_type menu-item-object-page menu-item-600"><a href="/login" style="display: inline-block;">Log-in</a>
+
+                                <i class="fa fa-sign-in"></i>
+                            </li>
 
                     {% endif %}
+
 
                 </ul></div>		</nav><!-- #site-navigation --><div class="headerright">
             <div>
