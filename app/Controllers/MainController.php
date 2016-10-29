@@ -72,6 +72,8 @@ class MainController extends Controller
     public function profileStats()
     {
 
+        $db = new DB();
+
 
 //        $DB = new DB();
 //        $carouselImages = $DB->getCarousel();
@@ -105,7 +107,15 @@ class MainController extends Controller
             $x++;
         }
 
-        echo $this->twig->render('customer/profile.twig', array('vals'=>$vals));
+        $userRegistrations = $db->getUserRegistrations($_SESSION['user']['id']);
+
+        foreach ($userRegistrations as $registration){
+
+            $classes[] = $db->getClass($registration['classID']);
+
+        }
+
+        echo $this->twig->render('customer/profile.twig', array('vals'=>$vals, 'classes'=>$classes));
     }
 
     public function login()
