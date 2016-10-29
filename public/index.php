@@ -36,6 +36,7 @@ $router->get('/adminsearchclasses', 'MainController', 'searchClasses');
 $router->get('/editusers', 'MainController', 'editUsers');
 $router->get('/adminsearchusers', 'MainController', 'searchUsers');
 $router->post('/updateuser', 'MainController', 'updateUser');
+$router->post('/deleteuser', 'MainController', 'deleteUser');
 
 $router->get('/profile', 'MainController', 'profileStats');
 

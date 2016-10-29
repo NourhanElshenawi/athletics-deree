@@ -128,12 +128,6 @@ class DB
         }
     }
 
-    public function deleteClass($id)
-    {
-        $stmt = $this->conn->prepare("delete from dereeAthletics.classes WHERE id = ?");
-        $stmt->bindValue(1,$id);
-        $stmt->execute();
-    }
 
     public function searchClasses($keyword)
     {
@@ -175,6 +169,14 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
 
 
+    }
+
+
+    public function deleteClass($id)
+    {
+        $stmt = $this->conn->prepare("delete from dereeAthletics.classes WHERE id = ?");
+        $stmt->bindValue(1,$id);
+        $stmt->execute();
     }
 
     ///////USERS
@@ -225,6 +227,14 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         $result = $stmt->fetchAll();
 
         return $result;
+    }
+
+
+    public function deleteUser($id)
+    {
+        $stmt = $this->conn->prepare("delete from dereeAthletics.users WHERE id = ?");
+        $stmt->bindValue(1,$id);
+        $stmt->execute();
     }
 
 

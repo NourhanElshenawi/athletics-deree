@@ -262,8 +262,8 @@
                                                     {#<form action="/editclass" method="post" style="margin: 0;">#}
                                                     <li>
 
-                                                        <input type="hidden" id="edit" name="edit" value="{{ class.id }}">
-                                                        <a href="#" class="edit" value="{{ class.id }}">Edit User</a>
+                                                        <input type="hidden" id="edit" name="edit" value="{{ user.id }}">
+                                                        <a href="#" class="edit" value="{{ user.id }}">Edit User</a>
 
                                                     </li>
                                                     <li>
@@ -275,7 +275,7 @@
                                                 </ul>
                                             </li>
                                             <li>
-                                                <a class="close-link delete" value="{{ class.id }}">
+                                                <a class="close-link delete" value="{{ user.id }}">
                                                     <i class="fa fa-close"></i></a>
 
                                             </li>
@@ -487,7 +487,7 @@
                 jQuery.ajax(
                         {
                             type: 'POST',
-                            url: '/deleteclass',
+                            url: '/deleteuser',
                             data: {
                                 id: jQuery(this).attr('value')
                             },

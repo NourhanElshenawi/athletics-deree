@@ -250,12 +250,6 @@ class MainController extends Controller
         echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'instructors'=> $instructors, 'allInstructors'=>$allInstructor));
     }
 
-    public function deleteClass()
-    {
-        $db = new DB();
-        $db->deleteClass($_POST['id']);
-
-    }
 
     public function addClass()
     {
@@ -319,6 +313,14 @@ class MainController extends Controller
 
     }
 
+
+    public function deleteClass()
+    {
+        $db = new DB();
+        $db->deleteClass($_POST['id']);
+
+    }
+
     ////////EDIT USERS
 
 
@@ -356,6 +358,14 @@ class MainController extends Controller
         {
             header('Location: /editusers');
         }
+
+    }
+
+
+    public function deleteUser()
+    {
+        $db = new DB();
+        $db->deleteUser($_POST['id']);
 
     }
 
