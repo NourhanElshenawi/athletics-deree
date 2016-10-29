@@ -366,14 +366,25 @@
 
                                                         <select name="" id="" multiple>
 
-                                                            {% for key, value in class.days %}
-                                                                {% if value == 1 %}
+                                                            {% for class in classes %}
 
-                                                                    <option value="{{ key }}" selected> {{ key }}</option>
-                                                                {% else %}
+                                                                {#{% for registered in user.registrations %}#}
 
-                                                                    <option value="{{ key }}"> {{ key }}</option>
+                                                                    {#{% if registered.id == class.id %}#}
+
+                                                                        {#<option value="{{ class.id }}" selected> {{ class.name }}</option>#}
+                                                                    {#{% endif %}#}
+
+                                                                {#{% endfor %}#}
+
+                                                                {% if class in user.registrations %}
+                                                                    <option value="{{ class.id }}" selected> {{ class.name }}</option>
+                                                                    {% else %}
+
+                                                                        <option value="{{ class.id }}"> {{ class.name }}</option>
                                                                 {% endif %}
+
+
                                                             {% endfor %}
 
                                                         </select>
