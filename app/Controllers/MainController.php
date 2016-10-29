@@ -324,14 +324,38 @@ class MainController extends Controller
     ////////EDIT USERS
 
 
+    public function getUsersWithRegistrations()
+    {
+
+        $db = new DB();
+        $users = $db->getUsers();
+
+        foreach ($users as $key=>$user )
+
+        {
+            $registrations = $db->getUserRegistrations($user['id']);
+
+            foreach ($registrations as $registration){
+
+                $users[$key]['registrations'][] = $db->getClass($registration['classID']);
+
+            }
+
+        }
+
+        return $users;
+
+    }
 
     public function editUsers()
     {
         $db = new DB();
 
-        $users = $db->getUsers();
+        $users = $this->getUsersWithRegistrations();
+        $classes = $db->getClasses();
 
-        echo $this->twig->render('admin/editUsers.twig', array('users'=> $users));
+
+        echo $this->twig->render('admin/editUsers.twig', array('users'=> $users, 'classes'=>$classes));
 
     }
 

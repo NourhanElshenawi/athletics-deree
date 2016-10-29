@@ -58,6 +58,18 @@ class DB
         return $result;
     }
 
+    public function getClass($id)
+    {
+        $stmt = $this->conn->prepare("select * from dereeAthletics.classes WHERE id = ?");
+        $stmt->bindValue(1,$id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
+
+        return $result;
+    }
+
     public function getInstructors()
     {
         $stmt = $this->conn->prepare("select * from dereeAthletics.instructors");
@@ -221,6 +233,18 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     public function getUsers()
     {
         $stmt = $this->conn->prepare("select * from dereeAthletics.users");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function getUserRegistrations($id)
+    {
+        $stmt = $this->conn->prepare("select * from dereeAthletics.registrations WHERE userID = ?");
+        $stmt->bindValue(1, $id);
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
