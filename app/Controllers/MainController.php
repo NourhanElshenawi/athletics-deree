@@ -71,6 +71,32 @@ class MainController extends Controller
 /*****CUSTOMER*****/
     public function profileStats()
     {
+
+
+//        $DB = new DB();
+//        $carouselImages = $DB->getCarousel();
+
+        /*  $date = "2016-06-09 00:38:47";
+          //below i get the year, month and the rest of the DateTime format (day and time)
+  //        $array = explode('-',$date,3);
+          //below i add the day to the date array
+  //        $temp = $array[2];
+  //        $array[2] = explode(' ',$array[2],2)[0];
+
+  //        echo "date </br>";
+  //        var_dump($date);
+  //        echo "split array </br>";
+  //        var_dump($array);
+  //        echo "complete </br>";
+  //        var_dump($array);
+  //        $monthNum  = $array[1];
+  //        $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
+  //        $monthName = $dateObj->format('F'); // March
+
+  */
+//        $array[1] = $monthName;
+//        var_dump($array);
+
         $array = array("January", "January", "January", "February", "February", "March");
         $vals = array_count_values($array);
 //        var_dump($vals);
@@ -322,14 +348,13 @@ class MainController extends Controller
     {
         $DB = new DB();
 
-        $date = $_POST['birthDate'];
-
         var_dump($_POST);
 
 
-//        if($DB->updateClass($_POST['id'],$_POST['name'],$_POST['email'],$_POST['password'], $_POST['gender'], $_POST['membershipType'], $_POST['admin']))
+        if($DB->updateUser($_POST['id'],$_POST['name'],$_POST['email'],$_POST['password'], $_POST['birthDate'],
+            $_POST['gender'], $_POST['membershipType'], $_POST['admin']))
         {
-//            header('Location: /editusers');
+            header('Location: /editusers');
         }
 
     }

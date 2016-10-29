@@ -94,16 +94,6 @@ class DB
         return $result;
     }
 
-    public function getUsers()
-    {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.users");
-        $stmt->execute();
-        // set the resulting array to associative
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetchAll();
-
-        return $result;
-    }
 
     public function getUserCredentials($username, $password)
     {
@@ -187,6 +177,8 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     }
 
+    ///////USERS
+
     public function searchUsers($keyword)
     {
         $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE name LIKE ? OR id LIKE ? OR email LIKE ?");
@@ -202,6 +194,39 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
 
     }
+
+    public function updateUser($id, $name, $email, $password, $birthDate, $gender, $membershipType, $admin)
+    {
+        $stmt = $this->conn->prepare("update dereeAthletics.users set name = ?, email = ?, password = ?, birthDate = ?,
+ gender = ?, membershipType = ?, admin = ? WHERE id = ? ");
+
+        try{
+            $stmt->bindValue(1, $name);
+            $stmt->bindValue(2, $email);
+            $stmt->bindValue(3, $password);
+            $stmt->bindValue(4, $birthDate);
+            $stmt->bindValue(5, $gender);
+            $stmt->bindValue(6, $membershipType);
+            $stmt->bindValue(7, $admin);
+            $stmt->bindValue(8, $id);
+            $stmt->execute();
+            return true;
+        } catch (Exception $e) {
+            //redirect error!
+        }
+    }
+
+    public function getUsers()
+    {
+        $stmt = $this->conn->prepare("select * from dereeAthletics.users");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
 
 
 }
