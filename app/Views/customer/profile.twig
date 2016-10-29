@@ -11,6 +11,25 @@
     <!-- Custom Theme Style -->
     <link href="css/custom.min.css" rel="stylesheet">
 
+
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.8.3.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+    <script type="text/javascript" src="http://qtip2.com/v/stable/jquery.qtip.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="http://qtip2.com/v/stable/jquery.qtip.css">
+
+    <link rel="stylesheet" type="text/css" href="http://qtip2.com/static/stylesheets/libs/jquery.fullcalendar.css">
+
+    <script type="text/javascript" src="http://qtip2.com/static/javascripts/libs/jquery.fullcalendar.min.js"></script>
+
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script>
+
+
+
     <script type="text/javascript">//<![CDATA[
         $(window).load(function(){
 // Setup FullCalendar
@@ -188,10 +207,8 @@
         </canvas>
     </div>
 
-    <div style="width: 50%; height: 50%;">
-        <canvas id="fullcalendar">
-        </canvas>
-    </div>
+
+    <div id="fullcalendar"></div>
 
     <!-- jQuery -->
     {#<script src="js/jquery.min.js"></script>#}
@@ -270,12 +287,6 @@
             }
         });
     </script>
-
-    {#{{ dump(array) }}#}
-    {#{% for key,value in vals %}#}
-        {#Key: {{ key }}#}
-        {#Value: {{ value }}#}
-    {#{% endfor %}#}
 
 
 

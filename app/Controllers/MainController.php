@@ -34,8 +34,13 @@ class MainController extends Controller
     {
         $db = new DB();
         $classes = $db->getClasses();
-//        $days[]= array();
-//        var_dump($classes);
+
+        $classes = $this->beautifyClassesForCalendar($classes);
+
+        echo $this->twig->render('fitnessProgram.twig', array('classes'=> $classes));
+    }
+
+    public function beautifyClassesForCalendar($classes) {
         foreach ($classes as $key=>$class) {
 //            var_dump($class);
 
@@ -62,11 +67,9 @@ class MainController extends Controller
                 $classes[$key]['days'][]="5";
 //                $classes[$key]['days'][]="friday";
             }
-    }
-//    var_dump($classes[0]['days']);
-//        if ($classes[])
+        }
 
-        echo $this->twig->render('fitnessProgram.twig', array('classes'=> $classes));
+        return $classes;
     }
 /*****CUSTOMER*****/
     public function profileStats()
@@ -114,6 +117,8 @@ class MainController extends Controller
             $classes[] = $db->getClass($registration['classID']);
 
         }
+//        d($classes);
+        $classes = $this->beautifyClassesForCalendar($classes);
 
         echo $this->twig->render('customer/profile.twig', array('vals'=>$vals, 'classes'=>$classes));
     }
@@ -194,6 +199,57 @@ class MainController extends Controller
         echo $this->twig->render('customer/profile.twig');
     }
 
+    public function beautifyClasses($classes){
+
+
+        foreach ($classes as $key=>$class ){
+
+            $temp = ($class['currentCapacity']*100)/$class['capacity'];
+            $temp2 = $class['currentCapacity'];
+
+            $classes[$key]['currentCapacityPercentage'] = $temp;
+            $classes[$key]['currentCapacity'] = $temp2;
+
+            $class['days']=array();
+
+            if($class['monday']){
+                $classes[$key]['days']['monday']="1";
+//                $classes[$key]['days'][]="monday";
+//                echo $class['monday'];
+            } else {
+                $classes[$key]['days']['monday']="0";
+            }
+            if($class['tuesday']){
+                $classes[$key]['days']['tuesday']="1";
+//                $classes[$key]['days'][]="tuesday";
+            }else {
+                $classes[$key]['days']['tuesday']="0";
+            }
+            if($class['wednesday']){
+                $classes[$key]['days']['wednesday']="1";
+//                $classes[$key]['days'][]="wednesday";
+            }else {
+                $classes[$key]['days']['wednesday']="0";
+            }
+            if($class['thursday']){
+                $classes[$key]['days']['thursday']="1";
+//                $classes[$key]['days'][]="thursday";
+            }else {
+                $classes[$key]['days']['thursday']="0";
+            }
+            if($class['friday']){
+                $classes[$key]['days']['friday']="1";
+//                $classes[$key]['days'][]="friday";
+            }else {
+                $classes[$key]['days']['friday']="0";
+            }
+        }
+
+        return $classes;
+
+
+    }
+
     /***********ADMIN************/
 
     ////////EDIT CLASS SCHEDULE
@@ -204,49 +260,7 @@ class MainController extends Controller
         $classes = $DB->getClasses();
         $allInstructor = $DB->getInstructors();
 
-        foreach ($classes as $key=>$class ){
-
-            $temp = ($class['currentCapacity']*100)/$class['capacity'];
-            $temp2 = $class['currentCapacity'];
-
-            $classes[$key]['currentCapacityPercentage'] = $temp;
-            $classes[$key]['currentCapacity'] = $temp2;
-
-                $class['days']=array();
-
-                if($class['monday']){
-                    $classes[$key]['days']['monday']="1";
-//                $classes[$key]['days'][]="monday";
-//                echo $class['monday'];
-                } else {
-                    $classes[$key]['days']['monday']="0";
-                }
-                if($class['tuesday']){
-                    $classes[$key]['days']['tuesday']="1";
-//                $classes[$key]['days'][]="tuesday";
-                }else {
-                    $classes[$key]['days']['tuesday']="0";
-                }
-                if($class['wednesday']){
-                    $classes[$key]['days']['wednesday']="1";
-//                $classes[$key]['days'][]="wednesday";
-                }else {
-                    $classes[$key]['days']['wednesday']="0";
-                }
-                if($class['thursday']){
-                    $classes[$key]['days']['thursday']="1";
-//                $classes[$key]['days'][]="thursday";
-                }else {
-                    $classes[$key]['days']['thursday']="0";
-                }
-                if($class['friday']){
-                    $classes[$key]['days']['friday']="1";
-//                $classes[$key]['days'][]="friday";
-                }else {
-                    $classes[$key]['days']['friday']="0";
-                }
-            }
-
+        $classes = $this->beautifyClasses($classes);
 
         $instructors = array();
 
