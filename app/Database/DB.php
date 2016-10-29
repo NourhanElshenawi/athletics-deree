@@ -132,7 +132,9 @@ class DB
             $stmt->bindValue(4, $instructorID);
             $stmt->bindValue(5, $id);
             $stmt->execute();
+            return true;
         } catch (Exception $e) {
+            //redirect error!
         }
     }
 
@@ -153,7 +155,6 @@ class DB
             $result = $stmt->fetchAll();
 
         return $result;
-
 
     }
 
@@ -185,5 +186,22 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
 
     }
+
+    public function searchUsers($keyword)
+    {
+        $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE name LIKE ? OR id LIKE ? OR email LIKE ?");
+
+        $stmt->bindValue(1, $keyword);
+        $stmt->bindValue(2, $keyword);
+        $stmt->bindValue(3, $keyword);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+
+    }
+
 
 }

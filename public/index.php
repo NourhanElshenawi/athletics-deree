@@ -34,6 +34,8 @@ $router->post('/updateclass', 'MainController', 'updateClass');
 $router->get('/adminsearchclasses', 'MainController', 'searchClasses');
 ////////Users
 $router->get('/editusers', 'MainController', 'editUsers');
+$router->get('/adminsearchusers', 'MainController', 'searchUsers');
+$router->post('/updateuser', 'MainController', 'updateUser');
 
 $router->get('/profile', 'MainController', 'profileStats');
 

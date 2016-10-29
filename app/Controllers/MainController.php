@@ -286,14 +286,10 @@ class MainController extends Controller
     public function updateClass()
     {
         $DB = new DB();
-        if($DB->updateClass($_POST['id'],$_POST['duration'],$_POST['startTime'],$_POST['capacity'], $_POST['instructor'])) {
-
-            $this->editSchedule();
-    }
-
-
-
-
+        if($DB->updateClass($_POST['id'],$_POST['duration'],$_POST['startTime'],$_POST['capacity'], $_POST['instructor']))
+        {
+            header('Location: /editschedule');
+        }
 
     }
 
@@ -311,66 +307,31 @@ class MainController extends Controller
 
     }
 
-//    public function editUsers()
-//    {
-//        $DB = new DB();
-//        $users = $DB->getusers();
-//        $allInstructor = $DB->getInstructors();
-//
-//        foreach ($classes as $key=>$class ){
-//
-//            $temp = ($class['currentCapacity']*100)/$class['capacity'];
-//            $temp2 = $class['currentCapacity'];
-//
-//            $classes[$key]['currentCapacityPercentage'] = $temp;
-//            $classes[$key]['currentCapacity'] = $temp2;
-//
-//            $class['days']=array();
-//
-//            if($class['monday']){
-//                $classes[$key]['days']['monday']="1";
-////                $classes[$key]['days'][]="monday";
-////                echo $class['monday'];
-//            } else {
-//                $classes[$key]['days']['monday']="0";
-//            }
-//            if($class['tuesday']){
-//                $classes[$key]['days']['tuesday']="1";
-////                $classes[$key]['days'][]="tuesday";
-//            }else {
-//                $classes[$key]['days']['tuesday']="0";
-//            }
-//            if($class['wednesday']){
-//                $classes[$key]['days']['wednesday']="1";
-////                $classes[$key]['days'][]="wednesday";
-//            }else {
-//                $classes[$key]['days']['wednesday']="0";
-//            }
-//            if($class['thursday']){
-//                $classes[$key]['days']['thursday']="1";
-////                $classes[$key]['days'][]="thursday";
-//            }else {
-//                $classes[$key]['days']['thursday']="0";
-//            }
-//            if($class['friday']){
-//                $classes[$key]['days']['friday']="1";
-////                $classes[$key]['days'][]="friday";
-//            }else {
-//                $classes[$key]['days']['friday']="0";
-//            }
-//        }
-//
-//
-//        $instructors = array();
-//
-//        foreach ($classes as $class ){
-//
-//            $id = "".$class["instructorID"]."";
-//            $instructors[]= $DB->getInstructor($id);
-//
-//        }
-//
-//        echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'instructors'=> $instructors, 'allInstructors'=>$allInstructor));
-//    }
+    public function searchUsers()
+    {
+        $db = new DB();
+
+        $user = $db->searchUsers($_GET['keyword']);
+
+        echo $this->twig->render('admin/editUsers.twig', array('users'=> $user));
+
+    }
+
+
+    public function updateUser()
+    {
+        $DB = new DB();
+
+        $date = $_POST['birthDate'];
+
+        var_dump($_POST);
+
+
+//        if($DB->updateClass($_POST['id'],$_POST['name'],$_POST['email'],$_POST['password'], $_POST['gender'], $_POST['membershipType'], $_POST['admin']))
+        {
+//            header('Location: /editusers');
+        }
+
+    }
 
 }
