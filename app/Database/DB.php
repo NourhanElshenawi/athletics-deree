@@ -313,14 +313,10 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         $stmt = $this->conn->prepare("update dereeAthletics.logs set logout = ? WHERE userID = ? AND logout IS NULL ");
 
         try{
-
-            echo "</br>";
-            echo $date;
             $stmt->bindValue(1, $date);
             $stmt->bindValue(2, $id);
             $stmt->execute();
 
-            echo "</br>";
             return true;
         } catch (Exception $e) {
             //redirect error!
@@ -334,13 +330,10 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
         try{
 
-            echo "</br>";
-            echo $date;
             $stmt->bindValue(1, $id);
             $stmt->bindValue(2, $date);
             $stmt->execute();
 
-            echo "</br>";
             return true;
         } catch (Exception $e) {
             //redirect error!

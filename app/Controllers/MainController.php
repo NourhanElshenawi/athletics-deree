@@ -473,11 +473,11 @@ class MainController extends Controller
         if($test) {
 
             $db->signout($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
-            echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes));
+//            echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes));
 
         } else {
-            echo $db->signin($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
-//            echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes));
+            $db->signin($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
+            echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes));
         }
 
 //        2012-06-18 10:34:09
