@@ -110,18 +110,17 @@ class MainController extends Controller
             $x++;
         }
 
-        $classes = $this->getUserClasses();
-//        d($classes);
+        $classes = $this->getUserClasses($_SESSION['user']['id']);
         $classes = $this->beautifyClassesForCalendar($classes);
 
         echo $this->twig->render('customer/profile.twig', array('vals'=>$vals, 'classes'=>$classes));
     }
 
-    public function getUserClasses() {
+    public function getUserClasses($id) {
 
         $db = new DB();
 
-        $userRegistrations = $db->getUserRegistrations($_SESSION['user']['id']);
+        $userRegistrations = $db->getUserRegistrations($id);
 
         foreach ($userRegistrations as $registration){
 
@@ -465,19 +464,20 @@ class MainController extends Controller
 
     public function signin() {
         $db = new DB();
-
         $date = date_create();
-
+        $user = $db->getUserProfile($_GET['userID']);
+        $classes = $this->getUserClasses($_GET['userID']);
+        $classes = $this->beautifyClassesForCalendar($classes);
         $test = $db->getUserLogin($_GET['userID']);
+
         if($test) {
 
-            echo "WOOOHOOO";
-
-            echo $db->signout($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
+            $db->signout($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
+            echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes));
 
         } else {
-            echo "have to create new log";
             echo $db->signin($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
+//            echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes));
         }
 
 //        2012-06-18 10:34:09

@@ -106,6 +106,18 @@ class DB
         return $result;
     }
 
+    public function getUserProfile($id)
+    {
+        $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE id = ?");
+        $stmt->bindValue(1,$id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
+
+        return $result;
+    }
+
 
     public function getUserCredentials($username, $password)
     {
