@@ -26,6 +26,7 @@ $router->get('/logout', 'MainController', 'logout');
 $router->get('/register', 'MainController', 'register');
 $router->post('/unregisterclass', 'MainController', 'unregisterClass');
 $router->post('/registerclass', 'MainController', 'registerClass');
+$router->get('/signin', 'MainController', 'signin');
 
 /********ADMIN**********/
 ///////CLASSES SCHEDULE

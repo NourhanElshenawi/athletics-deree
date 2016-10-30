@@ -125,7 +125,8 @@ class DB
  ////// EDIT CLASSES
     public function updateClass($id, $duration, $startTime, $capacity,$instructorID)
     {
-        $stmt = $this->conn->prepare("update dereeAthletics.classes set duration = ?, startTime = ?, capacity = ?, instructorID = ?  WHERE id = ? ");
+        $stmt = $this->conn->prepare("update dereeAthletics.classes set duration = ?, startTime = ?, capacity = ?,
+ instructorID = ?  WHERE id = ? ");
 
         try{
             $stmt->bindValue(1, $duration);
@@ -280,6 +281,61 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
             return false;
         }
     }
+
+    public function getUserLogin($id){
+
+        $stmt = $this->conn->prepare("select * from dereeAthletics.logs WHERE userID = ? AND logout IS NULL ");
+        $stmt->bindValue(1, $id);
+//        $stmt->bindValue(2, NULL);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
+
+        return $result;
+
+    }
+
+    public function signout($id, $date)
+    {
+        $stmt = $this->conn->prepare("update dereeAthletics.logs set logout = ? WHERE userID = ? AND logout IS NULL ");
+
+        try{
+
+            echo "</br>";
+            echo $date;
+            $stmt->bindValue(1, $date);
+            $stmt->bindValue(2, $id);
+            $stmt->execute();
+
+            echo "</br>";
+            return true;
+        } catch (Exception $e) {
+            //redirect error!
+            return false;
+        }
+    }
+
+    public function signin($id, $date)
+    {
+        $stmt = $this->conn->prepare("insert into dereeAthletics.logs (userID, login) VALUES  (?,?)  ");
+
+        try{
+
+            echo "</br>";
+            echo $date;
+            $stmt->bindValue(1, $id);
+            $stmt->bindValue(2, $date);
+            $stmt->execute();
+
+            echo "</br>";
+            return true;
+        } catch (Exception $e) {
+            //redirect error!
+            return false;
+        }
+    }
+
 
 
 

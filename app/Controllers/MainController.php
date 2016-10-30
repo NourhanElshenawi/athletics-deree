@@ -182,6 +182,7 @@ class MainController extends Controller
                 $user = $db->getUser($_POST["username"], $_POST["password"]);
 
                 if (empty($user)) {
+                    //404 or something
                     echo "user not found";
                 } else {
 //                $this->profileStats();
@@ -460,5 +461,28 @@ class MainController extends Controller
         $db = new DB();
         $db->registerClass($_POST['userID'], $_POST['classID']);
 
+    }
+
+    public function signin() {
+        $db = new DB();
+
+        $date = date_create();
+
+        $test = $db->getUserLogin($_GET['userID']);
+        if($test) {
+
+            echo "WOOOHOOO";
+
+            echo $db->signout($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
+
+        } else {
+            echo "have to create new log";
+            echo $db->signin($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
+        }
+
+//        2012-06-18 10:34:09
+//        d($db->getUserLogin("1"));
+//        http://athletics-deree.app/signin?userID=1
+//       http://athletics-deree.app/?name1=value1&name2=value2
     }
 }
