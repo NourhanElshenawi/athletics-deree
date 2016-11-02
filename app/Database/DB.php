@@ -119,6 +119,8 @@ class DB
     }
 
 
+    /*********USER VERIFICATION************/
+
     public function getUserCredentials($username, $password)
     {
         $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE email = ? and password = ?");
@@ -294,6 +296,8 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
     }
 
+    /*******GET USER LOGS FOR USER STATS*********/
+
     public function getUserLogin($id){
 
         $stmt = $this->conn->prepare("select * from dereeAthletics.logs WHERE userID = ? AND logout IS NULL ");
@@ -307,6 +311,38 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
 
     }
+
+
+    /*******GET USER LOGS FOR ADMIN STATS*********/
+
+    public function getUsersLogin(){
+
+        $stmt = $this->conn->prepare("select * from dereeAthletics.logs WHERE logout IS NULL ");
+
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
+
+        return $result;
+
+    }
+
+    public function getUsersLogs(){
+
+        $stmt = $this->conn->prepare("select * from dereeAthletics.logs");
+
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+    }
+
+
+    /******RECORDING USER LOGS WITH NFC********/
 
     public function signout($id, $date)
     {

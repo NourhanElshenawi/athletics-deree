@@ -42,6 +42,12 @@ $router->get('/adminsearchusers', 'MainController', 'searchUsers');
 $router->post('/updateuser', 'MainController', 'updateUser');
 $router->post('/deleteuser', 'MainController', 'deleteUser');
 
+/////STATS
+$router->get('/adminstatsmonth', 'MainController', 'adminStatsMonth');
+$router->get('/logs', 'MainController', 'usersLogs');
+//////Logs
+$router->get('/adminlogssearchclasses', 'MainController', 'searchLogs');
+
 $router->get('/profile', 'MainController', 'profileStats');
 
 ////See inside $router

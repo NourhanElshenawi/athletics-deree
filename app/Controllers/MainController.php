@@ -454,6 +454,38 @@ class MainController extends Controller
     }
 
 
+    ///////STATS
+
+    public function statsMonth(){
+
+        $db = new DB();
+        $logins = $db->getUsersLogin();
+
+        echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes));
+
+    }
+
+    public function usersLogs(){
+
+        $db = new DB();
+        $logs = $db->getUsersLogs();
+        $users = $db->getUsers();
+
+        echo $this->twig->render('admin/logs.twig', array('users'=>$users, 'logs'=>$logs));
+
+    }
+
+    public function searchLogs(){
+
+//        $db = new DB();
+//        $logs = $db->getUsersLogs();
+//        $users = $db->getUsers();
+//
+//        echo $this->twig->render('admin/logs.twig', array('users'=>$users, 'logs'=>$logs));
+        echo "NEEDS IMPLEMENTATION!";
+
+    }
+
     /*********USER********/
 
     public function register()
