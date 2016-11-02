@@ -322,7 +322,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetch();
+        $result = $stmt->fetchAll();
 
         return $result;
 

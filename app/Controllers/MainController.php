@@ -459,9 +459,37 @@ class MainController extends Controller
     public function statsMonth(){
 
         $db = new DB();
-        $logins = $db->getUsersLogin();
+        $logs = $db->getUsersLogs();
+        $months = array();
 
-        echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes));
+        foreach ($logs as $key => $log) {
+
+            $date = $log['login'];
+//            d($date);
+
+            //below i get the year, month and the rest of the DateTime format (day and time)
+            $array = explode('-',$date,3);
+            //below i add the day to the date array
+            $temp = $array[2];
+            $array[2] = explode(' ',$array[2],2)[0];
+//                    d($array);
+
+
+            $monthNum  = $array[1];
+            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
+            $monthName = $dateObj->format('F'); // March
+            $array[1] = $monthName;
+            $months[]=$monthName;
+
+            $logs[$key]['date'] = $array;
+
+        }
+        
+        $vals = array_count_values($months);
+        arsort($vals);
+
+
+        echo $this->twig->render('admin/logStatistics.twig', array('vals'=>$vals));
 
     }
 

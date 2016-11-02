@@ -43,7 +43,7 @@ $router->post('/updateuser', 'MainController', 'updateUser');
 $router->post('/deleteuser', 'MainController', 'deleteUser');
 
 /////STATS
-$router->get('/adminstatsmonth', 'MainController', 'adminStatsMonth');
+$router->get('/adminstatsmonth', 'MainController', 'StatsMonth');
 $router->get('/logs', 'MainController', 'usersLogs');
 //////Logs
 $router->get('/adminlogssearchclasses', 'MainController', 'searchLogs');
