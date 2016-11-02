@@ -76,11 +76,37 @@ class MainController extends Controller
     {
 
         $db = new DB();
+        $logs = $db->getUserLogs($_SESSION['user']['id']);
+        d($logs);
+        foreach ($logs as $log) {
+
+            $date = $log['login'];
+//            d($date);
+
+            //below i get the year, month and the rest of the DateTime format (day and time)
+                    $array = explode('-',$date,3);
+            //below i add the day to the date array
+                    $temp = $array[2];
+                    $array[2] = explode(' ',$array[2],2)[0];
+//                    d($array);
 
 
-//        $DB = new DB();
-//        $carouselImages = $DB->getCarousel();
+                    $monthNum  = $array[1];
+                    $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
+                    $monthName = $dateObj->format('F'); // March
+            $array[1] = $monthName;
 
+
+//            $dayNum  = $array[1];
+//            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
+//            $monthName = $dateObj->format('F'); // March
+//            $array[1] = $monthName;
+
+            d($array);
+
+        }
+
+//        $d(array_count_values($array[]));
         /*  $date = "2016-06-09 00:38:47";
           //below i get the year, month and the rest of the DateTime format (day and time)
   //        $array = explode('-',$date,3);
@@ -102,9 +128,10 @@ class MainController extends Controller
 //        $array[1] = $monthName;
 //        var_dump($array);
 
+
         $array = array("January", "January", "January", "February", "February", "March");
         $vals = array_count_values($array);
-//        var_dump($vals);
+        var_dump($vals);
         for ($x=0; $x<count($array);){
 
             $x++;

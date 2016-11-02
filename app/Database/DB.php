@@ -341,6 +341,17 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
     }
 
+    public function getUserLogs ($id) {
+        $stmt = $this->conn->prepare("select * from dereeAthletics.logs WHERE userID = ? AND MONTH(login) = 10 AND YEAR(login) = 2016");
+        $stmt->bindValue(1, $id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
 
 
 
