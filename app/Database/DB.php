@@ -341,6 +341,42 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     }
 
+    public function getUsersLogsDays(){
+
+        $stmt = $this->conn->prepare("select DAYOFWEEK (login) from dereeAthletics.logs");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+    }
+
+    public function getUsersLogsMonths(){
+
+        $stmt = $this->conn->prepare("select MONTH (login) from dereeAthletics.logs");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+    }
+
+    public function getUsersLogsYears(){
+
+        $stmt = $this->conn->prepare("select YEAR (login) from dereeAthletics.logs");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+    }
+
 
     /******RECORDING USER LOGS WITH NFC********/
 

@@ -2,14 +2,14 @@
 
 
 {% block head %}
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
     <!-- Font Awesome -->
     {#<link href="css/font-awesome.min.css" rel="stylesheet">#}
     <!-- NProgress -->
     <link href="css/nprogress.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
-    <link href="css/custom.min.css" rel="stylesheet">
+    {#<link href="css/custom.min.css" rel="stylesheet">#}
 
 
 {% endblock head %}
@@ -20,17 +20,29 @@
 {% block content %}
 
 
-    <div style="width: 50%; height: 50%;">
-        <canvas id="mybarChart">
+    <div>
+        <ul class="nav nav-tabs">
+            <li id="years" role="presentation" class="active"><a href="#" style="font-weight: bold; font-size: large;">Years</a></li>
+            <li id="months" role="presentation"><a href="#" style="font-weight: bold; font-size: large;">Months</a></li>
+            <li id="days" role="presentation"><a href="#" style="font-weight: bold; font-size: large;">Days</a></li>
+        </ul>
 
-        </canvas>
+        <div id="yearDiv" style="width: 80%; height: 50%; margin: auto;">
+            <canvas id="yearChart"></canvas>
+        </div>
+
+        <div id="monthsDiv" style="width: 80%; height: 50%; margin: auto; display: none;">
+            <canvas id="monthChart"></canvas>
+        </div>
+
+
+
+        <div id="daysDiv" style="width: 80%; height: 50%; margin: auto; display: none;">
+            <canvas id="dayChart"></canvas>
+        </div>
+
     </div>
 
-
-    <div id="fullcalendar"></div>
-
-    <!-- jQuery -->
-    {#<script src="js/jquery.min.js"></script>#}
     <script src="js/jquery.js"></script>
     <!-- Bootstrap -->
     <script src="js/bootstrap.js"></script>
@@ -50,12 +62,12 @@
             enabled: false
         };
 
-        var ctx = document.getElementById("mybarChart");
-        var mybarChart = new Chart(ctx, {
+        var ctx = document.getElementById("monthChart");
+        var monthChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: [
-                    {% for key,value in vals %}
+                    {% for key,value in months %}
 //                        "January", "February", "March", "April", "May", "June", "July"
                     {% if loop.last %}
                     "{{ key }}"
@@ -75,7 +87,7 @@
                     backgroundColor: "#26B99A",
                     data: [
 //                            51, 30, 40, 28, 92, 50, 45
-                        {% for key,value in vals %}
+                        {% for key,value in months %}
 //                        "January", "February", "March", "April", "May", "June", "July"
                         {% if loop.last %}
                         {{ value }}
@@ -105,6 +117,163 @@
                 }
             }
         });
+    </script>
+
+    <script>
+        Chart.defaults.global.legend = {
+            enabled: false
+        };
+
+        var ctx = document.getElementById("yearChart");
+        var yearChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for key,value in years %}
+//                        "January", "February", "March", "April", "May", "June", "July"
+                    {% if loop.last %}
+                    "{{ key }}"
+                    {% else %}
+                    "{{ key }}",
+                    {% endif %}
+
+                    {% endfor %}
+                ],
+
+                {#{% for key,value in vals %}#}
+                {##}
+                {#{% endfor %}#}
+
+                datasets: [{
+                    label: '# of Visits',
+                    backgroundColor: "#26B99A",
+                    data: [
+//                            51, 30, 40, 28, 92, 50, 45
+                        {% for key,value in years %}
+//                        "January", "February", "March", "April", "May", "June", "July"
+                        {% if loop.last %}
+                        {{ value }}
+                        {% else %}
+                        {{ value }},
+                        {% endif %}
+
+                        {% endfor %}
+                    ]
+                }
+//                , {
+//                    label: '# of Votes',
+//                    backgroundColor: "#03586A",
+//                    data: [41, 56, 25, 48, 72, 34, 12]
+//                }
+
+                ]
+            },
+
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+    <script>
+        Chart.defaults.global.legend = {
+            enabled: false
+        };
+
+        var ctx = document.getElementById("dayChart");
+        var dayChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for key,value in days %}
+//                        "January", "February", "March", "April", "May", "June", "July"
+                    {% if loop.last %}
+                    "{{ key }}"
+                    {% else %}
+                    "{{ key }}",
+                    {% endif %}
+
+                    {% endfor %}
+                ],
+
+                {#{% for key,value in vals %}#}
+                {##}
+                {#{% endfor %}#}
+
+                datasets: [{
+                    label: '# of Visits',
+                    backgroundColor: "#26B99A",
+                    data: [
+//                            51, 30, 40, 28, 92, 50, 45
+                        {% for key,value in days %}
+//                        "January", "February", "March", "April", "May", "June", "July"
+                        {% if loop.last %}
+                        {{ value }}
+                        {% else %}
+                        {{ value }},
+                        {% endif %}
+
+                        {% endfor %}
+                    ]
+                }
+//                , {
+//                    label: '# of Votes',
+//                    backgroundColor: "#03586A",
+//                    data: [41, 56, 25, 48, 72, 34, 12]
+//                }
+
+                ]
+            },
+
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+
+
+    <script>
+        jQuery('#months').click(function() {
+            console.log(jQuery(this));
+            jQuery(this).toggleClass('active');
+            jQuery('#years').removeClass('active');
+            jQuery('#days').removeClass('active');
+            jQuery('#monthsDiv').css('display','');
+            jQuery('#yearDiv').css('display','none');
+            jQuery('#daysDiv').css('display','none');
+        });
+        jQuery('#years').click(function() {
+            console.log(jQuery(this));
+            jQuery(this).toggleClass('active');
+            jQuery('#months').removeClass('active');
+            jQuery('#days').removeClass('active');
+            jQuery('#yearDiv').css('display','');
+            jQuery('#monthsDiv').css('display','none');
+            jQuery('#daysDiv').css('display','none');
+        });
+        jQuery('#days').click(function() {
+            console.log(jQuery(this));
+            jQuery(this).toggleClass('active');
+            jQuery('#years').removeClass('active');
+            jQuery('#months').removeClass('active');
+            jQuery('#daysDiv').css('display','');
+            jQuery('#monthsDiv').css('display','none');
+            jQuery('#yearDiv').css('display','none');
+        });
+
     </script>
 
 
