@@ -118,6 +118,30 @@ class DB
         return $result;
     }
 
+	public function addUser($user)
+	{
+		$stmt = $this->conn->prepare("
+				insert into dereeAthletics.classes
+				(name, age, major)
+				VALUES  (:name, :age, :major);"
+		);
+
+		$stmt->bindParam(':name', $user->name);
+		$stmt->bindParam(':age', $user->age);
+		$stmt->bindParam(':major', $user->major);
+
+		try
+		{
+			$stmt->execute();
+
+			return true;
+		}
+		catch (PDOException $e)
+		{
+			die($e->getMessage());
+		}
+    }
+
  /*************ADMIN***************/
 
  ////// EDIT CLASSES

@@ -11,7 +11,7 @@ use Nourhan\Router;
 
 $router = new Router\Router();
 
-
+$router->get('/antony', 'MainController', 'antony');
 
 $router->get('/', 'MainController', 'index');
 $router->get('/login', 'MainController', 'login');
