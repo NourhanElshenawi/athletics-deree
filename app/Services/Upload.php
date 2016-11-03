@@ -11,56 +11,60 @@ class Upload
     {
     }
 
-    public function upload()
+    public function upload($image, $user)
     {
-        $target_dir = "images/";
-        $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-        $uploadOk = 1;
-        $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+        $result['success'] = false;
+        $result['message'] = "";
 
-        if (isset($_POST["submit"])) {
-            $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+        $target_dir = "images/";
+
+        if (isset($image)) {
+            $target_file = $target_dir . basename($image["name"]);
+            $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+
+            $check = getimagesize($image["tmp_name"]);
             if ($check !== false) {
-                echo "File is an image - " . $check["mime"] . ".";
-                $uploadOk = 1;
+                $result['success'] = true;
+                $result['message'] = "File is an image - " . $check["mime"] . ".";
             } else {
-                echo "File is not an image.";
+                $result['success'] = false;
+                $result['message'] = "File is not an image.";
                 $uploadOk = 0;
             }
         }
-// Check if file already exists
+        // Check if file already exists
         if (file_exists($target_file)) {
-            echo "Sorry, file already exists.";
-            $uploadOk = 0;
+            $result['success'] = false;
+            $result['message'] = "Sorry, image already exists.";
         }
-// Check file size
-        if ($_FILES["fileToUpload"]["size"] > 500000) {
+        // Check file size
+        if ($image["size"] > 500000) {
             echo "Sorry, your file is too large.";
-            $uploadOk = 0;
+            $result['success'] = false;
+            $result['message'] = "Sorry, your image is too large.";
         }
-// Allow certain file formats
+        // Allow certain file formats
         if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
             && $imageFileType != "gif"
         ) {
-            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-            $uploadOk = 0;
+            $result['success'] = false;
+            $result['message'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed..";
         }
 // Check if $uploadOk is set to 0 by an error
-        if ($uploadOk == 0) {
-            echo "Sorry, your file was not uploaded.";
+        if ($result['success'] == false) {
+
+            return $result;
 // if everything is ok, try to upload file
         } else {
-            if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-                echo "The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded.";
-                $DB = new DB();
-                $name = $_FILES["fileToUpload"]["name"];
-                $DB->uploadCarousel($name);
+            if (move_uploaded_file($image["tmp_name"], $target_file)) {
+                $result['message'] = "The file " . basename($image["name"]) . " has been uploaded.";
 
             } else {
-                echo "Sorry, there was an error uploading your file.";
+                $result['message'] = "Sorry, there was an error uploading your file";
             }
         }
 
+        return $result;
     }
 
     public function uploadFile($file)

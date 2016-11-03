@@ -466,8 +466,17 @@ class MainController extends Controller
 
         foreach ($decodedUsers as $user)
         {
-            $result = $db->addUser($user);
+            $result = $db->addMutlipleUsers($user);
         }
+
+        echo $this->twig->render('admin/editUsers.twig', ['result'=>$result]);
+    }
+
+    public function addUser()
+    {
+        $db = new DB();
+
+        $result = $db->addUser($_POST, $_FILES['picture']);
 
         echo $this->twig->render('admin/editUsers.twig', ['result'=>$result]);
     }

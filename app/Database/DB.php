@@ -1,6 +1,7 @@
 <?php
 namespace Nourhan\Database;
 
+use Nourhan\Services\Upload;
 use PDO;
 use PDOException;
 
@@ -315,7 +316,63 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
     }
 
-    public function addUser($user)
+    public function addUser($user, $userImage)
+    {
+        //Check if user exists already
+        $row = $this->userExists($user['email']);
+
+        if (isset($row) && $row != false) {
+            $result['success'] = false;
+            $result['message'] = "Error. A user with email {$user['email']} already exists.";
+
+            return $result;
+        }
+
+        //Upload user image
+        $uploadService = new Upload();
+
+        $userImage['name'] = $user['email'] . '_' . basename($userImage["name"]);
+
+        $uploaded = $uploadService->upload($userImage, $user);
+
+        if ($uploaded['success'] == false) {
+            die($uploaded['message']);
+        }
+
+        $stmt = $this->conn->prepare("
+                    insert into dereeAthletics.users
+                    (name, email, password, birthDate, gender, membershipType, picture, admin, active)
+                    VALUES  (:name, :email, :password, :birthDate, :gender, :membershipType, :picture, :admin, :active);"
+        );
+        $stmt->bindParam(':name', $user['name']);
+        $stmt->bindParam(':email', $user['email']);
+        $stmt->bindParam(':password', $user['password']);
+        $stmt->bindParam(':birthDate', $user['birthDate']);
+        $stmt->bindParam(':gender', $user['gender']);
+        $stmt->bindParam(':membershipType', $user['membershipType']);
+        $stmt->bindParam(':picture', $userImage['name']);
+        $stmt->bindParam(':admin', $user['admin']);
+        $stmt->bindParam(':active', $user['active']);
+
+        try
+        {
+            $success = $stmt->execute();
+
+            if ($success) {
+                $result['success'] = true;
+                $result['message'] = "Success! User {$user['name']} added.";
+            }
+            return $result;
+        }
+        catch (PDOException $e)
+        {
+            die($e->getMessage());
+        }
+
+        return $result;
+    }
+
+    public function addMutlipleUsers($user)
     {
         $result['success'] = false;
         $result['message'] = "";

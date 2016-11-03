@@ -92,87 +92,74 @@
                     <tr>
 
                         <th>Name</th>
-                        <th>Duration</th>
-                        <th>Instructor</th>
-                        <th>Start Time</th>
-                        <th>Period</th>
-                        <th>Capacity</th>
-                        <th>Location</th>
-                        <th>Days</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Picture</th>
+                        <th>Is Admin</th>
+                        <th>Birth Date</th>
+                        <th>Gender</th>
+                        <th>Membership Type</th>
+                        <th>Active</th>
 
                     </tr>
                     </thead>
                     <tbody>
-                    <form action="/addclass" method="post">
+                    <form action="/add_user" method="post" enctype="multipart/form-data">
                         <tr>
+                            <td>
+                                <input type="text" style="width: 100%;" name="name" required>
+                            </td>
 
-                            <form action="/addclass" method="post">
+                            <td>
+                                <input type="email" style="width: 100%;" name="email" required>
+                            </td>
 
-                                <td>
-                                    <input type="text" style="width: 100%;" name="name" required>
-                                </td>
+                            <td>
+                                <input type="password" style="width: 100%;" name="password" required>
+                            </td>
 
-                                <td>
-                                    <input type="number" min="1" style="width: 100%;" name="duration" required>
-                                </td>
+                            <td>
+                                <input type="file" style="width: 100%;" name="picture" required>
+                            </td>
 
-                                <td>
+                            <td>
+                                <select name="admin" style="width: 100%;" required>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </td>
 
-                                    <select name="instructorID" id="" style="width: 100%;" name="instructor" required>
+                            <td>
+                                <input type="date" style="width: 100%;" name="birthDate" required>
+                            </td>
 
-                                        {% for instructor in allInstructors %}
-                                            <option value="{{ instructor.id }}">{{ instructor.name }}</option>
-                                        {% endfor %}
-
-                                    </select>
-
-                                </td>
-
-                                <td>
-                                    <input type="time"style="width: 100%;" name="startTime" required>
-                                </td>
-
-                                <td>
-                                    <select name="period" id="" style="width: 100%;" name="period" required>
-                                        <option value="fall">Fall Semester</option>
-                                        <option value="spring">Spring Semester</option>
-                                    </select>
-                                </td>
-
-                                <td>
-                                    <input type="number" min="1" style="width: 100%;" name="capacity" required>
-                                </td>
-
-                                <td>
-                                    <input type="text" style="width: 100%;" name="location" required>
-                                </td>
-
-                                <td>
-                                    <select name="days[]" id="" multiple style="width: 120%;"required>
-
-
-
-                                        {{ classExample.name }}
-                                        {% for key, value in classExample.days %}
-                                            <option value="{{ key }}"> {{ key }}</option>
-                                        {% endfor %}
-
-
-                                    </select>
-
-
-                                </td>
-
+                            <td>
+                                <select name="gender" style="width: 100%;" required>
+                                    <option value="m">Male</option>
+                                    <option value="f">Female</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="membershipType" style="width: 100%;" required>
+                                    <option value="1">Paid</option>
+                                    <option value="0">Non-Paid</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="active" style="width: 100%;" required>
+                                    <option value="1">Active</option>
+                                    <option value="0">Not Active</option>
+                                </select>
+                            </td>
                         </tr>
 
 
                         <tr colspan="8">
                             <td>
-                                <button type="submit"> Add Class</button>
+                                <button type="submit"> Add User </button>
                             </td>
-
+                        </tr>
                     </form>
-                    </tr>
 
 
                     </tbody>
