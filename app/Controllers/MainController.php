@@ -553,16 +553,13 @@ class MainController extends Controller
             }
         }
         $gender = array_count_values($gender);
-        d($age);
-        d($gender);
-
-//        INSERT INTO `dereeAthletics`.`users` (`name`, `email`, `password`, `picture`, `admin`, `birthDate`, `gender`) VALUES ('gsdfgf', 'dsgf@dfg.dfgdf', 'gfdgf', 'fgfhg', '0', '1994-11-01', 'F');
-
 
         echo $this->twig->render('admin/userStats.twig', array('age'=>$age, 'gender'=> $gender));
 
     }
 
+
+    /***********LOGS**************/
     public function usersLogs(){
 
         $db = new DB();
@@ -570,6 +567,50 @@ class MainController extends Controller
         $users = $db->getUsers();
 
         echo $this->twig->render('admin/logs.twig', array('users'=>$users, 'logs'=>$logs));
+
+    }
+
+    public function realtimeLogs(){
+        $db = new DB();
+        $logs = $db->getRealtimeLogs();
+        $usersID = array();
+        foreach ($logs as $log) {
+            foreach ($log as $r) {
+                $usersID[] = $r;
+            }
+        }
+        $users = array();
+
+        foreach ($usersID as $key=>$id){
+            $users[] = $db->getUsersByID($id);
+        }
+        echo $this->twig->render('admin/realtimeLogs.twig', array('users'=>$users));
+    }
+
+    public function searchRealtimeLogs(){
+
+//        $keyword
+
+        $db = new DB();
+        $logs = $db->getRealtimeLogs();
+        $usersID = array();
+        foreach ($logs as $log) {
+            foreach ($log as $r) {
+                $usersID[] = $r;
+            }
+        }
+
+        $users = array();
+        foreach ($usersID as $key=>$id){
+//            d($id);
+            $test = $db->searchUsersByID($id, $_GET['keyword']);
+            if(!empty($test)) {
+                foreach ($test as $one){
+                    $users[] = $one;
+                }
+            }
+        }
+        echo $this->twig->render('admin/realtimeLogs.twig', array('users'=>$users));
 
     }
 

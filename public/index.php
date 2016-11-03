@@ -48,6 +48,8 @@ $router->get('/adminstatsuser', 'MainController', 'userStats');
 $router->get('/logs', 'MainController', 'usersLogs');
 //////Logs
 $router->get('/adminlogssearchclasses', 'MainController', 'searchLogs');
+$router->get('/realtimelogs', 'MainController', 'realtimeLogs');
+$router->get('/adminsearchrealtime', 'MainController', 'searchRealtimeLogs');
 
 $router->get('/profile', 'MainController', 'profileStats');
 

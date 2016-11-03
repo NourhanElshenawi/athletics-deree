@@ -256,6 +256,34 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
+    public function getUsersByID($id)
+    {
+        $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE id = ?");
+        $stmt->bindValue(1, $id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
+
+        return $result;
+    }
+
+    public function searchUsersByID($id, $keyword)
+    {
+        $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE id = ? AND (name LIKE ? or 
+    email like ? or gender like ? or birthDate like ?) ");
+        $stmt->bindValue(1, $id);
+        $stmt->bindValue(2, $keyword);
+        $stmt->bindValue(3, $keyword);
+        $stmt->bindValue(4, $keyword);
+        $stmt->bindValue(5, $keyword);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     public function getUserRegistrations($id)
     {
         $stmt = $this->conn->prepare("select * from dereeAthletics.registrations WHERE userID = ?");
@@ -340,6 +368,21 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
 
     }
+
+    public function getRealtimeLogs(){
+
+        $stmt = $this->conn->prepare("select DISTINCT (userID) from dereeAthletics.logs WHERE logout is NULL");
+
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+    }
+
+    /*******STATS******/
 
     public function getUsersLogsDays(){
 
