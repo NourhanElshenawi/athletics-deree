@@ -532,40 +532,34 @@ class MainController extends Controller
 
     }
 
-    public function statsYear(){
+    public function userStats(){
 
         $db = new DB();
-        $logs = $db->getUsersLogs();
-        $years = array();
+        $ageDB = $db->getUsersAge();
 
-        foreach ($logs as $key => $log) {
-
-            $date = $log['login'];
-//            d($date);
-
-            //below i get the year, month and the rest of the DateTime format (day and time)
-            $array = explode('-',$date,3);
-            //below i add the day to the date array
-            $years[] = $array[0];
-//            $array[2] = explode(' ',$array[2],2)[0];
-////                    d($array);
-//
-//
-//            $monthNum  = $array[1];
-//            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
-//            $monthName = $dateObj->format('F'); // March
-//            $array[1] = $monthName;
-//            $months[]=$monthName;
-//
-//            $logs[$key]['date'] = $array;
-
+        $age = array();
+        foreach ($ageDB as $ages){
+            foreach ($ages as $r){
+                $age[]= $r;
+            }
         }
+        $age = array_count_values($age);
 
-        $vals = array_count_values($years);
-        arsort($vals);
+        $genderDB = $db->getUsersGender();
+        $gender = array();
+        foreach ($genderDB as $genders){
+            foreach ($genders as $r){
+                $gender[]= $r;
+            }
+        }
+        $gender = array_count_values($gender);
+        d($age);
+        d($gender);
+
+//        INSERT INTO `dereeAthletics`.`users` (`name`, `email`, `password`, `picture`, `admin`, `birthDate`, `gender`) VALUES ('gsdfgf', 'dsgf@dfg.dfgdf', 'gfdgf', 'fgfhg', '0', '1994-11-01', 'F');
 
 
-        echo $this->twig->render('admin/logStatistics.twig', array('vals'=>$vals));
+        echo $this->twig->render('admin/userStats.twig', array('age'=>$age, 'gender'=> $gender));
 
     }
 

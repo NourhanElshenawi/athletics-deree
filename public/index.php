@@ -44,7 +44,7 @@ $router->post('/deleteuser', 'MainController', 'deleteUser');
 
 /////STATS
 $router->get('/adminstatsmonth', 'MainController', 'statsMonth');
-$router->get('/adminstatsyear', 'MainController', 'statsYear');
+$router->get('/adminstatsuser', 'MainController', 'userStats');
 $router->get('/logs', 'MainController', 'usersLogs');
 //////Logs
 $router->get('/adminlogssearchclasses', 'MainController', 'searchLogs');

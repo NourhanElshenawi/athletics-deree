@@ -313,7 +313,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     }
 
 
-    /*******GET USER LOGS FOR ADMIN STATS*********/
+    /*******GET ADMIN STATS*********/
 
     public function getUsersLogin(){
 
@@ -368,6 +368,30 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     public function getUsersLogsYears(){
 
         $stmt = $this->conn->prepare("select YEAR (login) from dereeAthletics.logs");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+    }
+
+    public function getUsersAge(){
+
+        $stmt = $this->conn->prepare("select TIMESTAMPDIFF(YEAR,birthDate,CURDATE()) AS age from dereeAthletics.users");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+    }
+
+    public function getUsersGender(){
+
+        $stmt = $this->conn->prepare("select gender from dereeAthletics.users");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
