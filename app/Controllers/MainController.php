@@ -1,11 +1,6 @@
 <?php
 namespace Nourhan\Controllers;
 
-
-
-
-
-
 use Nourhan\Database\DB;
 use Nourhan\Services\Upload;
 use Nourhan\ReCaptcha;
@@ -444,12 +439,37 @@ class MainController extends Controller
 
     }
 
-
     public function deleteUser()
     {
         $db = new DB();
         $db->deleteUser($_POST['id']);
 
+    }
+
+    public function addMultipleUsers()
+    {
+        $uploadService = new Upload();
+        $db = new DB();
+
+        $result = $uploadService->uploadFile($_FILES['users_file']);
+
+        //If file was NOT uploaded show message to user and exit
+        if ($result['success'] == false){
+            echo $this->twig->render('admin/editUsers.twig', ['result'=>$result]);
+
+            die();
+        }
+
+        $encodedUsers = file_get_contents(__DIR__.'/../storage/users.json');
+
+        $decodedUsers = json_decode($encodedUsers);
+
+        foreach ($decodedUsers as $user)
+        {
+            $result = $db->addUser($user);
+        }
+
+        echo $this->twig->render('admin/editUsers.twig', ['result'=>$result]);
     }
 
 

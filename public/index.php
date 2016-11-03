@@ -41,6 +41,7 @@ $router->get('/editusers', 'MainController', 'editUsers');
 $router->get('/adminsearchusers', 'MainController', 'searchUsers');
 $router->post('/updateuser', 'MainController', 'updateUser');
 $router->post('/deleteuser', 'MainController', 'deleteUser');
+$router->post('/add_multiple_users', 'MainController', 'addMultipleUsers');
 
 /////STATS
 $router->get('/adminstatsmonth', 'MainController', 'statsMonth');

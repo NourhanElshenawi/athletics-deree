@@ -23,7 +23,7 @@
                         <a href="/register">Register Class</a>
                     </li>
 
-                    {% if session.user.admin is defined %}
+                    {% if session.user.admin == 1 %}
                         <li id="menu-item-15534"
                             class="top-general menu-item menu-item-type-custom menu-item-object-custom menu-item-15534">
                             <i class="fa fa-pencil" style="margin-right: 4px;"></i>
@@ -66,7 +66,9 @@
                 <div class="menu-top-virtual-quick-n-more-container">
                     <ul id="menu-top-virtual-quick-n-more" class="menu">
 
-                        <li id="menu-item-606" class="header-quick menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-has-children menu-item-606"><a href="http://www.acg.edu/#">Logs</a>
+                        <li id="menu-item-606" class="header-quick menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-has-children menu-item-606">
+                            <a href="http://www.acg.edu/#">Logs</a>
+                            {% if session.user.admin == 1 %}
                             <ul class="sub-menu">
                                 <li id="menu-item-12722"
                                     class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12722">
@@ -78,7 +80,16 @@
                                     <a target="_blank" href="/realtimelogs">Real Time</a>
                                 </li>
                             </ul>
+
+                                {% else %}
+
+
+                            {% endif %}
+
+
                         </li>
+
+                        {% if session.user.admin == 1 %}
                         <li id="menu-item-606" class="header-quick menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-has-children menu-item-606"><a href="http://www.acg.edu/#">Statistics</a>
                             <ul class="sub-menu">
                                 <li id="menu-item-12722"
@@ -92,19 +103,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
 
-
-
-                                {##}
-                                {#<li id="menu-item-12723" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12723"><a target="_blank" href="https://blackboard.acg.edu/">New Blackboard</a></li>#}
-                                {#<li id="menu-item-609" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-609"><a href="http://www.acg.edu/current-students/myacg-apply-now-register-online/">myACG / Apply now</a></li>#}
-                                {#<li id="menu-item-15533" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15533"><a href="http://library.acg.edu/welcome">Library</a></li>#}
-                                {#<li id="menu-item-12725" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12725"><a href="http://www.acg.edu/careers-acg/">Careers @ ACG</a></li>#}
-                                {#<li id="menu-item-12726" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12726"><a href="http://www.acg.edu/current-students/it-acg/">Information Technology</a></li>#}
-                                {#<li id="menu-item-12727" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12727"><a href="http://www.acg.edu/current-students/campus-map/">Campus Map</a></li>#}
-                                {#<li id="menu-item-12729" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12729"><a href="http://www.acg.edu/current-students/student-services/career-services/career-portal/">Career Portal for Students</a></li>#}
-                                {#<li id="menu-item-12730" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12730"><a href="http://www.acg.edu/deree-degree-recognition/">Deree Degree Recognition</a></li>#}
-                                {#<li id="menu-item-15372" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15372"><a href="http://www.acg.edu/admissions/undergraduate-admissions/admission-process/north-american-students/required-documents/">North American Students</a></li>#}
                         <li id="menu-item-604" class="header-giving menu-item menu-item-type-post_type menu-item-object-page menu-item-604"><a href="http://www.acg.edu/why-give/">Giving</a></li>
                         <li id="menu-item-605" class="header-alumni menu-item menu-item-type-post_type menu-item-object-page menu-item-605"><a href="http://www.acg.edu/alumni/">Alumni</a></li>
                     </ul></div></div>					</div>

@@ -296,6 +296,98 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
+    public function userExists($email)
+    {
+        $stmt = $this->conn->prepare("
+ 				Select * FROM dereeAthletics.users
+ 				WHERE email=:email;"
+        );
+        $stmt->bindParam(':email', $email);
+
+        try {
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $row = $stmt->fetch();
+
+            return $row;
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function addUser($user)
+    {
+        $result['success'] = false;
+        $result['message'] = "";
+
+        //Check if user exists
+        $row = $this->userExists($user->email);
+
+        //If user exists then update his info
+        if (isset($row) && $row != false) {
+            $stmt = $this->conn->prepare("
+ 				update dereeAthletics.users
+ 				set name=:name, email=:email, password=:password, birthDate=:birthDate, gender=:gender, membershipType=:membershipType, picture=:picture, admin=:admin, active=:active
+ 				WHERE id=:id;"
+            );
+            $stmt->bindParam(':name', $user->name);
+            $stmt->bindParam(':email', $user->email);
+            $stmt->bindParam(':password', $user->password);
+            $stmt->bindParam(':birthDate', $user->birthDate);
+            $stmt->bindParam(':gender', $user->gender);
+            $stmt->bindParam(':membershipType', $user->membershipType);
+            $stmt->bindParam(':picture', $user->picture);
+            $stmt->bindParam(':admin', $user->admin);
+            $stmt->bindParam(':active', $user->active);
+            $stmt->bindParam(':id', $row['id']);
+
+            try
+            {
+                $stmt->execute();
+
+                $result['success'] = true;
+                $result['message'] = "Success! User {$row['id']} updated!";
+            }
+            catch (PDOException $e)
+            {
+                die($e->getMessage());
+            }
+
+        }
+        else { //if user does not exist then add a new one
+            $stmt = $this->conn->prepare("
+                    insert into dereeAthletics.users
+                    (name, email, password, birthDate, gender, membershipType, picture, admin, active)
+                    VALUES  (:name, :email, :password, :birthDate, :gender, :membershipType, :picture, :admin, :active);"
+            );
+            $stmt->bindParam(':name', $user->name);
+            $stmt->bindParam(':email', $user->email);
+            $stmt->bindParam(':password', $user->password);
+            $stmt->bindParam(':birthDate', $user->birthDate);
+            $stmt->bindParam(':gender', $user->gender);
+            $stmt->bindParam(':membershipType', $user->membershipType);
+            $stmt->bindParam(':picture', $user->picture);
+            $stmt->bindParam(':admin', $user->admin);
+            $stmt->bindParam(':active', $user->active);
+
+            try
+            {
+                $success = $stmt->execute();
+
+                if ($success) {
+                    $result['success'] = true;
+                    $result['message'] = "Success! User {$user->name} added.";
+                }
+                return $result;
+            }
+            catch (PDOException $e)
+            {
+                die($e->getMessage());
+            }
+        }
+
+        return $result;
+    }
 
     public function deleteUser($id)
     {

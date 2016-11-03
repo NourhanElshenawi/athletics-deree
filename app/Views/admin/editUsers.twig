@@ -53,7 +53,7 @@
     {%  set admin = "Admin" %}
     {% set notAdmin = "Regular User" %}
 
-    {{ dump(users.1.registrations) }}
+    {#{{ dump(users.1.registrations) }}#}
 
     <div class="clearfix"></div>
 
@@ -64,6 +64,8 @@
                 <h2 style="width: auto; margin-right: 3%;">Gym Users</h2>
 
                 <button class="fa fa-plus add" style="margin-top: 1%; border-radius: 25px;"></button>
+
+                <button class="fa fa-users add-multiple" style="margin-top: 1%; border-radius: 25px;"></button>
 
                 <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/adminsearchusers">
                     <label style="display: inline-block;">
@@ -76,6 +78,14 @@
                 <div class="clearfix"></div>
             </div>
             <div>
+
+                {% if result['success'] is not null %}
+                    {% if result['success'] == true %}
+                        <h3 style="text-align: center; color: forestgreen;"> {{ result['message'] }} </h3>
+                    {% else %}
+                        <h3 style="text-align: center; color: tomato;"> {{ result['message'] }} </h3>
+                    {% endif %}
+                {% endif %}
 
                 <table class="addClass">
                     <thead>
@@ -167,6 +177,33 @@
 
                     </tbody>
                 </table>
+
+                <div class="addClass-multiple">
+
+                    <form action="/add_multiple_users" method="post" enctype='multipart/form-data'>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">File with users <span
+                                        class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label class="btn btn-default btn-primary btn-file">
+                                    <input type="file" name="users_file" id="users_file" onchange="$('#upload-file-info').html($(this).val());">
+
+                                </label>
+                                <span class='' id="upload-file-info"></span>
+                            </div>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <button type="submit" class="btn btn-success" name="submit">Submit</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
 
 
                 <!-- start project list -->
@@ -477,6 +514,13 @@
         jQuery('.add').click(function() {
 
             jQuery('.addClass').toggle();
+
+        });
+
+        jQuery('.addClass-multiple').toggle();
+        jQuery('.add-multiple').click(function() {
+
+            jQuery('.addClass-multiple').toggle();
 
         });
 
