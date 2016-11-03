@@ -144,44 +144,10 @@
                 {% endfor %}
 
                 {% endfor %}
-//                $('#fullcalendar').fullCalendar( 'addEventSource',
-//                        function(start, end, callback) {
-//                            // When requested, dynamically generate a
-//                            // repeatable event for every monday.
-//                            var events = [];
-//                            var monday = 1;
-//                            var one_day = (24 * 60 * 60 * 1000);
-//
-//                            for (loop = start.getTime();
-//                                 loop <= end.getTime();
-//                                 loop = loop + one_day) {
-//
-//                                var column_date = new Date(loop);
-//
-//                                if (column_date.getDay() == monday) {
-//                                    // we're in Moday, create the event
-//                                    events.push({
-//                                        title: 'Morning Meeting',
-//                                        start: new Date(column_date.setHours(10, 00)),
-//                                        end: new Date(column_date.setHours(10, 40)),
-//                                        allDay: false
-//                                    });
-//                                }
-//
-//
-//
-//
-//                            } // for loop
-//
-//                            // return events generated
-//                            callback( events );
-//                        }
-//                );
                 $('#fullcalendar').fullCalendar('changeView', 'agendaWeek');
-//                $('#calendar').fullCalendar('option', 'aspectRatio', 0.5);
 
             }());
-        });//]]>
+        });
 
 
 
@@ -239,7 +205,6 @@
             data: {
                 labels: [
                     {% for key,value in vals %}
-//                        "January", "February", "March", "April", "May", "June", "July"
                         {% if loop.last %}
                         "{{ key }}"
                             {% else %}
@@ -249,17 +214,11 @@
                     {% endfor %}
                 ],
 
-                 {#{% for key,value in vals %}#}
-                {##}
-                 {#{% endfor %}#}
-
                 datasets: [{
                     label: '# of Visits',
                     backgroundColor: "#26B99A",
                     data: [
-//                            51, 30, 40, 28, 92, 50, 45
                         {% for key,value in vals %}
-//                        "January", "February", "March", "April", "May", "June", "July"
                         {% if loop.last %}
                         {{ value }}
                         {% else %}

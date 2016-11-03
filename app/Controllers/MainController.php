@@ -102,7 +102,7 @@ class MainController extends Controller
 //            $monthName = $dateObj->format('F'); // March
 //            $array[1] = $monthName;
 
-            d($array);
+//            d($array);
 
         }
 
@@ -131,7 +131,6 @@ class MainController extends Controller
 
         $array = array("January", "January", "January", "February", "February", "March");
         $vals = array_count_values($array);
-        var_dump($vals);
         for ($x=0; $x<count($array);){
 
             $x++;
@@ -589,8 +588,6 @@ class MainController extends Controller
 
     public function searchRealtimeLogs(){
 
-//        $keyword
-
         $db = new DB();
         $logs = $db->getRealtimeLogs();
         $usersID = array();
@@ -599,7 +596,6 @@ class MainController extends Controller
                 $usersID[] = $r;
             }
         }
-
         $users = array();
         foreach ($usersID as $key=>$id){
 //            d($id);
@@ -611,7 +607,6 @@ class MainController extends Controller
             }
         }
         echo $this->twig->render('admin/realtimeLogs.twig', array('users'=>$users));
-
     }
 
     public function searchLogs(){
