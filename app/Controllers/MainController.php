@@ -486,6 +486,8 @@ class MainController extends Controller
 
     public function statsMonth(){
 
+        $gender = $_POST['data']['gender'] ?? 'f';
+
         $db = new DB();
         $logs = $db->getUsersLogs();
         $dayLogs = $db->getUsersLogsDays();
@@ -498,7 +500,8 @@ class MainController extends Controller
         }
 
         $months = array();
-        $monthsDB = $db->getUsersLogsMonths();
+        $monthsDB = $db->getUsersLogsMonths($gender);
+
         //create an array with months as string values
         foreach ($monthsDB as $mon){
             foreach ($mon as $r){
@@ -557,7 +560,84 @@ class MainController extends Controller
         }
 
         echo $this->twig->render('admin/logStatistics.twig', array('years'=>$years,'months'=>$months, 'days'=>$days));
+    }
 
+    public function postStatsMonth(){
+
+        $gender = $_POST['gender'] ?? 'f';
+
+        $db = new DB();
+        $logs = $db->getUsersLogs();
+        $dayLogs = $db->getUsersLogsDays();
+        $days = array();
+        //create an array with days as string values
+        foreach ($dayLogs as $day){
+            foreach ($day as $r){
+                $days[]= $r;
+            }
+        }
+
+        $months = array();
+        $monthsDB = $db->getUsersLogsMonths($gender);
+
+        //create an array with months as string values
+        foreach ($monthsDB as $mon){
+            foreach ($mon as $r){
+                $months[]= $r;
+            }
+        }
+        $years = array();
+        //create an array with years as string values
+        $yearsDB = $db->getUsersLogsYears();
+        foreach ($yearsDB as $year){
+            foreach ($year as $r){
+                $years[]= $r;
+            }
+        }
+
+        //get how many times a year was repeated aka the number of visits per year by users
+        $years = array_count_values($years);
+        //sort the array by year
+        ksort($years);
+        //get how many times a month was repeated aka the number of visits per month by users
+        $months = array_count_values($months);
+        //sort the array by month number
+        ksort($months);
+
+        foreach ($months as $monthNum=>$value){
+
+            //convert month number to name
+            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
+            //use name of the month as the new key of the array
+            $months[$dateObj->format('F')] = $months[$monthNum]; // March
+            //unset old array key
+            unset($months[$monthNum]);
+
+        }
+        //get how many times a day was repeated aka the number of visits per day by users
+        $days = array_count_values($days);
+        //sort the array by day number
+        ksort($days);
+        $dayConverter = array(
+            1 => 'Sunday',
+            2 => 'Monday',
+            3 => 'Tuesday',
+            4 => 'Wednesday',
+            5 => 'Thursday',
+            6 => 'Friday',
+            7 => 'Saturday'
+        );
+
+        foreach ($days as $dayNum=>$value){
+            //convert day number to name
+            //use name of the month as the new key of the array
+            $days[$dayConverter[$dayNum]] = $days[$dayNum];
+            //unset old array key
+            unset($days[$dayNum]);
+
+        }
+
+        echo json_encode($months);
     }
 
     public function userStats(){

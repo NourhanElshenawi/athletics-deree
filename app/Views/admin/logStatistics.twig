@@ -18,7 +18,7 @@
 
 
 {% block content %}
-
+                  {{ dump(months) }}
 
     <div>
         <ul class="nav nav-tabs">
@@ -26,6 +26,17 @@
             <li id="months" role="presentation"><a href="#" style="font-weight: bold; font-size: large;">Months</a></li>
             <li id="days" role="presentation"><a href="#" style="font-weight: bold; font-size: large;">Days</a></li>
         </ul>
+
+        <div>
+            <label for="gender">Choose gender: </label>
+            <select name="gender" id="gender" style="width: 100%;" required>
+                <option value="m">Male</option>
+                <option value="f">Female</option>
+                <option value="b">Both</option>
+            </select>
+
+            {#<button id="asdf" value="asdf">asdf</button>#}
+        </div>
 
         <div id="yearDiv" style="width: 80%; height: 50%; margin: auto;">
             <canvas id="yearChart"></canvas>
@@ -243,9 +254,6 @@
         });
     </script>
 
-
-
-
     <script>
         jQuery('#months').click(function() {
             console.log(jQuery(this));
@@ -275,6 +283,82 @@
             jQuery('#yearDiv').css('display','none');
         });
 
+    </script>
+
+    <script>
+        jQuery('#gender').click(function () {
+
+            jQuery.ajax({
+                type: "POST",
+                url: '/adminstatsmonth',
+                data: {
+                    gender: 'm'
+                },
+                success: function (months) {
+                    console.log('Success Message: ' + months);
+                    alert('the server returned ' + months);
+                    Chart.defaults.global.legend = {
+                        enabled: false
+                    };
+
+                    var ctx = document.getElementById("monthChart");
+                    var monthChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: [
+                                {% for key,value in months %}
+//                        "January", "February", "March", "April", "May", "June", "July"
+                                {% if loop.last %}
+                                "{{ key }}"
+                                {% else %}
+                                "{{ key }}",
+                                {% endif %}
+
+                                {% endfor %}
+                            ],
+
+                            {#{% for key,value in vals %}#}
+                            {##}
+                            {#{% endfor %}#}
+
+                            datasets: [{
+                                label: '# of Visits',
+                                backgroundColor: "#26B99A",
+                                data: [
+//                            51, 30, 40, 28, 92, 50, 45
+                                    {% for key,value in months %}
+//                        "January", "February", "March", "April", "May", "June", "July"
+                                    {% if loop.last %}
+                                    {{ value }}
+                                    {% else %}
+                                    {{ value }},
+                                    {% endif %}
+
+                                    {% endfor %}
+                                ]
+                            }
+//                , {
+//                    label: '# of Votes',
+//                    backgroundColor: "#03586A",
+//                    data: [41, 56, 25, 48, 72, 34, 12]
+//                }
+
+                            ]
+                        },
+
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                }
+            });
+        });
     </script>
 
 

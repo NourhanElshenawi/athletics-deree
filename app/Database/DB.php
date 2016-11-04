@@ -545,16 +545,23 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     }
 
-    public function getUsersLogsMonths(){
+    public function getUsersLogsMonths($gender='f'){
 
-        $stmt = $this->conn->prepare("select MONTH (login) from dereeAthletics.logs");
+        $stmt = $this->conn->prepare("
+            SELECT MONTH(dereeAthletics.logs.login)
+            FROM dereeAthletics.users
+            INNER JOIN dereeAthletics.logs
+            ON dereeAthletics.logs.userID=dereeAthletics.users.id
+            AND dereeAthletics.users.gender=:gender;"
+        );
+
+        $stmt->bindParam(':gender', $gender);
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
 
         return $result;
-
     }
 
     public function getUsersLogsYears(){

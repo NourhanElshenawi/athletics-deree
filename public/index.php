@@ -48,6 +48,7 @@ $router->post('/add_user', 'MainController', 'addUser');
 $router->get('/adminstatsmonth', 'MainController', 'statsMonth');
 $router->get('/adminstatsuser', 'MainController', 'userStats');
 $router->get('/logs', 'MainController', 'usersLogs');
+$router->post('/adminstatsmonth', 'MainController', 'postStatsMonth');
 //////Logs
 $router->get('/adminlogssearchclasses', 'MainController', 'searchLogs');
 $router->get('/realtimelogs', 'MainController', 'realtimeLogs');
