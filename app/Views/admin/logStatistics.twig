@@ -286,6 +286,24 @@
     </script>
 
     <script>
+        vals = '{{ months|json_encode|raw }}';
+        console.log(vals);
+        var obj = jQuery.parseJSON(vals);
+        console.log(obj);
+        jQuery.each(obj, function(key,value) {
+            console.log(value);
+        });
+
+//        jQuery.each(vals, function(index, value) {
+////            console.log("INDEX: "+index+" VALS: "+value);
+//            alert(value);
+////             do something with `item` (or `this` is also `item` if you like)
+//        });
+
+//        $.each(vals, function( index, value ) {
+//            alert( value );
+//        });
+
         jQuery('#gender').click(function () {
 
             jQuery.ajax({
