@@ -294,16 +294,6 @@
             console.log(value);
         });
 
-//        jQuery.each(vals, function(index, value) {
-////            console.log("INDEX: "+index+" VALS: "+value);
-//            alert(value);
-////             do something with `item` (or `this` is also `item` if you like)
-//        });
-
-//        $.each(vals, function( index, value ) {
-//            alert( value );
-//        });
-
         jQuery('#gender').click(function () {
 
             jQuery.ajax({
@@ -314,7 +304,9 @@
                 },
                 success: function (months) {
                     console.log('Success Message: ' + months);
-                    alert('the server returned ' + months);
+//                    alert('the server returned ' + months);
+                    var obj = jQuery.parseJSON(vals);
+                    console.log(obj);
                     Chart.defaults.global.legend = {
                         enabled: false
                     };
@@ -323,47 +315,15 @@
                     var monthChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: [
-                                {% for key,value in months %}
-//                        "January", "February", "March", "April", "May", "June", "July"
-                                {% if loop.last %}
-                                "{{ key }}"
-                                {% else %}
-                                "{{ key }}",
-                                {% endif %}
-
-                                {% endfor %}
-                            ],
-
-                            {#{% for key,value in vals %}#}
-                            {##}
-                            {#{% endfor %}#}
-
-                            datasets: [{
+                            labels: Object.keys(obj),
+                            datasets: [
+                                    {
                                 label: '# of Visits',
                                 backgroundColor: "#26B99A",
-                                data: [
-//                            51, 30, 40, 28, 92, 50, 45
-                                    {% for key,value in months %}
-//                        "January", "February", "March", "April", "May", "June", "July"
-                                    {% if loop.last %}
-                                    {{ value }}
-                                    {% else %}
-                                    {{ value }},
-                                    {% endif %}
-
-                                    {% endfor %}
-                                ]
+                                data: Object.values(obj)
                             }
-//                , {
-//                    label: '# of Votes',
-//                    backgroundColor: "#03586A",
-//                    data: [41, 56, 25, 48, 72, 34, 12]
-//                }
-
                             ]
                         },
-
                         options: {
                             scales: {
                                 yAxes: [{
