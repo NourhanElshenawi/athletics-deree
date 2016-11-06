@@ -6,6 +6,7 @@
     {{ include('head.twig') }}
     {% block head %}
     {% endblock %}
+
         <title> {% block title %}{% endblock %} </title>
 
 
@@ -13,7 +14,6 @@
         body{
             color: white;
         }
-
     </style>
 </head>
 
@@ -28,11 +28,6 @@
             '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-5563K6');</script>
 <!-- End Google Tag Manager -->
-
-
-
-{#<div id="page" class="hfeed site">#}
-
     {% block nav %}
         {{ include('nav.twig') }}
     {% endblock nav %}
@@ -141,7 +136,8 @@ Remarketing tags may not be associated with personally identifiable information 
     &lt;div style="display:inline;"&gt;
     &lt;img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/976819837/?value=0&amp;guid=ON&amp;script=0"/&gt;
     &lt;/div&gt;
-</noscript>    <script type="text/javascript">
+</noscript>
+<script type="text/javascript">
     if(typeof(MediaElementPlayer) != 'function') {
         jQuery(document).ready(function(e) {
 

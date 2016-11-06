@@ -20,6 +20,11 @@ class MainController extends Controller
         echo $this->twig->render('index.twig');
     }
 
+    public function test()
+    {
+        echo $this->twig->render('master2.twig');
+    }
+
     public function calendar()
     {
         echo $this->twig->render('calendar.twig');
@@ -72,26 +77,18 @@ class MainController extends Controller
 
         $db = new DB();
         $logs = $db->getUserLogs($_SESSION['user']['id']);
-        d($logs);
         foreach ($logs as $log) {
-
             $date = $log['login'];
-//            d($date);
-
             //below i get the year, month and the rest of the DateTime format (day and time)
-                    $array = explode('-',$date,3);
+            $array = explode('-',$date,3);
             //below i add the day to the date array
-                    $temp = $array[2];
-                    $array[2] = explode(' ',$array[2],2)[0];
+            $temp = $array[2];
+            $array[2] = explode(' ',$array[2],2)[0];
 //                    d($array);
-
-
-                    $monthNum  = $array[1];
-                    $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
-                    $monthName = $dateObj->format('F'); // March
+            $monthNum  = $array[1];
+            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
+            $monthName = $dateObj->format('F'); // March
             $array[1] = $monthName;
-
-
 //            $dayNum  = $array[1];
 //            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
 //            $monthName = $dateObj->format('F'); // March
@@ -122,8 +119,6 @@ class MainController extends Controller
   */
 //        $array[1] = $monthName;
 //        var_dump($array);
-
-
         $array = array("January", "January", "January", "February", "February", "March");
         $vals = array_count_values($array);
         for ($x=0; $x<count($array);){
@@ -488,6 +483,9 @@ class MainController extends Controller
 
         $gender = $_POST['data']['gender'] ?? 'f';
 
+        $ageUp = $_POST['ageUpper'] ?? "2016-12-31";
+        $ageDown = $_POST['ageLower'] ?? "1800-01-01";
+
         $db = new DB();
         $logs = $db->getUsersLogs();
         $dayLogs = $db->getUsersLogsDays();
@@ -500,7 +498,8 @@ class MainController extends Controller
         }
 
         $months = array();
-        $monthsDB = $db->getUsersLogsMonths($gender);
+        $monthsDB = $db->getUsersLogsMonths($gender, $ageUp, $ageDown);
+//        , $ageUp, $ageDown
 
         //create an array with months as string values
         foreach ($monthsDB as $mon){
@@ -565,6 +564,8 @@ class MainController extends Controller
     public function postStatsMonth(){
 
         $gender = $_POST['gender'] ?? 'f';
+        $ageUp = $_POST['ageUpper'] ?? "2016-12-31";
+        $ageDown = $_POST['ageLower'] ?? "1800-01-01";
 
         $db = new DB();
         $logs = $db->getUsersLogs();
@@ -578,7 +579,8 @@ class MainController extends Controller
         }
 
         $months = array();
-        $monthsDB = $db->getUsersLogsMonths($gender);
+        $monthsDB = $db->getUsersLogsMonths($gender, $ageUp, $ageDown);
+//        , $ageUp, $ageDown
 
         //create an array with months as string values
         foreach ($monthsDB as $mon){

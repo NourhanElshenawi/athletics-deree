@@ -545,17 +545,19 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     }
 
-    public function getUsersLogsMonths($gender='f'){
+    public function getUsersLogsMonths($gender='f', $ageUp, $ageDown){
 
         $stmt = $this->conn->prepare("
             SELECT MONTH(dereeAthletics.logs.login)
             FROM dereeAthletics.users
             INNER JOIN dereeAthletics.logs
             ON dereeAthletics.logs.userID=dereeAthletics.users.id
-            AND dereeAthletics.users.gender=:gender;"
+            AND dereeAthletics.users.gender=:gender AND dereeAthletics.users.birthDate BETWEEN :down AND :up;"
         );
 
         $stmt->bindParam(':gender', $gender);
+        $stmt->bindParam(':up', $ageUp);
+        $stmt->bindParam(':down', $ageDown);
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);

@@ -28,12 +28,6 @@
         </ul>
 
         <div>
-            <label for="gender">Choose gender: </label>
-            <select name="gender" id="gender" style="width: 100%;" required>
-                <option value="m">Male</option>
-                <option value="f">Female</option>
-                <option value="b">Both</option>
-            </select>
 
             {#<button id="asdf" value="asdf">asdf</button>#}
         </div>
@@ -42,10 +36,26 @@
             <canvas id="yearChart"></canvas>
         </div>
 
-        <div id="monthsDiv" style="width: 80%; height: 50%; margin: auto; display: none;">
-            <canvas id="monthChart"></canvas>
-        </div>
 
+        <div id="monthsDiv" style="width: 80%; height: 50%; margin: auto; display: none;">
+            <div>
+                <label for="gender">Choose gender: </label>
+                <select name="gender" id="gender" style="width: 100%;" required>
+                    <option value="m">Male</option>
+                    <option value="f">Female</option>
+                    <option value="b">Both</option>
+                </select>
+                <label for="age">Select Age Range: </label>
+                <d>From:</d>
+                <input type="number" min="16" name="age" id="ageUpper" value="16">
+                <d>To:</d>
+                <input type="number" min="16" name="age" id="ageLower" value="80">
+                <input type="submit" id="ageSubmit">
+                
+                    <canvas id="monthChart"></canvas>
+            </div>
+
+        </div>
 
 
         <div id="daysDiv" style="width: 80%; height: 50%; margin: auto; display: none;">
@@ -68,67 +78,55 @@
     <script src="js/custom.min.js"></script>
 
 
-    <script>
-        Chart.defaults.global.legend = {
-            enabled: false
-        };
+    {#<script>#}
+        {#Chart.defaults.global.legend = {#}
+            {#enabled: false#}
+        {#};#}
 
-        var ctx = document.getElementById("monthChart");
-        var monthChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [
-                    {% for key,value in months %}
-//                        "January", "February", "March", "April", "May", "June", "July"
-                    {% if loop.last %}
-                    "{{ key }}"
-                    {% else %}
-                    "{{ key }}",
-                    {% endif %}
+        {#var ctx = document.getElementById("monthChart");#}
+        {#var monthChart = new Chart(ctx, {#}
+            {#type: 'bar',#}
+            {#data: {#}
+                {#labels: [#}
+                    {#{% for key,value in months %}#}
+{#//                        "January", "February", "March", "April", "May", "June", "July"#}
+                    {#{% if loop.last %}#}
+                    {#"{{ key }}"#}
+                    {#{% else %}#}
+                    {#"{{ key }}",#}
+                    {#{% endif %}#}
 
-                    {% endfor %}
-                ],
+                    {#{% endfor %}#}
+                {#],#}
+                {#datasets: [{#}
+                    {#label: '# of Visits',#}
+                    {#backgroundColor: "#26B99A",#}
+                    {#data: [#}
+                        {#{% for key,value in months %}#}
+                        {#{% if loop.last %}#}
+                        {#{{ value }}#}
+                        {#{% else %}#}
+                        {#{{ value }},#}
+                        {#{% endif %}#}
 
-                {#{% for key,value in vals %}#}
-                {##}
-                {#{% endfor %}#}
+                        {#{% endfor %}#}
+                    {#]#}
+                {#}#}
 
-                datasets: [{
-                    label: '# of Visits',
-                    backgroundColor: "#26B99A",
-                    data: [
-//                            51, 30, 40, 28, 92, 50, 45
-                        {% for key,value in months %}
-//                        "January", "February", "March", "April", "May", "June", "July"
-                        {% if loop.last %}
-                        {{ value }}
-                        {% else %}
-                        {{ value }},
-                        {% endif %}
+                {#]#}
+            {#},#}
 
-                        {% endfor %}
-                    ]
-                }
-//                , {
-//                    label: '# of Votes',
-//                    backgroundColor: "#03586A",
-//                    data: [41, 56, 25, 48, 72, 34, 12]
-//                }
-
-                ]
-            },
-
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
+            {#options: {#}
+                {#scales: {#}
+                    {#yAxes: [{#}
+                        {#ticks: {#}
+                            {#beginAtZero: true#}
+                        {#}#}
+                    {#}]#}
+                {#}#}
+            {#}#}
+        {#});#}
+    {#</script>#}
 
     <script>
         Chart.defaults.global.legend = {
@@ -248,7 +246,7 @@
 
     <script>
         jQuery('#months').click(function() {
-            console.log(jQuery(this));
+//            console.log(jQuery(this));
             jQuery(this).toggleClass('active');
             jQuery('#years').removeClass('active');
             jQuery('#days').removeClass('active');
@@ -257,7 +255,7 @@
             jQuery('#daysDiv').css('display','none');
         });
         jQuery('#years').click(function() {
-            console.log(jQuery(this));
+//            console.log(jQuery(this));
             jQuery(this).toggleClass('active');
             jQuery('#months').removeClass('active');
             jQuery('#days').removeClass('active');
@@ -266,7 +264,7 @@
             jQuery('#daysDiv').css('display','none');
         });
         jQuery('#days').click(function() {
-            console.log(jQuery(this));
+//            console.log(jQuery(this));
             jQuery(this).toggleClass('active');
             jQuery('#years').removeClass('active');
             jQuery('#months').removeClass('active');
@@ -279,40 +277,88 @@
 
     <script>
         vals = '{{ months|json_encode|raw }}';
-        console.log(vals);
-        var obj = jQuery.parseJSON(vals);
-        console.log(obj);
-        jQuery.each(obj, function(key,value) {
-            console.log(value);
+//        console.log(vals);
+        var valsEncoded = jQuery.parseJSON(vals);
+        var ctx = document.getElementById("monthChart");
+        var monthChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(valsEncoded),
+                datasets: [
+                    {
+                        label: '# of Visits',
+                        backgroundColor: "#26B99A",
+                        data: Object.values(valsEncoded)
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
         });
+//        console.log(valsEncoded);
+        {#jQuery.each(obj, function(key,value) {#}
+            {#console.log(value);#}
+        {#});#}
+        jQuery('#ageSubmit').click(function () {
+            console.log("dfsgdfg");
+            var year = new Date().getFullYear();
+            console.log(year);
+            var ageLower = 2016 - jQuery('#ageLower').val();
+            var ageUpper = 2016 - jQuery('#ageUpper').val();
+            console.log(ageLower);
+            console.log(ageUpper);
+//        });
+//        jQuery('#gender').change(function () {
 
-        jQuery('#gender').change(function () {
+            var selectInput = document.getElementById("gender");
+            var selectValue = selectInput.options[selectInput.selectedIndex].value;
+            console.log(selectValue);
+            //get age range
+            var year = new Date().getFullYear();
+            console.log(year);
+            var ageLower = 2016 - jQuery('#ageLower').val();
+            var ageUpper = 2016 - jQuery('#ageUpper').val();
+            var ageLower = ageLower + "-01-01";
+            var ageUpper = ageUpper + "-12-31";
+            console.log(ageLower);
+            console.log(ageUpper);
+
             jQuery.ajax({
                 type: "POST",
                 url: '/adminstatsmonth',
                 data: {
-                    gender: 'm'
+                    gender: selectValue,
+                    ageUpper: ageUpper,
+                    ageLower: ageLower
                 },
                 success: function (months) {
+//                    vals = months;
+//                    console.log(vals);
                     console.log('Success Message: ' + months);
 //                    alert('the server returned ' + months);
-                    var obj = jQuery.parseJSON(vals);
-                    console.log(obj);
+                    valsEncoded = jQuery.parseJSON(months);
+                    console.log(valsEncoded);
                     Chart.defaults.global.legend = {
                         enabled: false
                     };
-
                     var ctx = document.getElementById("monthChart");
                     var monthChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: Object.keys(obj),
+                            labels: Object.keys(valsEncoded),
                             datasets: [
-                                    {
-                                label: '# of Visits',
-                                backgroundColor: "#26B99A",
-                                data: Object.values(obj)
-                            }
+                                {
+                                    label: '# of Visits',
+                                    backgroundColor: "#26B99A",
+                                    data: Object.values(valsEncoded)
+                                }
                             ]
                         },
                         options: {
@@ -328,6 +374,9 @@
                 }
             });
         });
+
+
+
     </script>
 
 
@@ -336,7 +385,6 @@
 {% endblock content %}
 
 {% block info %}
-    {{ include('info.twig') }}
 {% endblock info %}
 
 

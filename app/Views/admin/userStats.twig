@@ -68,7 +68,6 @@
             data: {
                 labels: [
                     {% for key,value in months %}
-//                        "January", "February", "March", "April", "May", "June", "July"
                     {% if loop.last %}
                     "{{ key }}"
                     {% else %}
@@ -86,9 +85,7 @@
                     label: '# of Visits',
                     backgroundColor: "#26B99A",
                     data: [
-//                            51, 30, 40, 28, 92, 50, 45
                         {% for key,value in months %}
-//                        "January", "February", "March", "April", "May", "June", "July"
                         {% if loop.last %}
                         {{ value }}
                         {% else %}
@@ -98,11 +95,6 @@
                         {% endfor %}
                     ]
                 }
-//                , {
-//                    label: '# of Votes',
-//                    backgroundColor: "#03586A",
-//                    data: [41, 56, 25, 48, 72, 34, 12]
-//                }
 
                 ]
             },
@@ -232,7 +224,6 @@
 {% endblock content %}
 
 {% block info %}
-    {{ include('info.twig') }}
 {% endblock info %}
 
 
