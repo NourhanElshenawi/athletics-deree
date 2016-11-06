@@ -483,8 +483,8 @@ class MainController extends Controller
 
         $gender = $_POST['data']['gender'] ?? 'f';
 
-        $ageUp = $_POST['ageUpper'] ?? "2016-12-31";
-        $ageDown = $_POST['ageLower'] ?? "1800-01-01";
+        $ageUp = $_POST['data']['ageUpper'] ?? "2016-12-31";
+        $ageDown = $_POST['data']['ageLower'] ?? "1800-01-01";
 
         $db = new DB();
         $logs = $db->getUsersLogs();
