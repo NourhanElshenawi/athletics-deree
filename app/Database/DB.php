@@ -297,6 +297,25 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
+    public function getRegisteredUsers($classID)
+    {
+        $stmt = $this->conn->prepare("
+            SELECT *
+            FROM dereeAthletics.users
+            INNER JOIN dereeAthletics.registrations
+            ON dereeAthletics.registrations.userID=dereeAthletics.users.id
+            AND dereeAthletics.registrations.classID=:class limit 5;"
+        );
+
+        $stmt->bindParam(':class', $classID);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     public function userExists($email)
     {
         $stmt = $this->conn->prepare("

@@ -226,6 +226,7 @@ class MainController extends Controller
 
     public function beautifyClasses($classes){
 
+        $db = new DB();
 
         foreach ($classes as $key=>$class ){
 
@@ -234,6 +235,8 @@ class MainController extends Controller
 
             $classes[$key]['currentCapacityPercentage'] = $temp;
             $classes[$key]['currentCapacity'] = $temp2;
+
+            $classes[$key]['users'] = $db->getRegisteredUsers($class['id']);
 
             $class['days']=array();
 
@@ -281,21 +284,15 @@ class MainController extends Controller
 
     public function editSchedule()
     {
-        $DB = new DB();
-        $classes = $DB->getClasses();
-        $allInstructor = $DB->getInstructors();
-
+        $db = new DB();
+        $classes = $db->getClasses();
+        $allInstructor = $db->getInstructors();
         $classes = $this->beautifyClasses($classes);
-
         $instructors = array();
-
         foreach ($classes as $class ){
-
             $id = "".$class["instructorID"]."";
-            $instructors[]= $DB->getInstructor($id);
-
+            $instructors[]= $db->getInstructor($id);
     }
-
         echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'instructors'=> $instructors, 'allInstructors'=>$allInstructor));
     }
 

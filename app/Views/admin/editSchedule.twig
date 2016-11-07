@@ -37,6 +37,8 @@
 
 {% block content %}
 
+    {#{{ dump(classes.1.users) }}#}
+
     {% set classExample = classes|first %}
     <div class="clearfix"></div>
 
@@ -199,18 +201,29 @@
 
                                         <div class="split" style="width: 25%; margin: 0;">
                                             <ul class="list-inline">
-                                                <li>
-                                                    <img src="images/user.png" class="avatar" alt="Avatar">
-                                                </li>
-                                                <li>
-                                                    <img src="images/user.png" class="avatar" alt="Avatar">
-                                                </li>
-                                                <li>
-                                                    <img src="images/user.png" class="avatar" alt="Avatar">
-                                                </li>
-                                                <li>
-                                                    <img src="images/user.png" class="avatar" alt="Avatar">
-                                                </li>
+                                                {#<form action="" method="get">#}
+                                                {% for user in class.users %}
+                                                    <li>
+
+                                                        <a href="/adminsearchusers?keyword={{ user.id }}">
+                                                            <img src="images/{{ user.picture }}" class="avatar" alt="Avatar" value="{{ user.name }}">
+                                                        </a>
+                                                        {#<input type="hidden" value="{{ user.id }}">#}
+                                                    </li>
+                                                {% endfor %}
+                                                {#</form>#}
+                                                {#<li>#}
+                                                    {#<img src="images/user.png" class="avatar" alt="Avatar">#}
+                                                {#</li>#}
+                                                {#<li>#}
+                                                    {#<img src="images/user.png" class="avatar" alt="Avatar">#}
+                                                {#</li>#}
+                                                {#<li>#}
+                                                    {#<img src="images/user.png" class="avatar" alt="Avatar">#}
+                                                {#</li>#}
+                                                {#<li>#}
+                                                    {#<img src="images/user.png" class="avatar" alt="Avatar">#}
+                                                {#</li>#}
                                             </ul>
                                         </div>
 
