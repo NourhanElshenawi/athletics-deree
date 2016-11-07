@@ -28,6 +28,8 @@ $router->get('/register', 'MainController', 'register');
 $router->post('/unregisterclass', 'MainController', 'unregisterClass');
 $router->post('/registerclass', 'MainController', 'registerClass');
 $router->get('/signin', 'MainController', 'signin');
+$router->get('/realtimelogs', 'MainController', 'realtimeLogs');
+//$router->get('/friendslogs', 'MainController', 'friendslogs');
 
 /********ADMIN**********/
 ///////CLASSES SCHEDULE
@@ -37,6 +39,10 @@ $router->post('/addclass', 'MainController', 'addClass');
 $router->post('/deleteclass', 'MainController', 'deleteClass');
 $router->post('/updateclass', 'MainController', 'updateClass');
 $router->get('/adminsearchclasses', 'MainController', 'searchClasses');
+
+///////CLASS REGISTRATIONS
+$router->get('/registrations', 'MainController', 'registrations');
+$router->get('/searchregistrations', 'MainController', 'searchRegistrations');
 ////////Users
 $router->get('/editusers', 'MainController', 'editUsers');
 $router->get('/adminsearchusers', 'MainController', 'searchUsers');
@@ -52,7 +58,6 @@ $router->get('/logs', 'MainController', 'usersLogs');
 $router->post('/adminstatsmonth', 'MainController', 'postStatsMonth');
 //////Logs
 $router->get('/adminlogssearchclasses', 'MainController', 'searchLogs');
-$router->get('/realtimelogs', 'MainController', 'realtimeLogs');
 $router->get('/adminsearchrealtime', 'MainController', 'searchRealtimeLogs');
 
 $router->get('/profile', 'MainController', 'profileStats');

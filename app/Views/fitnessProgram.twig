@@ -192,14 +192,14 @@
 
 {% block content %}
 
-    {% for class in classes %}
-        {{ class.name }}:
+    {#{% for class in classes %}#}
+        {#{{ class.name }}:#}
         {#<br>#}
-        {% for key, value in class.days %}
-            {{ value }}
-        {% endfor %}
-        <br>
-    {% endfor %}
+        {#{% for key, value in class.days %}#}
+            {#{{ value }}#}
+        {#{% endfor %}#}
+        {#<br>#}
+    {#{% endfor %}#}
 <div id="fullcalendar"></div>
 
 {% endblock content %}

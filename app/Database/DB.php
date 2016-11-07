@@ -316,6 +316,30 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
+    public function searchClassRegistrations($classID, $keyword)
+    {
+        $stmt = $this->conn->prepare("
+            SELECT *
+            FROM dereeAthletics.users
+            INNER JOIN dereeAthletics.registrations
+            ON dereeAthletics.registrations.userID=dereeAthletics.users.id
+            AND dereeAthletics.registrations.classID=:class WHERE dereeAthletics.users.id LIKE :id or dereeAthletics.users.email LIKE :email
+            OR dereeAthletics.users.name LIKE :username or dereeAthletics.users.gender LIKE :gender limit 5;"
+        );
+
+        $stmt->bindParam(':class', $classID);
+        $stmt->bindParam(':id', $keyword);
+        $stmt->bindParam(':email', $keyword);
+        $stmt->bindParam(':username', $keyword);
+        $stmt->bindParam(':gender', $keyword);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     public function userExists($email)
     {
         $stmt = $this->conn->prepare("

@@ -367,6 +367,35 @@ class MainController extends Controller
 
     }
 
+    public function registrations()
+    {
+        $db = new DB();
+        $classes = $db->getClasses();
+
+        if(!isset($_GET['class'])){
+            echo $this->twig->render('admin/registrations.twig', array('classes'=>$classes));
+        }
+        else {
+            $users = $db->getRegisteredUsers($_GET['class']);
+            $class = $db->getClass($_GET['class']);
+            echo $this->twig->render('admin/registrations.twig', array('classes'=>$classes, 'users'=>$users, 'class'=>$class));
+        }
+
+    }
+
+    public function searchRegistrations()
+    {
+        $db = new DB();
+        $classes = $db->getClasses();
+
+            $users = $db->searchClassRegistrations($_GET['classID'], $_GET['keyword']);
+            $class = $db->getClass($_GET['classID']);
+        if (empty($users)){
+            $users = array();
+        }
+            echo $this->twig->render('admin/registrations.twig', array('classes'=>$classes, 'users'=>$users, 'class'=>$class));
+    }
+
     ////////EDIT USERS
 
 
@@ -691,7 +720,7 @@ class MainController extends Controller
         foreach ($usersID as $key=>$id){
             $users[] = $db->getUsersByID($id);
         }
-        echo $this->twig->render('admin/realtimeLogs.twig', array('users'=>$users));
+        echo $this->twig->render('realtimeLogs.twig', array('users'=>$users));
     }
 
     public function searchRealtimeLogs(){
