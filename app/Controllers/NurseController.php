@@ -18,7 +18,7 @@ class NurseController extends Controller
     {
         $db = new DB();
 
-        $users = $db->getUsers();
+        $users = $db->getUserCertificates();
 
         echo $this->twig->render('nurse/pendingCertificates.twig', array('users'=>$users));
     }

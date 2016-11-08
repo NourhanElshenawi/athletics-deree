@@ -207,6 +207,25 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         $stmt->execute();
     }
 
+
+    ///////Nurse
+    public function getUserCertificates()
+    {
+        $stmt = $this->conn->prepare("
+          select *
+          from dereeAthletics.users
+          join dereeAthletics.user_certificates
+          on users.id = user_certificates.userID;
+          ");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+
     ///////USERS
 
     public function searchUsers($keyword)

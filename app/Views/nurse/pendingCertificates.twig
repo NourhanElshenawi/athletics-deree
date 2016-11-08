@@ -65,15 +65,15 @@
 
                                 </td>
                                 <td>
-                                    {% if user.nurseCertificate is not null %}
-                                        {{ user.certificate }}
+                                    {% if user.certificate_file is not null %}
+                                        <a target="_blank" href="/certificates/{{ user.certificate_file }}">{{ user.certificate_file }}</a>
                                     {% else %}
                                         Not uploaded yet
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i> Success</button>
-                                    <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-close"></i> Success</button>
+                                    <button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i> Approve</button>
+                                    <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-close"></i> Reject</button>
                                 </td>
                                 {# I can change the above td to the one below #}
                                 {#<td>#}
