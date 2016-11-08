@@ -215,8 +215,10 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
           select *
           from dereeAthletics.users
           join dereeAthletics.user_certificates
-          on users.id = user_certificates.userID;
+          on users.id = user_certificates.userID
+          WHERE user_certificates.certificate_status = ?;
           ");
+        $stmt->bindValue(1, '0');
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -225,6 +227,20 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
+    public function approveUserCertificate($id)
+    {
+        $stmt = $this->conn->prepare("update dereeAthletics.user_certificates set certificate_status = ? WHERE id = ? ");
+
+        try{
+            $stmt->bindValue(1, '1');
+            $stmt->bindValue(2, $id);
+            $result = $stmt->execute();
+
+            return $result;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 
     ///////USERS
 

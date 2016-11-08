@@ -27,7 +27,6 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-md-12">
             <div class="x_panel">
                 <div class="x_title">
                     <h2>Pending Certificates</h2>
@@ -39,21 +38,21 @@
                     <p>Download the file, view it, and approve/reject it.</p>
 
                     <!-- start project list -->
-                    <table class="table table-striped">
+                    <table class="table table-striped" style="width: 100%;">
                         <thead>
                         <tr>
-                            <th style="width: 1%">#</th>
-                            <th style="width: 20%">Member's Name</th>
+                            <th>#</th>
+                            <th>Member's Name</th>
                             <th>Type</th>
                             <th>File</th>
-                            <th style="width: 20%">Action</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
 
 
                         {% for user in users %}
-                            <tr class="row">
+                            <tr class="user_row">
                                 <td>{{ loop.index }}</td>
                                 <td> {{ user.name }} </td>
                                 <td>
@@ -120,9 +119,9 @@
                         console.log("data returned: " + data);
 
                         if (data=='true') {
-                            approve_btn.closest('.row').remove();
+                            approve_btn.closest('.user_row').remove();
                         } else {
-                            jQuery(approve_btn).closest('.row').css('opacity', '0.3');
+                            jQuery(approve_btn).closest('.user_row').css('opacity', '0.3');
                             alert('Operation Failed! Please contact support.');
                         }
                     }

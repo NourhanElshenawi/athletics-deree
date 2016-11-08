@@ -35,7 +35,11 @@ class NurseController extends Controller
 
     public function approveCertificate()
     {
-        echo json_encode(false);
+        $db = new DB();
+
+        $result = $db->approveUserCertificate($_POST['user_certificate_id']);
+
+        echo json_encode($result);
     }
 
 }
