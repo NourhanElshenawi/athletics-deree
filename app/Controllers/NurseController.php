@@ -33,6 +33,9 @@ class NurseController extends Controller
         echo "see rejected certificates";
     }
 
-
+    public function approveCertificate()
+    {
+        echo json_encode(false);
+    }
 
 }

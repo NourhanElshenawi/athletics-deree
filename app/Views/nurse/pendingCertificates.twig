@@ -53,7 +53,7 @@
 
 
                         {% for user in users %}
-                            <tr>
+                            <tr class="row">
                                 <td>{{ loop.index }}</td>
                                 <td> {{ user.name }} </td>
                                 <td>
@@ -72,8 +72,8 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i> Approve</button>
-                                    <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-close"></i> Reject</button>
+                                    <button value="{{ user.id }}" type="button" class="approve_btn btn btn-success btn-xs"><i class="fa fa-check"></i> Approve</button>
+                                    <button value="{{ user.id }}" type="button" class="reject_btn btn btn-danger btn-xs"><i class="fa fa-close"></i> Reject</button>
                                 </td>
                                 {# I can change the above td to the one below #}
                                 {#<td>#}
@@ -102,6 +102,34 @@
         </div>
     </div>
 
+    <script>
+        jQuery('.approve_btn').click(function() {
+
+            var approve_btn = this;
+
+            if (confirm("Are you sure you want to approve this certificate?")) {
+                console.log("The id is: " + jQuery(this).attr('value'));
+
+                jQuery.ajax({
+                    type: 'POST',
+                    url: '/approveCertificate',
+                    data: {
+                        user_certificate_id: jQuery(this).attr('value')
+                    },
+                    success: function (data) {
+                        console.log("data returned: " + data);
+
+                        if (data=='true') {
+                            approve_btn.closest('.row').remove();
+                        } else {
+                            jQuery(approve_btn).closest('.row').css('opacity', '0.3');
+                            alert('Operation Failed! Please contact support.');
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 
     <!-- jQuery -->
     <script src="js/jquery.min.js"></script>
@@ -119,12 +147,7 @@
     <script>jQuery.noConflict();</script>
     <script src="js/custom.min.js"></script>
 
-
-
-
 {% endblock content %}
 
-{% block info %}
-    {{ include('info.twig') }}twig
-{% endblock info %}
+
 
