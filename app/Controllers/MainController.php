@@ -274,8 +274,6 @@ class MainController extends Controller
         }
 
         return $classes;
-
-
     }
 
     /***********ADMIN************/
@@ -295,7 +293,6 @@ class MainController extends Controller
     }
         echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'instructors'=> $instructors, 'allInstructors'=>$allInstructor));
     }
-
 
     public function addClass()
     {
@@ -508,11 +505,11 @@ class MainController extends Controller
     public function statsMonth(){
 
         $gender = $_POST['data']['gender'] ?? 'f';
-
-        $ageUp = $_POST['data']['ageUpper'] ?? "2016-12-31";
-        $ageDown = $_POST['data']['ageLower'] ?? "1800-01-01";
+        $ageUpperLimit = $_POST['data']['ageUpper'] ?? "2016-12-31";
+        $ageLowerLimit = $_POST['data']['ageLower'] ?? "1800-01-01";
 
         $db = new DB();
+
         $logs = $db->getUsersLogs();
         $dayLogs = $db->getUsersLogsDays();
         $days = array();
@@ -524,8 +521,8 @@ class MainController extends Controller
         }
 
         $months = array();
-        $monthsDB = $db->getUsersLogsMonths($gender, $ageUp, $ageDown);
-//        , $ageUp, $ageDown
+        $monthsDB = $db->getUsersLogsMonths($gender, $ageUpperLimit, $ageLowerLimit);
+//        , $ageUpperLimit, $ageLowerLimit
 
         //create an array with months as string values
         foreach ($monthsDB as $mon){
@@ -590,8 +587,8 @@ class MainController extends Controller
     public function postStatsMonth(){
 
         $gender = $_POST['gender'] ?? 'f';
-        $ageUp = $_POST['ageUpper'] ?? "2016-12-31";
-        $ageDown = $_POST['ageLower'] ?? "1800-01-01";
+        $ageUpperLimit = $_POST['ageUpper'] ?? "2016-12-31";
+        $ageLowerLimit = $_POST['ageLower'] ?? "1800-01-01";
 
         $db = new DB();
         $logs = $db->getUsersLogs();
@@ -605,8 +602,8 @@ class MainController extends Controller
         }
 
         $months = array();
-        $monthsDB = $db->getUsersLogsMonths($gender, $ageUp, $ageDown);
-//        , $ageUp, $ageDown
+        $monthsDB = $db->getUsersLogsMonths($gender, $ageUpperLimit, $ageLowerLimit);
+//        , $ageUpperLimit, $ageLowerLimit
 
         //create an array with months as string values
         foreach ($monthsDB as $mon){
