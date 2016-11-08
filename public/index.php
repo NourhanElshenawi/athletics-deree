@@ -62,6 +62,12 @@ $router->get('/adminsearchrealtime', 'MainController', 'searchRealtimeLogs');
 
 $router->get('/profile', 'MainController', 'profileStats');
 
+/******** Nurse **********/
+$router->get('/nurse-pending', 'NurseController', 'seePendingCertificates');
+$router->get('/nurse-approved', 'NurseController', 'seeApprovedCertificates');
+$router->get('/nurse-rejected', 'NurseController', 'seeRejectedCertificates');
+
+
 ////See inside $router
 //echo "<pre>";
 //print_r($router);
