@@ -22,9 +22,9 @@
 
     <div>
         <ul class="nav nav-tabs">
-            <li id="years" role="presentation" class="active"><a href="#" style="font-weight: bold; font-size: large;">Years</a></li>
-            <li id="months" role="presentation"><a href="#" style="font-weight: bold; font-size: large;">Months</a></li>
-            <li id="days" role="presentation"><a href="#" style="font-weight: bold; font-size: large;">Days</a></li>
+            <li id="years" role="presentation" class="active"><a style="font-weight: bold; font-size: large;">Years</a></li>
+            <li id="months" role="presentation"><a style="font-weight: bold; font-size: large;">Months</a></li>
+            <li id="days" role="presentation"><a style="font-weight: bold; font-size: large;">Days</a></li>
         </ul>
 
         <div>
@@ -330,6 +330,7 @@
             console.log(ageLower);
             console.log(ageUpper);
 
+            monthChart.destroy();
             jQuery.ajax({
                 type: "POST",
                 url: '/adminstatsmonth',
