@@ -18,7 +18,6 @@
 
 
 {% block content %}
-                  {{ dump(months) }}
 
     <div>
         <ul class="nav nav-tabs">
@@ -28,8 +27,27 @@
         </ul>
 
         <div>
-
-            {#<button id="asdf" value="asdf">asdf</button>#}
+            <label for="gender">Choose gender: </label>
+            <select name="gender" id="gender" style="display: block;" required>
+                <option value="m">Male</option>
+                <option value="f">Female</option>
+                <option value="b">Both</option>
+            </select>
+            <label for="allAge" style="display: inline-block;">All Ages: </label>
+            <input type="checkbox" name="allAge" id="allAge" checked onclick="if(jQuery('#allAge').is(':checked')){
+                jQuery('#ageUpper').attr('disabled', 'disabled');
+                jQuery('#ageLower').attr('disabled', 'disabled');
+            } else {
+                jQuery('#ageUpper').removeAttr('disabled');
+                jQuery('#ageLower').removeAttr('disabled');
+            }
+            ; ">
+            <label for="age" style="display: inline-block;"> OR Select Age Range: </label>
+            <p style="display: inline-block;">From:</p>
+            <input type="number" min="16" name="age" id="ageUpper" value="16" disabled>
+            <p style="display: inline-block;">To:</p>
+            <input type="number" min="16" name="age" id="ageLower" value="80" disabled>
+            <input type="submit" id="filter">
         </div>
 
         <div id="yearDiv" style="width: 80%; height: 50%; margin: auto;">
@@ -38,32 +56,7 @@
 
 
         <div id="monthsDiv" style="width: 80%; height: 50%; margin: auto; display: none;">
-            <div>
-                <label for="gender">Choose gender: </label>
-                <select name="gender" id="gender" style="width: 100%;" required>
-                    <option value="m">Male</option>
-                    <option value="f">Female</option>
-                    <option value="b">Both</option>
-                </select>
-                <label for="allAge" style="display: inline-block;">All Ages: </label>
-                <input type="checkbox" name="allAge" id="allAge" checked onclick="if(jQuery('#allAge').is(':checked')){
-                    jQuery('#ageUpper').attr('disabled', 'disabled');
-                    jQuery('#ageLower').attr('disabled', 'disabled');
-                } else {
-                    jQuery('#ageUpper').removeAttr('disabled');
-                    jQuery('#ageLower').removeAttr('disabled');
-                }
-                ; ">
-                <label for="age">Select Age Range: </label>
-                <d>From:</d>
-                <input type="number" min="16" name="age" id="ageUpper" value="16" disabled>
-                <d>To:</d>
-                <input type="number" min="16" name="age" id="ageLower" value="80" disabled>
-                <input type="submit" id="ageSubmit">
-
-                    <canvas id="monthChart"></canvas>
-            </div>
-
+            <canvas id="monthChart"></canvas>
         </div>
 
 
@@ -86,56 +79,6 @@
     <!-- Custom Theme Scripts -->
     <script src="js/custom.min.js"></script>
 
-
-    {#<script>#}
-        {#Chart.defaults.global.legend = {#}
-            {#enabled: false#}
-        {#};#}
-
-        {#var ctx = document.getElementById("monthChart");#}
-        {#var monthChart = new Chart(ctx, {#}
-            {#type: 'bar',#}
-            {#data: {#}
-                {#labels: [#}
-                    {#{% for key,value in months %}#}
-{#//                        "January", "February", "March", "April", "May", "June", "July"#}
-                    {#{% if loop.last %}#}
-                    {#"{{ key }}"#}
-                    {#{% else %}#}
-                    {#"{{ key }}",#}
-                    {#{% endif %}#}
-
-                    {#{% endfor %}#}
-                {#],#}
-                {#datasets: [{#}
-                    {#label: '# of Visits',#}
-                    {#backgroundColor: "#26B99A",#}
-                    {#data: [#}
-                        {#{% for key,value in months %}#}
-                        {#{% if loop.last %}#}
-                        {#{{ value }}#}
-                        {#{% else %}#}
-                        {#{{ value }},#}
-                        {#{% endif %}#}
-
-                        {#{% endfor %}#}
-                    {#]#}
-                {#}#}
-
-                {#]#}
-            {#},#}
-
-            {#options: {#}
-                {#scales: {#}
-                    {#yAxes: [{#}
-                        {#ticks: {#}
-                            {#beginAtZero: true#}
-                        {#}#}
-                    {#}]#}
-                {#}#}
-            {#}#}
-        {#});#}
-    {#</script>#}
 
     <script>
         Chart.defaults.global.legend = {
@@ -315,7 +258,7 @@
         {#jQuery.each(obj, function(key,value) {#}
             {#console.log(value);#}
         {#});#}
-        jQuery('#ageSubmit').click(function () {
+        jQuery('#filter').click(function () {
             console.log("dfsgdfg");
 
             var selectInput = document.getElementById("gender");
@@ -337,49 +280,147 @@
             console.log(ageUpper);
 
             monthChart.destroy();
-            jQuery.ajax({
-                type: "POST",
-                url: '/adminstatsmonth',
-                data: {
-                    gender: selectValue,
-                    ageUpper: ageUpper,
-                    ageLower: ageLower
-                },
-                success: function (months) {
+
+            if (jQuery('#years').hasClass('active')){
+                console.log("YEARS ACTIVE");
+                jQuery.ajax({
+                    type: "POST",
+                    url: '/adminstatsyear',
+                    data: {
+                        gender: selectValue,
+                        ageUpper: ageUpper,
+                        ageLower: ageLower
+                    },
+                    success: function (year) {
+                        console.log('Success Message: ' + year);
+                        valsEncoded = jQuery.parseJSON(year);
+                        console.log(valsEncoded);
+                        Chart.defaults.global.legend = {
+                            enabled: false
+                        };
+                        var ctx = document.getElementById("yearChart");
+                        var yearChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: Object.keys(valsEncoded),
+                                datasets: [
+                                    {
+                                        label: '# of Visits',
+                                        backgroundColor: "#26B99A",
+                                        data: Object.values(valsEncoded)
+                                    }
+                                ]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
+            if (jQuery('#months').hasClass('active')){
+                console.log("MONTHS ACTIVE");
+                jQuery.ajax({
+                    type: "POST",
+                    url: '/adminstatsmonth',
+                    data: {
+                        gender: selectValue,
+                        ageUpper: ageUpper,
+                        ageLower: ageLower
+                    },
+                    success: function (months) {
 //                    vals = months;
 //                    console.log(vals);
-                    console.log('Success Message: ' + months);
+                        console.log('Success Message: ' + months);
 //                    alert('the server returned ' + months);
-                    valsEncoded = jQuery.parseJSON(months);
-                    console.log(valsEncoded);
-                    Chart.defaults.global.legend = {
-                        enabled: false
-                    };
-                    var ctx = document.getElementById("monthChart");
-                    var monthChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: Object.keys(valsEncoded),
-                            datasets: [
-                                {
-                                    label: '# of Visits',
-                                    backgroundColor: "#26B99A",
-                                    data: Object.values(valsEncoded)
-                                }
-                            ]
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
+                        valsEncoded = jQuery.parseJSON(months);
+                        console.log(valsEncoded);
+                        Chart.defaults.global.legend = {
+                            enabled: false
+                        };
+                        var ctx = document.getElementById("monthChart");
+                        var monthChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: Object.keys(valsEncoded),
+                                datasets: [
+                                    {
+                                        label: '# of Visits',
+                                        backgroundColor: "#26B99A",
+                                        data: Object.values(valsEncoded)
                                     }
-                                }]
+                                ]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
                             }
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+                });
+            }
+
+            if (jQuery('#days').hasClass('active')){
+                console.log("DAYS ACTIVE");
+                jQuery.ajax({
+                    type: "POST",
+                    url: '/adminstatsday',
+                    data: {
+                        gender: selectValue,
+                        ageUpper: ageUpper,
+                        ageLower: ageLower
+                    },
+                    success: function (day) {
+//                    vals = months;
+//                    console.log(vals);
+                        console.log('Success Message: ' + day);
+//                    alert('the server returned ' + months);
+                        valsEncoded = jQuery.parseJSON(day);
+                        console.log(valsEncoded);
+                        Chart.defaults.global.legend = {
+                            enabled: false
+                        };
+                        var ctx = document.getElementById("dayChart");
+                        var dayChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: Object.keys(valsEncoded),
+                                datasets: [
+                                    {
+                                        label: '# of Visits',
+                                        backgroundColor: "#26B99A",
+                                        data: Object.values(valsEncoded)
+                                    }
+                                ]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
+
+
         });
 
 

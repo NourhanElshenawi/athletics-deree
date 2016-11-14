@@ -49,10 +49,12 @@ $router->post('/add_multiple_users', 'MainController', 'addMultipleUsers');
 $router->post('/add_user', 'MainController', 'addUser');
 
 //STATS
-$router->get('/adminstatsmonth', 'MainController', 'statsMonth');
+$router->get('/adminvisitstats', 'MainController', 'stats');
 $router->get('/adminstatsuser', 'MainController', 'userStats');
 $router->get('/logs', 'MainController', 'usersLogs');
+$router->post('/adminstatsyear', 'MainController', 'postStatsYear');
 $router->post('/adminstatsmonth', 'MainController', 'postStatsMonth');
+$router->post('/adminstatsday', 'MainController', 'postStatsDay');
 
 //Logs
 $router->get('/adminlogssearchclasses', 'MainController', 'searchLogs');

@@ -502,7 +502,7 @@ class MainController extends Controller
 
     ///////STATS
 
-    public function statsMonth(){
+    public function stats(){
 
 
         //get how many times a day was repeated aka the number of visits per day by users
@@ -537,6 +537,28 @@ class MainController extends Controller
         $months = $this->convertMonths($months);
 
         echo json_encode($months);
+    }
+
+    public function postStatsYear(){
+
+        //get how many times a month was repeated aka the number of visits per month by users
+        $years = array_count_values($this->getYearsLogsFilter());
+        //sort the array by month number
+        ksort($years);
+
+
+        echo json_encode($years);
+    }
+
+    public function postStatsDay(){
+
+        //get how many times a month was repeated aka the number of visits per month by users
+        $days = array_count_values($this->getDaysLogsFilter());
+        //sort the array by month number
+        ksort($days);
+        $days = $this->convertDays($days);
+
+        echo json_encode($days);
     }
 
     public function getDayLogs()
@@ -607,6 +629,36 @@ class MainController extends Controller
             }
         }
         return $months;
+    }
+
+    public function getYearsLogsFilter()
+    {
+        $db = new DB();
+
+        $yearsDB = $db->getUsersLogsYearsFilter();
+        $years = array();
+        //create an array with months as string values
+        foreach ($yearsDB as $year){
+            foreach ($year as $r){
+                $years[]= $r;
+            }
+        }
+        return $years;
+    }
+
+    public function getDaysLogsFilter()
+    {
+        $db = new DB();
+
+        $daysDB = $db->getUsersLogsDaysFilter();
+        $days = array();
+        //create an array with months as string values
+        foreach ($daysDB as $day){
+            foreach ($day as $r){
+                $days[]= $r;
+            }
+        }
+        return $days;
     }
 
     public function convertMonths($months)
