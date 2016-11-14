@@ -45,11 +45,20 @@
                     <option value="f">Female</option>
                     <option value="b">Both</option>
                 </select>
+                <label for="allAge" style="display: inline-block;">All Ages: </label>
+                <input type="checkbox" name="allAge" id="allAge" checked onclick="if(jQuery('#allAge').is(':checked')){
+                    jQuery('#ageUpper').attr('disabled', 'disabled');
+                    jQuery('#ageLower').attr('disabled', 'disabled');
+                } else {
+                    jQuery('#ageUpper').removeAttr('disabled');
+                    jQuery('#ageLower').removeAttr('disabled');
+                }
+                ; ">
                 <label for="age">Select Age Range: </label>
                 <d>From:</d>
-                <input type="number" min="16" name="age" id="ageUpper" value="16">
+                <input type="number" min="16" name="age" id="ageUpper" value="16" disabled>
                 <d>To:</d>
-                <input type="number" min="16" name="age" id="ageLower" value="80">
+                <input type="number" min="16" name="age" id="ageLower" value="80" disabled>
                 <input type="submit" id="ageSubmit">
 
                     <canvas id="monthChart"></canvas>
@@ -308,14 +317,6 @@
         {#});#}
         jQuery('#ageSubmit').click(function () {
             console.log("dfsgdfg");
-            var year = new Date().getFullYear();
-            console.log(year);
-            var ageLower = 2016 - jQuery('#ageLower').val();
-            var ageUpper = 2016 - jQuery('#ageUpper').val();
-            console.log(ageLower);
-            console.log(ageUpper);
-//        });
-//        jQuery('#gender').change(function () {
 
             var selectInput = document.getElementById("gender");
             var selectValue = selectInput.options[selectInput.selectedIndex].value;
@@ -323,10 +324,15 @@
             //get age range
             var year = new Date().getFullYear();
             console.log(year);
-            var ageLower = 2016 - jQuery('#ageLower').val();
-            var ageUpper = 2016 - jQuery('#ageUpper').val();
-            var ageLower = ageLower + "-01-01";
-            var ageUpper = ageUpper + "-12-31";
+            if (jQuery('#allAge').is(':checked')){
+                console.log("CHECKED");
+            } else {
+                var ageLower = 2016 - jQuery('#ageLower').val();
+                var ageUpper = 2016 - jQuery('#ageUpper').val();
+                var ageLower = ageLower + "-01-01";
+                var ageUpper = ageUpper + "-12-31";
+            }
+
             console.log(ageLower);
             console.log(ageUpper);
 

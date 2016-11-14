@@ -623,19 +623,53 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     }
 
-    public function getUsersLogsMonths($gender='f', $ageUp, $ageDown){
+    public function getUsersLogsMonths(){
 
         $stmt = $this->conn->prepare("
             SELECT MONTH(dereeAthletics.logs.login)
             FROM dereeAthletics.users
             INNER JOIN dereeAthletics.logs
-            ON dereeAthletics.logs.userID=dereeAthletics.users.id
-            AND dereeAthletics.users.gender=:gender AND dereeAthletics.users.birthDate BETWEEN :down AND :up;"
+            ON dereeAthletics.logs.userID=dereeAthletics.users.id;"
         );
 
-        $stmt->bindParam(':gender', $gender);
-        $stmt->bindParam(':up', $ageUp);
-        $stmt->bindParam(':down', $ageDown);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+    public function getUsersLogsMonthsFilter(){
+
+        $statement = "
+            SELECT MONTH(dereeAthletics.logs.login)
+            FROM dereeAthletics.users
+            INNER JOIN dereeAthletics.logs
+            ON dereeAthletics.logs.userID=dereeAthletics.users.id";
+
+        $gender = $_POST['gender'];
+        if($gender == 'b'){
+            $gender="";
+        }
+
+        if (!empty($gender)){
+            $statement = $statement . " AND dereeAthletics.users.gender=:gender";
+        }
+
+        if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
+            $statement = $statement . " AND dereeAthletics.users.birthDate BETWEEN :down AND :up";
+        }
+
+
+        $stmt = $this->conn->prepare($statement);
+
+        if (!empty($gender)) {
+            $stmt->bindParam(':gender', $gender);
+        }
+        if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
+            $stmt->bindParam(':up', $_POST['ageUpper']);
+            $stmt->bindParam(':down', $_POST['ageLower']);
+        }
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
