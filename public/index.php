@@ -55,6 +55,7 @@ $router->get('/logs', 'MainController', 'usersLogs');
 $router->post('/adminstatsyear', 'MainController', 'postStatsYear');
 $router->post('/adminstatsmonth', 'MainController', 'postStatsMonth');
 $router->post('/adminstatsday', 'MainController', 'postStatsDay');
+$router->post('/adminstatshour', 'MainController', 'postStatsHour');
 
 //Logs
 $router->get('/adminlogssearchclasses', 'MainController', 'searchLogs');

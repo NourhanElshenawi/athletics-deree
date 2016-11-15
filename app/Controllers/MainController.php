@@ -504,6 +504,8 @@ class MainController extends Controller
 
     public function stats(){
 
+        //get how many times a day was repeated aka the number of visits per day by users
+        $hours = array_count_values($this->getHourLogs());
 
         //get how many times a day was repeated aka the number of visits per day by users
         $days = array_count_values($this->getDayLogs());
@@ -519,12 +521,13 @@ class MainController extends Controller
         //sort the array by month number
         ksort($months);
         $months = $this->convertMonths($months);
-
         //sort the array by day number
         ksort($days);
         $days = $this->convertDays($days);
+        //sort the array by hour
+        ksort($hours);
 
-        echo $this->twig->render('admin/logStatistics.twig', array('years'=>$years,'months'=>$months, 'days'=>$days));
+        echo $this->twig->render('admin/logStatistics.twig', array('years'=>$years,'months'=>$months, 'days'=>$days, 'hours'=>$hours));
     }
 
     public function postStatsMonth(){
@@ -561,6 +564,46 @@ class MainController extends Controller
         echo json_encode($days);
     }
 
+    public function postStatsHour(){
+
+        //get how many times a month was repeated aka the number of visits per month by users
+        $hours = array_count_values($this->getHoursLogsFilter());
+        //sort the array by month number
+        ksort($hours);
+
+        echo json_encode($hours);
+    }
+
+    public function getYearsLogs()
+    {
+        $db = new DB();
+        //create an array with years as string values
+        $yearsDB = $db->getUsersLogsYears();
+
+        foreach ($yearsDB as $year){
+            foreach ($year as $r){
+                $years[]= $r;
+            }
+        }
+        return $years;
+    }
+
+    public function getMonthsLogs()
+    {
+        $db = new DB();
+
+        $monthsDB = $db->getUsersLogsMonths();
+//        , $ageUpperLimit, $ageLowerLimit
+
+        //create an array with months as string values
+        foreach ($monthsDB as $mon){
+            foreach ($mon as $r){
+                $months[]= $r;
+            }
+        }
+        return $months;
+    }
+
     public function getDayLogs()
     {
         $db = new DB();
@@ -575,6 +618,97 @@ class MainController extends Controller
         }
 
         return $days;
+    }
+
+    public function getHourLogs()
+    {
+        $db = new DB();
+//        $logs = $db->getUsersLogs();
+        $hourLogs = $db->getUsersLogsHours();
+        $hours = array();
+        //create an array with days as string values
+        foreach ($hourLogs as $hour){
+            foreach ($hour as $r){
+                $hours[]= $r;
+            }
+        }
+
+        return $hours;
+    }
+
+    public function getYearsLogsFilter()
+    {
+        $db = new DB();
+
+        $yearsDB = $db->getUsersLogsYearsFilter();
+        $years = array();
+        //create an array with months as string values
+        foreach ($yearsDB as $year){
+            foreach ($year as $r){
+                $years[]= $r;
+            }
+        }
+        return $years;
+    }
+
+    public function getMonthsLogsFilter()
+    {
+        $db = new DB();
+
+        $monthsDB = $db->getUsersLogsMonthsFilter();
+        $months = array();
+        //create an array with months as string values
+        foreach ($monthsDB as $mon){
+            foreach ($mon as $r){
+                $months[]= $r;
+            }
+        }
+        return $months;
+    }
+
+    public function getDaysLogsFilter()
+    {
+        $db = new DB();
+
+        $daysDB = $db->getUsersLogsDaysFilter();
+        $days = array();
+        //create an array with months as string values
+        foreach ($daysDB as $day){
+            foreach ($day as $r){
+                $days[]= $r;
+            }
+        }
+        return $days;
+    }
+
+    public function getHoursLogsFilter()
+    {
+        $db = new DB();
+
+        $hoursDB = $db->getUsersLogsHoursFilter();
+        $hours = array();
+        //create an array with months as string values
+        foreach ($hoursDB as $hour){
+            foreach ($hour as $r){
+                $hours[]= $r;
+            }
+        }
+        return $hours;
+    }
+
+    public function convertMonths($months)
+    {
+        foreach ($months as $monthNum=>$value){
+
+            //convert month number to name
+            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
+            //use name of the month as the new key of the array
+            $months[$dateObj->format('F')] = $months[$monthNum]; // March
+            //unset old array key
+            unset($months[$monthNum]);
+
+        }
+        return $months;
     }
 
     public function convertDays($days)
@@ -598,96 +732,6 @@ class MainController extends Controller
 
         }
         return $days;
-    }
-
-    public function getMonthsLogs()
-    {
-        $db = new DB();
-
-        $monthsDB = $db->getUsersLogsMonths();
-//        , $ageUpperLimit, $ageLowerLimit
-
-        //create an array with months as string values
-        foreach ($monthsDB as $mon){
-            foreach ($mon as $r){
-                $months[]= $r;
-            }
-        }
-        return $months;
-    }
-
-    public function getMonthsLogsFilter()
-    {
-        $db = new DB();
-
-        $monthsDB = $db->getUsersLogsMonthsFilter();
-        $months = array();
-        //create an array with months as string values
-        foreach ($monthsDB as $mon){
-            foreach ($mon as $r){
-                $months[]= $r;
-            }
-        }
-        return $months;
-    }
-
-    public function getYearsLogsFilter()
-    {
-        $db = new DB();
-
-        $yearsDB = $db->getUsersLogsYearsFilter();
-        $years = array();
-        //create an array with months as string values
-        foreach ($yearsDB as $year){
-            foreach ($year as $r){
-                $years[]= $r;
-            }
-        }
-        return $years;
-    }
-
-    public function getDaysLogsFilter()
-    {
-        $db = new DB();
-
-        $daysDB = $db->getUsersLogsDaysFilter();
-        $days = array();
-        //create an array with months as string values
-        foreach ($daysDB as $day){
-            foreach ($day as $r){
-                $days[]= $r;
-            }
-        }
-        return $days;
-    }
-
-    public function convertMonths($months)
-    {
-        foreach ($months as $monthNum=>$value){
-
-            //convert month number to name
-            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
-            //use name of the month as the new key of the array
-            $months[$dateObj->format('F')] = $months[$monthNum]; // March
-            //unset old array key
-            unset($months[$monthNum]);
-
-        }
-        return $months;
-    }
-
-    public function getYearsLogs()
-    {
-        $db = new DB();
-        //create an array with years as string values
-        $yearsDB = $db->getUsersLogsYears();
-
-        foreach ($yearsDB as $year){
-            foreach ($year as $r){
-                $years[]= $r;
-            }
-        }
-        return $years;
     }
 
     public function userStats(){

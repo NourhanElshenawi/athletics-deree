@@ -609,11 +609,12 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     }
 
+
     /*******STATS******/
 
-    public function getUsersLogsDays(){
+    public function getUsersLogsYears(){
 
-        $stmt = $this->conn->prepare("select DAYOFWEEK (login) from dereeAthletics.logs");
+        $stmt = $this->conn->prepare("select YEAR (login) from dereeAthletics.logs");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -640,49 +641,21 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
-    public function getUsersLogsMonthsFilter(){
+    public function getUsersLogsDays(){
 
-        $statement = "
-            SELECT MONTH(dereeAthletics.logs.login)
-            FROM dereeAthletics.users
-            INNER JOIN dereeAthletics.logs
-            ON dereeAthletics.logs.userID=dereeAthletics.users.id";
-
-        $gender = $_POST['gender'];
-        if($gender == 'b'){
-            $gender="";
-        }
-
-        if (!empty($gender)){
-            $statement = $statement . " AND dereeAthletics.users.gender=:gender";
-        }
-
-        if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
-            $statement = $statement . " AND dereeAthletics.users.birthDate BETWEEN :down AND :up";
-        }
-
-
-        $stmt = $this->conn->prepare($statement);
-
-        if (!empty($gender)) {
-            $stmt->bindParam(':gender', $gender);
-        }
-        if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
-            $stmt->bindParam(':up', $_POST['ageUpper']);
-            $stmt->bindParam(':down', $_POST['ageLower']);
-        }
-
+        $stmt = $this->conn->prepare("select DAYOFWEEK (login) from dereeAthletics.logs");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
 
         return $result;
+
     }
 
-    public function getUsersLogsYears(){
+    public function getUsersLogsHours(){
 
-        $stmt = $this->conn->prepare("select YEAR (login) from dereeAthletics.logs");
+        $stmt = $this->conn->prepare("select HOUR (login) from dereeAthletics.logs");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -732,9 +705,88 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
+    public function getUsersLogsMonthsFilter(){
+
+        $statement = "
+            SELECT MONTH(dereeAthletics.logs.login)
+            FROM dereeAthletics.users
+            INNER JOIN dereeAthletics.logs
+            ON dereeAthletics.logs.userID=dereeAthletics.users.id";
+
+        $gender = $_POST['gender'];
+        if($gender == 'b'){
+            $gender="";
+        }
+
+        if (!empty($gender)){
+            $statement = $statement . " AND dereeAthletics.users.gender=:gender";
+        }
+
+        if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
+            $statement = $statement . " AND dereeAthletics.users.birthDate BETWEEN :down AND :up";
+        }
+
+
+        $stmt = $this->conn->prepare($statement);
+
+        if (!empty($gender)) {
+            $stmt->bindParam(':gender', $gender);
+        }
+        if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
+            $stmt->bindParam(':up', $_POST['ageUpper']);
+            $stmt->bindParam(':down', $_POST['ageLower']);
+        }
+
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     public function getUsersLogsDaysFilter(){
 
         $statement = "SELECT DAYOFWEEK (dereeAthletics.logs.login)
+            FROM dereeAthletics.users
+            INNER JOIN dereeAthletics.logs
+            ON dereeAthletics.logs.userID=dereeAthletics.users.id";
+
+        $gender = $_POST['gender'];
+        if($gender == 'b'){
+            $gender="";
+        }
+
+        if (!empty($gender)){
+            $statement = $statement . " AND dereeAthletics.users.gender=:gender";
+        }
+
+        if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
+            $statement = $statement . " AND dereeAthletics.users.birthDate BETWEEN :down AND :up";
+        }
+
+
+        $stmt = $this->conn->prepare($statement);
+
+        if (!empty($gender)) {
+            $stmt->bindParam(':gender', $gender);
+        }
+        if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
+            $stmt->bindParam(':up', $_POST['ageUpper']);
+            $stmt->bindParam(':down', $_POST['ageLower']);
+        }
+
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function getUsersLogsHoursFilter(){
+
+        $statement = "SELECT HOUR (dereeAthletics.logs.login)
             FROM dereeAthletics.users
             INNER JOIN dereeAthletics.logs
             ON dereeAthletics.logs.userID=dereeAthletics.users.id";

@@ -14,7 +14,7 @@
 
 {% endblock head %}
 
-    {% block title %} Month Stats{% endblock title %}
+    {% block title %} Gym Stats{% endblock title %}
 
 
 {% block content %}
@@ -24,6 +24,7 @@
             <li id="years" role="presentation" class="active"><a style="font-weight: bold; font-size: large;">Years</a></li>
             <li id="months" role="presentation"><a style="font-weight: bold; font-size: large;">Months</a></li>
             <li id="days" role="presentation"><a style="font-weight: bold; font-size: large;">Days</a></li>
+            <li id="hours" role="presentation"><a style="font-weight: bold; font-size: large;">Hours</a></li>
         </ul>
 
         <div>
@@ -64,6 +65,10 @@
             <canvas id="dayChart"></canvas>
         </div>
 
+        <div id="hoursDiv" style="width: 80%; height: 50%; margin: auto; display: none;">
+            <canvas id="hourChart"></canvas>
+        </div>
+
     </div>
 
     <script src="js/jquery.js"></script>
@@ -78,149 +83,47 @@
 
     <!-- Custom Theme Scripts -->
     <script src="js/custom.min.js"></script>
-
-
-    <script>
-        Chart.defaults.global.legend = {
-            enabled: false
-        };
-
-        var ctx = document.getElementById("yearChart");
-        var yearChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [
-                    {% for key,value in years %}
-                    {% if loop.last %}
-                    "{{ key }}"
-                    {% else %}
-                    "{{ key }}",
-                    {% endif %}
-
-                    {% endfor %}
-                ],
-
-                {#{% for key,value in vals %}#}
-                {##}
-                {#{% endfor %}#}
-
-                datasets: [{
-                    label: '# of Visits',
-                    backgroundColor: "#26B99A",
-                    data: [
-                        {% for key,value in years %}
-                        {% if loop.last %}
-                        {{ value }}
-                        {% else %}
-                        {{ value }},
-                        {% endif %}
-
-                        {% endfor %}
-                    ]
-                }
-
-                ]
-            },
-
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
-
-    <script>
-        Chart.defaults.global.legend = {
-            enabled: false
-        };
-
-        var ctx = document.getElementById("dayChart");
-        var dayChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [
-                    {% for key,value in days %}
-//                        "January", "February", "March", "April", "May", "June", "July"
-                    {% if loop.last %}
-                    "{{ key }}"
-                    {% else %}
-                    "{{ key }}",
-                    {% endif %}
-
-                    {% endfor %}
-                ],
-
-                {#{% for key,value in vals %}#}
-                {##}
-                {#{% endfor %}#}
-
-                datasets: [{
-                    label: '# of Visits',
-                    backgroundColor: "#26B99A",
-                    data: [
-//                            51, 30, 40, 28, 92, 50, 45
-                        {% for key,value in days %}
-//                        "January", "February", "March", "April", "May", "June", "July"
-                        {% if loop.last %}
-                        {{ value }}
-                        {% else %}
-                        {{ value }},
-                        {% endif %}
-
-                        {% endfor %}
-                    ]
-                }
-//                , {
-//                    label: '# of Votes',
-//                    backgroundColor: "#03586A",
-//                    data: [41, 56, 25, 48, 72, 34, 12]
-//                }
-
-                ]
-            },
-
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
+    
 
     <script>
         jQuery('#months').click(function() {
-//            console.log(jQuery(this));
             jQuery(this).toggleClass('active');
             jQuery('#years').removeClass('active');
             jQuery('#days').removeClass('active');
+            jQuery('#hours').removeClass('active');
             jQuery('#monthsDiv').css('display','');
             jQuery('#yearDiv').css('display','none');
             jQuery('#daysDiv').css('display','none');
+            jQuery('#hoursDiv').css('display','none');
         });
         jQuery('#years').click(function() {
-//            console.log(jQuery(this));
             jQuery(this).toggleClass('active');
             jQuery('#months').removeClass('active');
             jQuery('#days').removeClass('active');
+            jQuery('#hours').removeClass('active');
             jQuery('#yearDiv').css('display','');
+            jQuery('#hoursDiv').css('display','none');
             jQuery('#monthsDiv').css('display','none');
             jQuery('#daysDiv').css('display','none');
         });
         jQuery('#days').click(function() {
-//            console.log(jQuery(this));
             jQuery(this).toggleClass('active');
             jQuery('#years').removeClass('active');
             jQuery('#months').removeClass('active');
+            jQuery('#hours').removeClass('active');
             jQuery('#daysDiv').css('display','');
+            jQuery('#hoursDiv').css('display','none');
+            jQuery('#monthsDiv').css('display','none');
+            jQuery('#yearDiv').css('display','none');
+        });
+
+        jQuery('#hours').click(function() {
+            jQuery(this).toggleClass('active');
+            jQuery('#years').removeClass('active');
+            jQuery('#months').removeClass('active');
+            jQuery('#days').removeClass('active');
+            jQuery('#hoursDiv').css('display','');
+            jQuery('#daysDiv').css('display','none');
             jQuery('#monthsDiv').css('display','none');
             jQuery('#yearDiv').css('display','none');
         });
@@ -228,8 +131,34 @@
     </script>
 
     <script>
+        yearsvals = '{{ years|json_encode|raw }}';
+        var yearsvalsEncoded = jQuery.parseJSON(yearsvals);
+        var ctx = document.getElementById("yearChart");
+        var yearChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(yearsvalsEncoded),
+                datasets: [
+                    {
+                        label: '# of Visits',
+                        backgroundColor: "#26B99A",
+                        data: Object.values(yearsvalsEncoded)
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+
         vals = '{{ months|json_encode|raw }}';
-//        console.log(vals);
         var valsEncoded = jQuery.parseJSON(vals);
         var ctx = document.getElementById("monthChart");
         var monthChart = new Chart(ctx, {
@@ -254,10 +183,61 @@
                 }
             }
         });
-//        console.log(valsEncoded);
-        {#jQuery.each(obj, function(key,value) {#}
-            {#console.log(value);#}
-        {#});#}
+
+        daysVals = '{{ days|json_encode|raw }}';
+        var daysValsEncoded = jQuery.parseJSON(daysVals);
+        var ctx = document.getElementById("dayChart");
+        var dayChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(daysValsEncoded),
+                datasets: [
+                    {
+                        label: '# of Visits',
+                        backgroundColor: "#26B99A",
+                        data: Object.values(daysValsEncoded)
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        hoursVals = '{{ hours|json_encode|raw }}';
+        var hoursValsEncoded = jQuery.parseJSON(hoursVals);
+        var ctx = document.getElementById("hourChart");
+        var hourChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(hoursValsEncoded),
+                datasets: [
+                    {
+                        label: '# of Visits',
+                        backgroundColor: "#26B99A",
+                        data: Object.values(hoursValsEncoded)
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+    <script>
         jQuery('#filter').click(function () {
             console.log("dfsgdfg");
 
@@ -281,6 +261,8 @@
 
             monthChart.destroy();
 
+            yearsVals = '{{ years|json_encode|raw }}';
+            var yearsValsEncoded = jQuery.parseJSON(yearsVals);
             if (jQuery('#years').hasClass('active')){
                 console.log("YEARS ACTIVE");
                 jQuery.ajax({
@@ -293,8 +275,8 @@
                     },
                     success: function (year) {
                         console.log('Success Message: ' + year);
-                        valsEncoded = jQuery.parseJSON(year);
-                        console.log(valsEncoded);
+                        yearsValsEncoded = jQuery.parseJSON(year);
+                        console.log(yearsValsEncoded);
                         Chart.defaults.global.legend = {
                             enabled: false
                         };
@@ -302,12 +284,12 @@
                         var yearChart = new Chart(ctx, {
                             type: 'bar',
                             data: {
-                                labels: Object.keys(valsEncoded),
+                                labels: Object.keys(yearsValsEncoded),
                                 datasets: [
                                     {
                                         label: '# of Visits',
                                         backgroundColor: "#26B99A",
-                                        data: Object.values(valsEncoded)
+                                        data: Object.values(yearsValsEncoded)
                                     }
                                 ]
                             },
@@ -372,6 +354,9 @@
                 });
             }
 
+
+            daysVals = '{{ days|json_encode|raw }}';
+            var daysValsEncoded = jQuery.parseJSON(daysVals);
             if (jQuery('#days').hasClass('active')){
                 console.log("DAYS ACTIVE");
                 jQuery.ajax({
@@ -387,8 +372,8 @@
 //                    console.log(vals);
                         console.log('Success Message: ' + day);
 //                    alert('the server returned ' + months);
-                        valsEncoded = jQuery.parseJSON(day);
-                        console.log(valsEncoded);
+                        daysValsEncoded = jQuery.parseJSON(day);
+                        console.log(daysValsEncoded);
                         Chart.defaults.global.legend = {
                             enabled: false
                         };
@@ -396,12 +381,12 @@
                         var dayChart = new Chart(ctx, {
                             type: 'bar',
                             data: {
-                                labels: Object.keys(valsEncoded),
+                                labels: Object.keys(daysValsEncoded),
                                 datasets: [
                                     {
                                         label: '# of Visits',
                                         backgroundColor: "#26B99A",
-                                        data: Object.values(valsEncoded)
+                                        data: Object.values(daysValsEncoded)
                                     }
                                 ]
                             },
@@ -419,6 +404,54 @@
                 });
             }
 
+            hoursVals = '{{ hours|json_encode|raw }}';
+            var hoursValsEncoded = jQuery.parseJSON(hoursVals);
+            if (jQuery('#hours').hasClass('active')){
+                console.log("HOURS ACTIVE");
+                jQuery.ajax({
+                    type: "POST",
+                    url: '/adminstatshour',
+                    data: {
+                        gender: selectValue,
+                        ageUpper: ageUpper,
+                        ageLower: ageLower
+                    },
+                    success: function (hour) {
+//                    vals = months;
+//                    console.log(vals);
+                        console.log('Success Message: ' + hour);
+//                    alert('the server returned ' + months);
+                        hoursValsEncoded = jQuery.parseJSON(hour);
+                        console.log(hoursValsEncoded);
+                        Chart.defaults.global.legend = {
+                            enabled: false
+                        };
+                        var ctx = document.getElementById("hourChart");
+                        var hourChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: Object.keys(hoursValsEncoded),
+                                datasets: [
+                                    {
+                                        label: '# of Visits',
+                                        backgroundColor: "#26B99A",
+                                        data: Object.values(hoursValsEncoded)
+                                    }
+                                ]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                    }
+                });
+            }
 
 
         });
