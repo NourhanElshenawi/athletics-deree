@@ -937,7 +937,6 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         catch (PDOException $exception)
         {
             ddd($exception->getMessage());
-
             $result['success'] = 0;
             $result['message'] = $exception->getMessage();
         }
