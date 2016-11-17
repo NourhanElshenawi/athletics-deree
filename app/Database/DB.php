@@ -894,9 +894,70 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
+    public function createProgramRequest ($data)
+    {
+        $result = [];
+        $userID = $_SESSION['user']['id'];
+        $monday = $data['monday'] ?? 0;
+        $tuesday = $data['tuesday'] ?? 0;
+        $wednesday = $data['wednesday'] ?? 0;
+        $thursday = $data['thursday'] ?? 0;
+        $friday = $data['friday'] ?? 0;
+        $saturday = $data['saturday'] ?? 0;
+        $sunday = $data['sunday'] ?? 0;
 
+        try
+        {
+            $stmt = $this->conn->prepare("
+                INSERT INTO dereeAthletics.program_requests 
+                (`userID`, `height`, `weight`, `pastExercise`, `currentlyExercising`, `currentExercisingIntensity`, `activities`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`, `comments`) 
+                VALUES (:userID, :height, :weight, :pastExercise, :currentlyExercising, :currentExercisingIntensity, :activities, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :comments );
+            ");
+            $stmt->bindParam(':userID', $userID);
+            $stmt->bindValue(':height', $data['height'] ?? 0);
+            $stmt->bindValue(':weight', $data['weight'] ?? 0);
+            $stmt->bindParam(':pastExercise', $data['pastExercise']);
+            $stmt->bindParam(':currentlyExercising', $data['currentlyExercising']);
+            $stmt->bindParam(':currentExercisingIntensity', $data['currentExercisingIntensity']);
+            $stmt->bindValue(':activities', $data['activities'] ?? "");
+            $stmt->bindValue(':monday', (int) $monday ?? 0);
+            $stmt->bindValue(':tuesday', (int) $tuesday ?? 0);
+            $stmt->bindValue(':wednesday', (int) $wednesday ?? 0);
+            $stmt->bindValue(':thursday', (int) $thursday ?? 0);
+            $stmt->bindValue(':friday', (int) $friday ?? 0);
+            $stmt->bindValue(':saturday', (int) $saturday ?? 0);
+            $stmt->bindValue(':sunday', (int) $sunday ?? 0);
+            $stmt->bindValue(':comments', $data['comments'] ?? "");
 
+            $stmt->execute();
 
+            $result['success'] = 1;
+            $result['message'] = "Request Successfully Submitted!";
+        }
+        catch (PDOException $exception)
+        {
+            ddd($exception->getMessage());
 
+            $result['success'] = 0;
+            $result['message'] = $exception->getMessage();
+        }
+
+        return $result;
+    }
+
+    public function getPendingProgramRequests()
+    {
+        $stmt = $this->conn->prepare("select *
+          from dereeAthletics.users
+          join dereeAthletics.program_requests
+          on users.id = program_requests.userID
+          WHERE program_requests.trainerResponse = 0;");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
 
 }

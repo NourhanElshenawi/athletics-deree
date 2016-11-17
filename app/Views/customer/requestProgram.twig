@@ -1,0 +1,300 @@
+{% extends 'master.twig' %}
+
+{% block head %}
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="css/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="css/green.css" rel="stylesheet">
+
+    <script src="js/bootstrap.js"></script>
+
+    <script type="text/javascript">//<![CDATA[
+        $(window).load(function(){
+// Setup FullCalendar
+            (function() {
+                var date = new Date();
+                var d = date.getDate();
+                var m = date.getMonth();
+                var y = date.getFullYear();
+
+                var tooltip = $('<div/>').qtip({
+                    id: 'fullcalendar',
+                    prerender: true,
+                    content: {
+                        text: ' ',
+                        title: {
+                            button: true
+                        }
+                    },
+                    position: {
+                        my: 'bottom center',
+                        at: 'top center',
+                        target: 'mouse',
+                        viewport: $('#fullcalendar'),
+                        adjust: {
+                            mouse: false,
+                            scroll: false
+                        }
+                    },
+                    show: false,
+                    hide: false,
+                    style: 'qtip-light'
+                }).qtip('api');
+
+                $('#fullcalendar').fullCalendar({
+//                    editable: true,
+                    height: 600,
+//                    width: 100,
+                    buttons: false,
+                    header: false
+//                    {
+//                        left: 'title',
+//                        center: '',
+//                        right: 'today prev,next'
+//                    }
+                    ,
+                    minTime: "07:00:00",
+                    maxTime: "21:00:00",
+
+                    eventClick: function(data, event, view) {
+                        var content = '<h3>'+data.title+'       </h3>' +
+                                        '<p><b>Start:</b> '+data.time+'<br />' +
+                                        '<p><b>Duration:</b> '+data.duration+' Min<br /></p>'+
+                                        '<p><b>Location:</b> '+data.location+'<br /></p>'
+//                                +'<p><input type="button" value="Register"></p>'
+                                ;
+
+                        tooltip.set({
+                            'content.text': content
+                        })
+                                .reposition(event).show(event);
+                    },
+                    dayClick: function() { tooltip.hide() },
+                    eventResizeStart: function() { tooltip.hide() },
+                    eventDragStart: function() { tooltip.hide() },
+                    viewDisplay: function() { tooltip.hide() },
+                });
+
+                {% for class in calendarClasses %}
+
+                {% for key, value in class.days %}
+
+                $('#fullcalendar').fullCalendar( 'addEventSource',
+                        function(start, end, callback) {
+                            // When requested, dynamically generate a
+                            // repeatable event for every monday.
+                            var events = [];
+//                            var monday = 1;
+                            var one_day = (24 * 60 * 60 * 1000);
+
+                            for (loop = start.getTime();
+                                 loop <= end.getTime();
+                                 loop = loop + one_day) {
+
+                                var column_date = new Date(loop);
+
+                                if (column_date.getDay() == {{ value }}) {
+                                    // we're in Monday, create the event
+                                    var time = "{{ class.startTime }}";
+                                    var parseTime = time.split(":");
+                                    console.log(parseTime[0]);
+                                    events.push({
+                                        title: '{{ class.name }}',
+                                        start: new Date(column_date.setHours(parseTime[0], parseTime[1])),
+                                        end: new Date(column_date.setMinutes({{ class.duration }})),
+//                                        end: new Date(column_date.setMinutes(90)),
+                                        allDay: false,
+                                        location: "{{ class.location }}",
+                                        time: "{{ class.startTime }}",
+                                        duration: "{{ class.duration }}"
+                                    });
+                                }
+
+
+
+
+                            } // for loop
+
+                            // return events generated
+                            callback( events );
+                        }
+                );
+                {#{% endif %}#}
+
+                {% endfor %}
+
+                {% endfor %}
+//                $('#fullcalendar').fullCalendar( 'addEventSource',
+//                        function(start, end, callback) {
+//                            // When requested, dynamically generate a
+//                            // repeatable event for every monday.
+//                            var events = [];
+//                            var monday = 1;
+//                            var one_day = (24 * 60 * 60 * 1000);
+//
+//                            for (loop = start.getTime();
+//                                 loop <= end.getTime();
+//                                 loop = loop + one_day) {
+//
+//                                var column_date = new Date(loop);
+//
+//                                if (column_date.getDay() == monday) {
+//                                    // we're in Moday, create the event
+//                                    events.push({
+//                                        title: 'Morning Meeting',
+//                                        start: new Date(column_date.setHours(10, 00)),
+//                                        end: new Date(column_date.setHours(10, 40)),
+//                                        allDay: false
+//                                    });
+//                                }
+//
+//
+//
+//
+//                            } // for loop
+//
+//                            // return events generated
+//                            callback( events );
+//                        }
+//                );
+                $('#fullcalendar').fullCalendar('changeView', 'agendaWeek');
+//                $('#fullcalendar').fullCalendar('option', 'aspectRatio', 3);
+
+            }());
+        });//]]>
+
+
+
+
+    </script>
+
+{% endblock head %}
+
+
+{% block content %}
+
+    <form action="/submitProgram" method="post" class="form-horizontal">
+        <h3>Personal Details</h3>
+        <div class="control-group">
+            <label class="control-label" for="height">Height (in cm)</label>
+            <div class="controls">
+                <input type="number" id="height" name="height" placeholder="Your height.." max="250">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="weight">Weight (in kg)</label>
+            <div class="controls">
+                <input type="number" id="weight" name="weight" placeholder="Your weight.." max="300">
+            </div>
+        </div>
+        <h3>Fitness History</h3>
+        <div class="control-group">
+            <label for="pastExercise" class="control-label">Have you been involved with any sort of exercise in the past?</label>
+            <div class="controls">
+                <label class="radio">
+                    <input type="radio" name="pastExercise" id="optionsRadios1" value="1">
+                    Yes
+                </label>
+                <label class="radio">
+                    <input type="radio" name="pastExercise" id="optionsRadios1" value="0" checked>
+                    No
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="currentlyExercising" class="control-label">Are you currently exercising?</label>
+            <div class="controls">
+                <label class="radio">
+                    <input type="radio" name="currentlyExercising" id="optionsRadios1" value="1">
+                    Yes
+                </label>
+                <label class="radio">
+                    <input type="radio" name="currentlyExercising" id="optionsRadios1" value="0" checked>
+                    No
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="currentExercisingIntensity" class="control-label">If yes, how intense?</label>
+            <div class="controls">
+                <label class="radio">
+                    <input type="radio" name="currentExercisingIntensity" id="optionsRadios1" value="0" checked>
+                    Light (1x/week)
+                </label>
+                <label class="radio">
+                    <input type="radio" name="currentExercisingIntensity" id="optionsRadios1" value="1">
+                    Moderate (2-3x/week)
+                </label>
+                <label class="radio">
+                    <input type="radio" name="currentExercisingIntensity" value="2">
+                    Heavy (5-6x/week)
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="activities">What activities are you involved in?</label>
+            <div class="controls">
+                <textarea id="activities" name="activities" placeholder="ex: cardio, sports, etc." rows="3" maxlength="100"></textarea>
+            </div>
+        </div>
+        <h3>Exercise Goals</h3>
+        <div class="control-group">
+            <label class="control-label">Which days would you like to exercise?</label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" name="monday" value=1>
+                    Monday
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="tuesday" value=1>
+                    Tuesday
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="wednesday" value=1>
+                    Wednesday
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="thursday" value=1>
+                    Thursday
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="friday" value=1>
+                    Friday
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="saturday" value=1>
+                    Saturday
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="sunday" value=1>
+                    Sunday
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="comments">Comments for the fitness trainer:</label>
+            <div class="controls">
+                <textarea id="comments" name="comments" placeholder="ex: health issues, etc." rows="3" maxlength="150"></textarea>
+            </div>
+        </div>
+        <hr>
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn">Submit Request</button>
+            </div>
+        </div>
+    </form>
+
+
+
+
+
+
+
+
+
+{% endblock content %}

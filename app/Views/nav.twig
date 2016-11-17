@@ -14,28 +14,27 @@
 
 
                     <li id="menu-item-15534" class="top-general menu-item menu-item-type-custom menu-item-object-custom menu-item-15534"><i class="fa fa-list-alt" style="margin-right: 4px;"></i>
-                        <a href="/fitnessProgram">Fitness Program</a></li>
-
-
+                        <a href="/fitnessProgram">Fitness Program</a>
+                    </li>
                     <li id="menu-item-15534"
                         class="top-general menu-item menu-item-type-custom menu-item-object-custom menu-item-15534">
                         <i class="fa fa-plus-square" style="margin-right: 4px;"></i>
                         <a href="/register">Register Class</a>
                     </li>
+                    <li id="menu-item-15534"
+                        class="top-general menu-item menu-item-type-custom menu-item-object-custom menu-item-15534">
+                        <i class="fa fa-plus-square" style="margin-right: 4px;"></i>
+                        <a href="/requestProgram">Request Program</a>
+                    </li>
 
                     {% if session.user is defined %}
-
                         <li id="menu-item-600" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-600"><a href="/logout">Logout</a>
                             <i class="fa fa-sign-out"></i>
                         </li>
-
                         {% else %}
-
                             <li id="menu-item-600" class=" menu-item menu-item-type-post_type menu-item-object-page menu-item-600"><a href="/login" style="display: inline-block;">Log-in</a>
-
                                 <i class="fa fa-sign-in"></i>
                             </li>
-
                     {% endif %}
 
                 </ul></div>		</nav><!-- #site-navigation --><div class="headerright">
@@ -121,7 +120,7 @@
                         <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Personal Programs</a>
                             <ul class="sub-menu">
                                 <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
-                                    <a href="/logs">Form</a>
+                                    <a href="/programRequests">Program Requests</a>
                                 </li>
                                 <li id="menu-item-35" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35">
                                     <a href="/realtimelogs">Statistics</a>
