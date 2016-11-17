@@ -38,6 +38,11 @@ $router->post('/deleteclass', 'MainController', 'deleteClass');
 $router->post('/updateclass', 'MainController', 'updateClass');
 $router->get('/adminsearchclasses', 'MainController', 'searchClasses');
 
+/** Trainer **/
+$router->get('/programRequests', 'TrainerController', 'programRequests');
+
+
+
 //CLASS REGISTRATIONS
 $router->get('/registrations', 'MainController', 'registrations');
 $router->get('/searchregistrations', 'MainController', 'searchRegistrations');

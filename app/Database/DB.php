@@ -893,5 +893,19 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
+    public function getPendingProgramRequests()
+    {
+        $stmt = $this->conn->prepare("select *
+          from dereeAthletics.users
+          join dereeAthletics.program_requests
+          on users.id = program_requests.userID
+          WHERE program_requests.trainerResponse = 0;");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
 
 }

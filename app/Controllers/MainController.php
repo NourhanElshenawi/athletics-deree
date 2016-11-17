@@ -713,7 +713,6 @@ class MainController extends Controller
         $gender = array_count_values($gender);
 
         echo $this->twig->render('admin/userStats.twig', array('age'=>$age, 'gender'=> $gender));
-
     }
 
 
