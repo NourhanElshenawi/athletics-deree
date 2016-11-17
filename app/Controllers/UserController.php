@@ -9,6 +9,8 @@
 namespace Nourhan\Controllers;
 
 
+use Nourhan\Database\DB;
+
 class UserController extends Controller
 {
     public function requestProgram ()
@@ -18,6 +20,10 @@ class UserController extends Controller
 
     public function submitProgram ()
     {
-        ddd($_POST);
+        d($_POST);
+
+        $db = new DB();
+
+        $db->createProgramRequest($_POST);
     }
 }
