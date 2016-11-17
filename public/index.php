@@ -40,6 +40,7 @@ $router->get('/adminsearchclasses', 'MainController', 'searchClasses');
 
 /** Trainer **/
 $router->get('/programRequests', 'TrainerController', 'programRequests');
+$router->post('/trainerResponse', 'TrainerController', 'trainerResponse');
 
 
 

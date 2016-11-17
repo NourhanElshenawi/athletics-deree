@@ -10,7 +10,6 @@
     <link href="css/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
     <link href="css/green.css" rel="stylesheet">
-
     <!-- Custom Theme Style -->
     <link href="css/custom.min.css" rel="stylesheet">
     <style>
@@ -19,74 +18,195 @@
             margin: 0;
             padding: 0;
         }
+
+        .split {
+            display: inline-block;
+        }
     </style>
+
 
 {% endblock head %}
 
-{% block title %} Pending {% endblock title %}
+{#{% block title %} Pending Program Requests {% endblock title %}#}
 
 {% block content %}
+
+    {#{{ dump(classes.1.users) }}#}
+
+    {% set requestExample = requests|first %}
+    <div class="clearfix"></div>
+
     <div class="row">
-        <div class="x_panel">
+        {#<div class="col-md-12">#}
+        <div class="x_panel2">
             <div class="x_title">
-                <h2>Pending Certificates</h2>
+                <h2 style="width: auto; margin-right: 3%;">Pending Requests</h2>
+
+                <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/adminsearchclasses">
+                    <label style="display: inline-block;">
+                        <span class="screen-reader-text">Search for:</span>
+                        <input style="margin: 0;" type="search" class="search-field" placeholder="Search …" value="" name="keyword">
+                    </label>
+                    <input type="submit" class="search-submit" value="Search">
+                </form>
 
                 <div class="clearfix"></div>
             </div>
-            <div class="x_content">
-
-                <p>Download the file, view it, and approve/reject it.</p>
-
+            <div>
                 <!-- start project list -->
-                <table class="table table-striped" style="width: 100%;">
+                <table class="table table-striped projects">
                     <thead>
                     <tr>
+
                         <th>#</th>
                         <th>Member's Name</th>
+                        <th></th>
+                        {#<th>Team Members</th>#}
+                        {#<th>Project Progress</th>#}
+
                     </tr>
                     </thead>
                     <tbody>
 
 
-                    {% for request in requests %}
-                        <tr class="user_row">
-                            <td>{{ loop.index }}</td>
-                            <td> {{ request.name }} </td>
-                            <td>
-                                {% if user.membershipType == 0 %}
-                                    Non-Paid
-                                {% else %}
-                                    Paid
-                                {% endif %}
 
+                    {% for request in requests %}
+                        <tr style="padding: 0;">
+                            <td colspan="3" style="border: none; padding: 0;">
+                                <div class="x_panel" style="padding: 0;">
+                                    <div class="x_title" style="padding: 4px; border-bottom: none;">
+                                        <div class="split" style="margin-right: 7%">
+                                            {{ loop.index }}
+                                        </div>
+
+                                        <div class="split" style="margin-right: 4%">
+                                            <ul class="list-inline">
+                                                <li>
+                                                    <a href="/adminsearchusers?keyword={{ request.userID }}">
+                                                        <img src="images/{{ request.picture }}" class="avatar" alt="Avatar" value="{{ request.name }}">
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="split">
+                                            {{ request.name|capitalize }}
+                                        </div>
+
+
+
+
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li>
+                                                <a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
+                                            </li>
+                                            <li class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                    <i class="fa fa-wrench"></i>
+                                                </a>
+                                                <ul class="dropdown-menu" role="menu">
+
+                                                    {#<form action="/editclass" method="post" style="margin: 0;">#}
+                                                    <li>
+
+                                                        <input type="hidden" id="edit" name="edit" value="{{ class.id }}">
+                                                        <a href="#" class="edit" value="{{ class.id }}">Edit Class</a>
+
+                                                    </li>
+                                                    <li>
+                                                        <input type="hidden" name="hold" value="{{ class.id }}">
+                                                        <a href="#" class="hold" value="{{ class.id }}" >Hold</a>
+                                                    </li>
+
+                                                    {#</form>#}
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a class="close-link delete" value="{{ class.id }}">
+                                                    <i class="fa fa-close"></i></a>
+
+                                            </li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="x_content update" style="padding: 0; display: none;">
+
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr style="border-top: none;">
+                                                <td style="border-top: none;">
+                                                    <div>
+                                                        <p>Gender:
+                                                        {% if request.gender == f %}
+                                                            Female
+                                                            {% else %}
+                                                            Male
+                                                        {% endif %}
+                                                        </p>
+                                                        <p>Height: {{ request.height }} cm</p>
+                                                        <p>Weight: {{ request.weight }} Kg</p>
+                                                        <p>Currently Exercising:
+                                                            {% if request.currentlyExercising == 0 %}
+                                                                No
+                                                            {% else %}
+                                                                Yes, Intensity: {{ request.currentExercisingIntensity }}
+                                                            {% endif %}
+                                                        </p>
+                                                        <p>Activities: {{ request.activities }}</p>
+                                                        <p style=" display: inline-block;">Days: </p>
+                                                            <ul style="text-decoration: none; display: inline-block; vertical-align: top;">
+                                                            {% if request.monday == 1 %}
+                                                               <li>Monday</li>
+                                                            {% endif %}
+                                                            {% if request.tuesday == 1 %}
+                                                               <li>Tuesday</li>
+                                                            {% endif %}
+                                                            {% if request.wednesday == 1 %}
+                                                               <li>Wednesday</li>
+                                                            {% endif %}
+                                                            {% if request.thursday == 1 %}
+                                                               <li>Thursday</li>
+                                                            {% endif %}
+                                                            {% if request.friday == 1 %}
+                                                               <li>Friday</li>
+                                                            {% endif %}
+                                                            {% if request.saturday == 1 %}
+                                                               <li>Saturday</li>
+                                                            {% endif %}
+                                                            {% if request.sunday == 1 %}
+                                                               <li>Sunday</li>
+                                                            {% endif %}
+                                                            </ul>
+                                                        <br>
+                                                        <br>
+                                                        <p>Comments: {{ request.comments }}</p>
+                                                    </div>
+                                                </td>
+                                                <td style="border-top: none;">
+                                                    <textarea id="trainerComments" placeholder="Propose Program" rows="15" cols="50" maxlength="500"></textarea>
+                                                    <p>
+                                                        <button type="submit" id="submitProgram" value="{{ request.id }}" name="submitProgram"> Submit Program</button>
+                                                    </p>
+                                                </td>
+
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
                             </td>
-                            <td>
-                                {% if user.certificate_file is not null %}
-                                    <a target="_blank" href="/certificates/{{ user.certificate_file }}">{{ user.certificate_file }}</a>
-                                {% else %}
-                                    Not uploaded yet
-                                {% endif %}
-                            </td>
-                            <td>
-                                <button value="{{ user.id }}" type="button" class="approve_btn btn btn-success btn-xs"><i class="fa fa-check"></i> Approve</button>
-                                <button value="{{ user.id }}" type="button" class="reject_btn btn btn-danger btn-xs"><i class="fa fa-close"></i> Reject</button>
-                            </td>
-                            {# I can change the above td to the one below #}
-                            {#<td>#}
-                            {#<ul class="nav navbar-right panel_toolbox">#}
-                            {#<li class="dropdown">#}
-                            {#<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">#}
-                            {#<i class="fa fa-check"></i>#}
-                            {#</a>#}
-                            {#</li>#}
-                            {#<li>#}
-                            {#<a class="close-link delete" value="{{ class.id }}">#}
-                            {#<i class="fa fa-close"></i></a>#}
-                            {#</li>#}
-                            {#</ul>#}
-                            {#</td>#}
                         </tr>
+
+
                     {% endfor %}
+
+
 
 
                     </tbody>
@@ -98,37 +218,79 @@
     </div>
     </div>
 
+
+
     <script>
-        jQuery('.approve_btn').click(function() {
-
-            var approve_btn = this;
-
-            if (confirm("Are you sure you want to approve this certificate?")) {
-                console.log("The id is: " + jQuery(this).attr('value'));
-
-                jQuery.ajax({
-                    type: 'POST',
-                    url: '/approveCertificate',
-                    data: {
-                        user_certificate_id: jQuery(this).attr('value')
-                    },
-                    success: function (data) {
-                        console.log("data returned: " + data);
-
-                        if (data=='true') {
-                            approve_btn.closest('.user_row').remove();
-                        } else {
-                            jQuery(approve_btn).closest('.user_row').css('opacity', '0.3');
-                            alert('Operation Failed! Please contact support.');
-                        }
-                    }
-                });
-            }
+        jQuery(document).ready(function() {
+            jQuery('.collapse-link').click(function() {
+                toggle(this);
+            });
         });
+
+        function toggle($this) {
+            var $BOX_PANEL = jQuery($this).closest('.x_panel'),
+                    $ICON = jQuery($this).find('i'),
+                    $BOX_CONTENT = $BOX_PANEL.find('.x_content');
+
+//            console.log($ICON);
+            if ($BOX_PANEL.attr('style')) {
+                $BOX_CONTENT.slideToggle(200, function(){
+                    $BOX_PANEL.removeAttr('style');
+
+                    $ICON.toggleClass('fa-chevron-down');
+                    $ICON.addClass('fa-chevron-up');
+                });
+            } else {
+                $BOX_CONTENT.slideToggle(200);
+                $BOX_PANEL.css('height', 'auto');
+                $ICON.toggleClass('fa-chevron-up');
+                $ICON.addClass('fa-chevron-down');
+            }
+            jQuery('.x_title').css('border-bottom', '2px solid');
+        }
+
+
     </script>
 
+    <script>
+        jQuery('#submitProgram').click(function() {
+
+            var $id = jQuery(this).attr('value');
+            var $trainerComments = jQuery(this).parent().parent().children(':first-child').val();
+            var $button = jQuery(this);
+            if($trainerComments == ""){
+                alert("You're proposing an empty program. Please write an appropriate program for the user");
+            } else {
+                jQuery.ajax(
+                        {
+                            type: 'POST',
+                            url: '/trainerResponse',
+                            data: {
+                                id: $id,
+                                trainerComments: $trainerComments
+
+                            },
+                            success: function (data) {
+                                console.log(data);
+                                var $returnedValue = jQuery.parseJSON(data);
+                                console.log($returnedValue['success']);
+                                if ($returnedValue['success'] == true) {
+                                    $button.closest('.x_panel').remove();
+                                }
+                            }
+                        }
+                );
+            }
+        });
+
+    </script>
+
+
+
+
+
     <!-- jQuery -->
-    <script src="js/jquery.min.js"></script>
+    {#<script src="js/jquery.min.js"></script>#}
     <!-- Bootstrap -->
     <script src="js/bootstrap.min.js"></script>
     <!-- FastClick -->
@@ -142,8 +304,9 @@
     <!-- Custom Theme Scripts -->
     <script>jQuery.noConflict();</script>
     <script src="js/custom.min.js"></script>
-
 {% endblock content %}
 
-
+{% block info %}
+    {#{{ include('info.twig') }}#}
+{% endblock info %}
 

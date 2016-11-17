@@ -362,10 +362,10 @@
                                                             {% for key, value in class.days %}
                                                                 {% if value == 1 %}
 
-                                                                    <option value="{{ key }}" selected> {{ key }}</option>
+                                                                    <option value="{{ key }}" selected> {{ key|capitalize }}</option>
                                                                 {% else %}
 
-                                                                    <option value="{{ key }}"> {{ key }}</option>
+                                                                    <option value="{{ key }}"> {{ key|capitalize }}</option>
                                                                 {% endif %}
                                                             {% endfor %}
 
@@ -416,9 +416,7 @@
             jQuery('.collapse-link').click(function() {
                 toggle(this);
 
-            })  ;
-
-
+            });
             jQuery('.close-link').click(function () {
                 var $BOX_PANEL = jQuery(this).closest('.x_panel');
 //                console.log(jQuery(this).closest('.delete').attr('value'));
@@ -426,15 +424,9 @@
 //                $BOX_PANEL.remove();
             });
 
-
-
-
-
-
         });
         jQuery('.addClass').toggle();
         jQuery('.add').click(function() {
-
             jQuery('.addClass').toggle();
 
         });
@@ -447,15 +439,9 @@
             jQuery('.updateInfo').toggle();
 
         });
-
         jQuery('.delete').click(function() {
-
-
             if (confirm("Are you sure you want to delete this class?")) {
-
-
                 jQuery(this).closest('.x_panel').remove();
-
                 jQuery.ajax(
                         {
                             type: 'POST',
@@ -464,9 +450,7 @@
                                 id: jQuery(this).attr('value')
                             },
                             success: function (msg) {
-
                                 console.log("SUCCESS AJAX!");
-
                             }
                         }
                 );

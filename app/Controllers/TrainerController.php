@@ -18,8 +18,16 @@ class TrainerController extends Controller
     {
         $db = new DB();
         $pendingRequests = $db->getPendingProgramRequests();
-        ddd($pendingRequests);
+        d($pendingRequests);
         echo $this->twig->render('trainer/pendingRequests.twig', array('requests'=>$pendingRequests));
+    }
+
+    public function trainerResponse()
+    {
+        $db = new DB();
+        echo json_encode($db-> trainerResponse($_POST['id'], $_POST['trainerComments']));
+//        $db-> trainerResponse($_POST['id'], $_POST['trainerComments']);
+
     }
     
 }

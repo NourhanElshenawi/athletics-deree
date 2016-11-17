@@ -959,4 +959,26 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
+    public function trainerResponse($id, $trainerComments)
+    {
+        try
+        {
+            $stmt = $this->conn->prepare("UPDATE dereeAthletics.program_requests SET trainerResponse = 1, trainerComments=:trainerComments WHERE id=:id");
+            $stmt->bindParam(':trainerComments', $trainerComments);
+            $stmt->bindParam(':id', $id);
+
+            $stmt->execute();
+
+            $result['success'] = true;
+            $result['message'] = "Request Successfully Submitted!";
+        }
+        catch (PDOException $exception)
+        {
+            ddd($exception->getMessage());
+            $result['success'] = false;
+            $result['message'] = $exception->getMessage();
+        }
+        return $result;
+    }
+
 }
