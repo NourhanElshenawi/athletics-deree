@@ -17,7 +17,7 @@ $router->get('/login', 'MainController', 'login');
 $router->get('/calendar', 'MainController', 'calendar');
 $router->get('/fitnessProgram', 'MainController', 'fitnessProgram');
 
-/** USER **/               //CREATE USERCONTROLLER
+/** USER **/
 $router->get('/profile', 'MainController', 'profileStats');
 $router->post('/profile', 'MainController', 'userLogin');
 $router->get('/logout', 'MainController', 'logout');
@@ -26,6 +26,8 @@ $router->post('/registerclass', 'MainController', 'registerClass');
 $router->post('/unregisterclass', 'MainController', 'unregisterClass');
 $router->get('/signin', 'MainController', 'signin');
 $router->get('/realtimelogs', 'MainController', 'realtimeLogs');
+$router->get('/requestProgram', 'UserController', 'requestProgram');
+$router->post('/submitProgram', 'UserController', 'submitProgram');
 
 /** ADMIN **/
 //CLASSES SCHEDULE
