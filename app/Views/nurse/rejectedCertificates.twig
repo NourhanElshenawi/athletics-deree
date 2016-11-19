@@ -23,19 +23,19 @@
 
 {% endblock head %}
 
-{% block title %} Approved {% endblock title %}
+{% block title %} Rejected {% endblock title %}
 
 {% block content %}
     <div class="row">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Approved Certificates</h2>
+                <h2>Rejected Certificates</h2>
 
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
 
-                <p>Download the file, view it, or reject it.</p>
+                <p>Download the file, view it, or approve it.</p>
 
                 <!-- start project list -->
                 <table class="table table-striped" style="width: 100%;">
@@ -71,7 +71,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <button value="{{ user.id }}" type="button" class="reject_btn btn btn-danger btn-xs"><i class="fa fa-close"></i> Reject</button>
+                                <button value="{{ user.id }}" type="button" class="approve_btn btn btn-success btn-xs"><i class="fa fa-check"></i> Approve</button>
                             </td>
                             {# I can change the above td to the one below #}
                             {#<td>#}
@@ -98,18 +98,19 @@
             </div>
         </div>
     </div>
+    </div>
 
     <script>
-        jQuery('.reject_btn').click(function() {
+        jQuery('.approve_btn').click(function() {
 
             var approve_btn = this;
 
-            if (confirm("Are you sure you want to reject this certificate?")) {
+            if (confirm("Are you sure you want to approve this certificate after it has been rejected?")) {
                 console.log("The id is: " + jQuery(this).attr('value'));
 
                 jQuery.ajax({
                     type: 'POST',
-                    url: '/rejectCertificate',
+                    url: '/approveCertificate',
                     data: {
                         user_certificate_id: jQuery(this).attr('value')
                     },

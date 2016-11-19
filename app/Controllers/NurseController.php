@@ -34,7 +34,11 @@ class NurseController extends Controller
 
     public function seeRejectedCertificates()
     {
-        echo "see rejected certificates";
+        $db = new DB();
+
+        $users = $db->getRejectedCertificates();
+
+        echo $this->twig->render('nurse/rejectedCertificates.twig', array('users'=>$users));
     }
 
     public function approveCertificate()

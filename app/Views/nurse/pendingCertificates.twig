@@ -54,7 +54,7 @@
                         {% for user in users %}
                             <tr class="user_row">
                                 <td>{{ loop.index }}</td>
-                                <td> {{ user.name }} </td>
+                                <td> {{ user.name|capitalize }} </td>
                                 <td>
                                     {% if user.membershipType == 0 %}
                                         Non-Paid

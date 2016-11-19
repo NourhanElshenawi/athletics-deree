@@ -300,6 +300,24 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
+    public function getRejectedCertificates()
+    {
+        $stmt = $this->conn->prepare("
+          select *
+          from dereeAthletics.users
+          join dereeAthletics.user_certificates
+          on users.id = user_certificates.userID
+          WHERE user_certificates.certificate_status = ?;
+          ");
+        $stmt->bindValue(1, '2');
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     ///////USERS
 
     public function searchUsers($keyword)
