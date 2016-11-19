@@ -266,6 +266,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
             return false;
         }
     }
+
     public function rejectUserCertificate($id)
     {
         $stmt = $this->conn->prepare("update dereeAthletics.user_certificates set certificate_status = ? WHERE id = ? ");

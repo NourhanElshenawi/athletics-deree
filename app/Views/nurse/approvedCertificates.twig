@@ -71,7 +71,6 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <button value="{{ user.id }}" type="button" class="approve_btn btn btn-success btn-xs"><i class="fa fa-check"></i> Approve</button>
                                 <button value="{{ user.id }}" type="button" class="reject_btn btn btn-danger btn-xs"><i class="fa fa-close"></i> Reject</button>
                             </td>
                             {# I can change the above td to the one below #}
@@ -105,7 +104,7 @@
 
             var approve_btn = this;
 
-            if (confirm("Are you sure you want to reject this certificate after it has been approved?")) {
+            if (confirm("Are you sure you want to reject this certificate?")) {
                 console.log("The id is: " + jQuery(this).attr('value'));
 
                 jQuery.ajax({
