@@ -74,6 +74,7 @@ $router->get('/nurse-pending', 'NurseController', 'seePendingCertificates');
 $router->get('/nurse-approved', 'NurseController', 'seeApprovedCertificates');
 $router->get('/nurse-rejected', 'NurseController', 'seeRejectedCertificates');
 $router->post('/approveCertificate', 'NurseController', 'approveCertificate');
+$router->post('/rejectCertificate', 'NurseController', 'rejectCertificate');
 
 
 ////See inside $router

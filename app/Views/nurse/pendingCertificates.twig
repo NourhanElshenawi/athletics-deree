@@ -128,6 +128,33 @@
                 });
             }
         });
+
+        jQuery('.reject_btn').click(function() {
+
+            var approve_btn = this;
+
+            if (confirm("Are you sure you want to reject this certificate?")) {
+                console.log("The id is: " + jQuery(this).attr('value'));
+
+                jQuery.ajax({
+                    type: 'POST',
+                    url: '/rejectCertificate',
+                    data: {
+                        user_certificate_id: jQuery(this).attr('value')
+                    },
+                    success: function (data) {
+                        console.log("data returned: " + data);
+
+                        if (data=='true') {
+                            approve_btn.closest('.user_row').remove();
+                        } else {
+                            jQuery(approve_btn).closest('.user_row').css('opacity', '0.3');
+                            alert('Operation Failed! Please contact support.');
+                        }
+                    }
+                });
+            }
+        });
     </script>
 
     <!-- jQuery -->

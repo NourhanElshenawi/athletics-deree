@@ -25,7 +25,11 @@ class NurseController extends Controller
 
     public function seeApprovedCertificates()
     {
-        echo "see approved certificates";
+        $db = new DB();
+
+        $users = $db->getApprovedCertificates();
+
+        echo $this->twig->render('nurse/approvedCertificates.twig', array('users'=>$users));
     }
 
     public function seeRejectedCertificates()
@@ -38,6 +42,15 @@ class NurseController extends Controller
         $db = new DB();
 
         $result = $db->approveUserCertificate($_POST['user_certificate_id']);
+
+        echo json_encode($result);
+    }
+
+    public function rejectCertificate()
+    {
+        $db = new DB();
+
+        $result = $db->rejectUserCertificate($_POST['user_certificate_id']);
 
         echo json_encode($result);
     }

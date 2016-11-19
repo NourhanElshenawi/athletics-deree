@@ -24,16 +24,16 @@ class DB
      * @param string $password
      */
 
-//    public function __construct($serverName = "127.0.0.1", $port = "33060", $dbName = "dereeAthletics",$username = "homestead", $password = "secret" )
-//    {
-//        $this->serverName = $serverName;
-//        $this->port = $port;
-//        $this->dbname = $dbName;
-//        $this->username = $username;
-//        $this->password = $password;
-//
-//        $this->connect();
-//    }
+    public function __construct($serverName = "127.0.0.1", $port = "33060", $dbName = "dereeAthletics",$username = "homestead", $password = "secret" )
+    {
+        $this->serverName = $serverName;
+        $this->port = $port;
+        $this->dbname = $dbName;
+        $this->username = $username;
+        $this->password = $password;
+
+        $this->connect();
+    }
 
     /*
      *
@@ -43,21 +43,21 @@ class DB
     /**
      * DB constructor. Connect to Heroku's DB (ClearDB).
      */
-        public function __construct()
-        {
-            $cleardb_url = parse_url("mysql://b62bd972e49c6e:bd867b55@us-cdbr-iron-east-04.cleardb.net/heroku_8c5cf6545b7b42b?reconnect=true");
-
-
-            $this->host = $cleardb_url["host"];;
-            $this->port = 3306;
-            $this->dbname = substr($cleardb_url["path"], 1);
-            $this->username = $cleardb_url["user"];
-            $this->password = $cleardb_url["pass"];
-
-            $this->options = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
-
-            $this->connect();
-        }
+//        public function __construct()
+//        {
+//            $cleardb_url = parse_url("mysql://b62bd972e49c6e:bd867b55@us-cdbr-iron-east-04.cleardb.net/heroku_8c5cf6545b7b42b?reconnect=true");
+//
+//
+//            $this->host = $cleardb_url["host"];;
+//            $this->port = 3306;
+//            $this->dbname = substr($cleardb_url["path"], 1);
+//            $this->username = $cleardb_url["user"];
+//            $this->password = $cleardb_url["pass"];
+//
+//            $this->options = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
+//
+//            $this->connect();
+//        }
 
 
     public function connect()
@@ -265,6 +265,38 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         } catch (Exception $e) {
             return false;
         }
+    }
+    public function rejectUserCertificate($id)
+    {
+        $stmt = $this->conn->prepare("update dereeAthletics.user_certificates set certificate_status = ? WHERE id = ? ");
+
+        try{
+            $stmt->bindValue(1, '2');
+            $stmt->bindValue(2, $id);
+            $result = $stmt->execute();
+
+            return $result;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function getApprovedCertificates()
+    {
+        $stmt = $this->conn->prepare("
+          select *
+          from dereeAthletics.users
+          join dereeAthletics.user_certificates
+          on users.id = user_certificates.userID
+          WHERE user_certificates.certificate_status = ?;
+          ");
+        $stmt->bindValue(1, '1');
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
     }
 
     ///////USERS
@@ -969,6 +1001,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
+    /** Trainer **/
     public function getPendingProgramRequests()
     {
         $stmt = $this->conn->prepare("select *
