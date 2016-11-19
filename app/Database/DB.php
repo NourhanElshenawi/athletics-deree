@@ -24,16 +24,41 @@ class DB
      * @param string $password
      */
 
-    public function __construct($serverName = "127.0.0.1", $port = "33060", $dbName = "dereeAthletics",$username = "homestead", $password = "secret" )
-    {
-        $this->serverName = $serverName;
-        $this->port = $port;
-        $this->dbname = $dbName;
-        $this->username = $username;
-        $this->password = $password;
+//    public function __construct($serverName = "127.0.0.1", $port = "33060", $dbName = "dereeAthletics",$username = "homestead", $password = "secret" )
+//    {
+//        $this->serverName = $serverName;
+//        $this->port = $port;
+//        $this->dbname = $dbName;
+//        $this->username = $username;
+//        $this->password = $password;
+//
+//        $this->connect();
+//    }
 
-        $this->connect();
-    }
+    /*
+     *
+     *
+     *
+     */
+    /**
+     * DB constructor. Connect to Heroku's DB (ClearDB).
+     */
+        public function __construct()
+        {
+            $cleardb_url = parse_url("mysql://b62bd972e49c6e:bd867b55@us-cdbr-iron-east-04.cleardb.net/heroku_8c5cf6545b7b42b?reconnect=true");
+
+
+            $this->host = $cleardb_url["host"];;
+            $this->port = 3306;
+            $this->dbname = substr($cleardb_url["path"], 1);
+            $this->username = $cleardb_url["user"];
+            $this->password = $cleardb_url["pass"];
+
+            $this->options = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
+
+            $this->connect();
+        }
+
 
     public function connect()
     {
