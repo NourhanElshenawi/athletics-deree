@@ -155,8 +155,8 @@ class MainController extends Controller
     public function verifyResponse()
     {
 // your secret key
-        $secret = "6Lel3ggUAAAAACT3Xz7dfhUhvFGALwDrXgtwFeON";
-//        $secret = "6Ld91QgUAAAAAIRUcZnJqHYO836O9dCCesrdMgLg"; //for productions
+//        $secret = "6Lel3ggUAAAAACT3Xz7dfhUhvFGALwDrXgtwFeON";
+        $secret = "6Ld91QgUAAAAAIRUcZnJqHYO836O9dCCesrdMgLg"; //for productions
 // empty response
         $response = null;
 // check secret key
