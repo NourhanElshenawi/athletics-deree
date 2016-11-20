@@ -71,7 +71,8 @@ class DB
     public function getClasses()
     {
 
-        $stmt = $this->conn->prepare("select *, classes.name AS className, instructors.name AS instructorName
+        $stmt = $this->conn->prepare("select *, classes.name AS className, instructors.name AS instructorName,
+                                      classes.id AS classID, instructors.id AS instructorID
                                       from {$this->dbname}.classes
                                       join {$this->dbname}.instructors
                                       on classes.instructorID = instructors.id");
@@ -86,8 +87,13 @@ class DB
 
     public function getClass($id)
     {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.classes WHERE id = ?");
-        $stmt->bindValue(1,$id);
+        $stmt = $this->conn->prepare("select *, classes.name AS className, instructors.name AS instructorName,
+                                      classes.id AS classID, instructors.id AS instructorID
+                                      from {$this->dbname}.classes
+                                      join {$this->dbname}.instructors
+                                      on classes.instructorID = instructors.id
+                                      WHERE classes.id =:classID");
+        $stmt->bindParam(':classID',$id);
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -184,7 +190,8 @@ class DB
 
     public function searchClasses($keyword)
     {
-        $stmt = $this->conn->prepare("select *, classes.name AS className, instructors.name AS instructorName
+        $stmt = $this->conn->prepare("select *, classes.name AS className, instructors.name AS instructorName,
+                                      classes.id AS classID, instructors.id AS instructorID
                                       from {$this->dbname}.classes
                                       join {$this->dbname}.instructors
                                       on classes.instructorID = instructors.id

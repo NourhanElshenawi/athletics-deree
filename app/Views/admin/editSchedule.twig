@@ -221,20 +221,20 @@
                                                     {#<form action="/editclass" method="post" style="margin: 0;">#}
                                                     <li>
 
-                                                        <input type="hidden" id="edit" name="edit" value="{{ class.id }}">
-                                                        <a href="#" class="edit" value="{{ class.id }}">Edit Class</a>
+                                                        <input type="hidden" id="edit" name="edit" value="{{ class.classID }}">
+                                                        <a href="#" class="edit" value="{{ class.classID }}">Edit Class</a>
 
                                                     </li>
                                                     <li>
-                                                        <input type="hidden" name="hold" value="{{ class.id }}">
-                                                        <a href="#" class="hold" value="{{ class.id }}" >Hold</a>
+                                                        <input type="hidden" name="hold" value="{{ class.classID }}">
+                                                        <a href="#" class="hold" value="{{ class.classID }}" >Hold</a>
                                                     </li>
 
                                                     {#</form>#}
                                                 </ul>
                                             </li>
                                             <li>
-                                                <a class="close-link delete" value="{{ class.id }}">
+                                                <a class="close-link delete" value="{{ class.classID }}">
                                                     <i class="fa fa-close"></i></a>
 
                                             </li>
@@ -338,10 +338,10 @@
                                                     </td>
 
                                                     <td>
-                                                        <input style="width: 100%;" type="hidden" name="id" value="{{ class.id }}">
+                                                        <input style="width: 100%;" type="hidden" name="id" value="{{ class.classID }}">
 
                                                         {#remove unnecessary attributes#}
-                                                        <button type="submit" value="{{ class.id }}">Update</button>
+                                                        <button type="submit" value="{{ class.classID }}">Update</button>
                                                     </td>
 
 

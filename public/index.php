@@ -41,9 +41,6 @@ $router->get('/signin', 'MainController', 'signin');
 $router->get('/requestProgram', 'UserController', 'requestProgram');
 $router->post('/submitProgram', 'UserController', 'submitProgram');
 
-//CLASS REGISTRATIONS
-$router->get('/registrations', 'MainController', 'registrations');
-$router->get('/searchregistrations', 'MainController', 'searchRegistrations');
 
 /** ADMIN **/
 //CLASSES SCHEDULE
@@ -54,6 +51,9 @@ $router->post('/deleteclass', 'AdminController', 'deleteClass');
 $router->post('/updateclass', 'AdminController', 'updateClass');
 $router->get('/adminsearchclasses', 'AdminController', 'searchClasses');
 
+//CLASS REGISTRATIONS
+$router->get('/registrations', 'AdminController', 'registrations');
+$router->get('/searchregistrations', 'AdminController', 'searchRegistrations');
 
 //Users
 $router->get('/editusers', 'AdminController', 'editUsers');

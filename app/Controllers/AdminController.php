@@ -137,11 +137,8 @@ class AdminController extends Controller
         $classes = $db->searchClasses($_GET['keyword']);
         $classes = $this->beautifyClasses($classes);
         $allInstructors = $db->getInstructors();
-//        ddd($allInstructors);
 
         echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'allInstructors'=> $allInstructors));
-
-
     }
 
     public function updateClass()
@@ -158,7 +155,6 @@ class AdminController extends Controller
     {
         $db = new DB();
         $db->deleteClass($_POST['id']);
-
     }
 
     public function registrations()
@@ -172,23 +168,24 @@ class AdminController extends Controller
         else {
             $users = $db->getRegisteredUsers($_GET['class']);
             $class = $db->getClass($_GET['class']);
-            echo $this->twig->render('admin/registrations.twig', array('classes'=>$classes, 'users'=>$users, 'class'=>$class));
+
+            echo $this->twig->render('admin/registrations.twig', array('classes'=>$classes, 'users'=>$users, 'selectedClass'=>$class));
         }
 
     }
 
-    public function searchRegistrations()
-    {
-        $db = new DB();
-        $classes = $db->getClasses();
-
-        $users = $db->searchClassRegistrations($_GET['classID'], $_GET['keyword']);
-        $class = $db->getClass($_GET['classID']);
-        if (empty($users)){
-            $users = array();
-        }
-        echo $this->twig->render('admin/registrations.twig', array('classes'=>$classes, 'users'=>$users, 'class'=>$class));
-    }
+//    public function searchRegistrations()
+//    {
+//        $db = new DB();
+//        $classes = $db->getClasses();
+//
+//        $users = $db->searchClassRegistrations($_GET['classID'], $_GET['keyword']);
+//        $class = $db->getClass($_GET['classID']);
+//        if (empty($users)){
+//            $users = array();
+//        }
+//        echo $this->twig->render('admin/registrations.twig', array('classes'=>$classes, 'users'=>$users, 'class'=>$class));
+//    }
 
     ////////EDIT USERS
     public function getUsersWithRegistrations()
