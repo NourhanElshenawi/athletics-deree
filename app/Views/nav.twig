@@ -5,7 +5,8 @@
         <a class="skip-link screen-reader-text" href="#site-navigation">Skip to navigation</a>
         <a class="skip-link screen-reader-text" href="#content">Skip to content</a>
         <a href="http://www.acg.edu/" class="custom-logo-link" rel="home" itemprop="url"><img width="245" height="110" src="http://www.acg.edu/wp-content/uploads/2016/05/logo.png" class="custom-logo" alt="logo" itemprop="logo"></a>		<nav class="secondary-navigation" role="navigation" aria-label="Secondary Navigation">
-            <div class="menu-top-menu-container"><ul id="menu-top-menu" class="menu">
+            <div class="menu-top-menu-container">
+                <ul id="menu-top-menu" class="menu">
 
                     <li id="menu-item-291" class="top-general menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-6 current_page_item menu-item-291">
                         <i class="fa fa-home" style="margin-right: 4px;"></i>
@@ -33,10 +34,10 @@
                                 <i class="fa fa-sign-in"></i>
                             </li>
                     {% endif %}
-
                 </ul>
             </div>
         </nav>
+        {% if session.user is defined %}
         <!-- #site-navigation -->
         <div class="headerright">
             <div>
@@ -162,4 +163,5 @@
             </nav><!-- #site-navigation -->
         </section>
     </div>
+    {% endif %}
 </header><!-- #masthead -->

@@ -132,10 +132,6 @@
                                         duration: "{{ class.duration }}"
                                     });
                                 }
-
-
-
-
                             } // for loop
 
                             // return events generated
@@ -151,10 +147,6 @@
 
             }());
         });
-
-
-
-
     </script>
 
 {% endblock head %}
@@ -193,10 +185,8 @@
     <script src="js/nprogress.js"></script>
     <!-- Chart.js -->
     <script src="js/Chart.min.js"></script>
-
     <!-- Custom Theme Scripts -->
     <script src="js/custom.min.js"></script>
-
 
     <script>
         Chart.defaults.global.legend = {
@@ -253,11 +243,4 @@
         });
     </script>
 {% endblock content %}
-
-{% block info %}
-    {{ include('info.twig') }}
-{% endblock info %}
-
-
-
 

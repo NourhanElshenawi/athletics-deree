@@ -9,6 +9,7 @@
 namespace Nourhan\Controllers;
 
 use Nourhan\Database\DB;
+use Nourhan\ReCaptcha;
 
 class UserController extends Controller
 {
