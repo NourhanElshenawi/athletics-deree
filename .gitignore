@@ -3,3 +3,4 @@
 /TemplatePagesDemo/
 node_modules/
 public/bower_components/
+.env

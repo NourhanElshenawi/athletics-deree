@@ -8,7 +8,7 @@ use PDOException;
 class DB
 {
 
-    protected $serverName;
+    protected $host;
     protected $port;
     protected $dbName;
     protected $username;
@@ -24,46 +24,41 @@ class DB
      * @param string $password
      */
 
-    public function __construct($serverName = "127.0.0.1", $port = "33060", $dbName = "dereeAthletics",$username = "homestead", $password = "secret" )
-    {
-        $this->serverName = $serverName;
-        $this->port = $port;
-        $this->dbname = $dbName;
-        $this->username = $username;
-        $this->password = $password;
+//    public function __construct($host = "127.0.0.1", $port = "33060", $dbName = "dereeAthletics",$username = "homestead", $password = "secret" )
+//    {
+//        $this->host = $host;
+//        $this->port = $port;
+//        $this->dbname = $dbName;
+//        $this->username = $username;
+//        $this->password = $password;
+//
+//        $this->connect();
+//    }
 
-        $this->connect();
-    }
 
-    /*
-     *
-     *
-     *
-     */
     /**
      * DB constructor. Connect to Heroku's DB (ClearDB).
      */
-//        public function __construct()
-//        {
-//            $cleardb_url = parse_url("mysql://b62bd972e49c6e:bd867b55@us-cdbr-iron-east-04.cleardb.net/heroku_8c5cf6545b7b42b?reconnect=true");
-//
-//
-//            $this->host = $cleardb_url["host"];;
-//            $this->port = 3306;
-//            $this->dbname = substr($cleardb_url["path"], 1);
-//            $this->username = $cleardb_url["user"];
-//            $this->password = $cleardb_url["pass"];
-//
-//            $this->options = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
-//
-//            $this->connect();
-//        }
+        public function __construct()
+        {
+            $cleardb_url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+
+            $this->host = $cleardb_url["host"];;
+            $this->port = 3306;
+            $this->dbname = substr($cleardb_url["path"], 1);
+            $this->username = $cleardb_url["user"];
+            $this->password = $cleardb_url["pass"];
+
+            $this->options = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
+
+            $this->connect();
+        }
 
 
     public function connect()
     {
         try{
-            $conn = new PDO("mysql:host=$this->serverName;port:$this->port;dbname=$this->dbName", $this->username, $this->password);
+            $conn = new PDO("mysql:host=$this->host;port:$this->port;dbname=$this->dbName", $this->username, $this->password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->conn = $conn;
 //            echo "Connection Established!";
@@ -75,7 +70,7 @@ class DB
 
     public function getClasses()
     {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.classes");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.classes");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -86,7 +81,7 @@ class DB
 
     public function getClass($id)
     {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.classes WHERE id = ?");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.classes WHERE id = ?");
         $stmt->bindValue(1,$id);
         $stmt->execute();
         // set the resulting array to associative
@@ -98,7 +93,7 @@ class DB
 
     public function getInstructors()
     {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.instructors");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.instructors");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -109,7 +104,7 @@ class DB
 
     public function getInstructor($id)
     {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.instructors WHERE id=?");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.instructors WHERE id=?");
         $stmt->bindValue(1,$id);
         $stmt->execute();
         // set the resulting array to associative
@@ -121,7 +116,7 @@ class DB
 
     public function getUser($email, $password)
     {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE email = ? and password = ?");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE email = ? and password = ?");
         $stmt->bindValue(1,$email);
         $stmt->bindValue(2,$password);
         $stmt->execute();
@@ -134,7 +129,7 @@ class DB
 
     public function getUserProfile($id)
     {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE id = ?");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE id = ?");
         $stmt->bindValue(1,$id);
         $stmt->execute();
         // set the resulting array to associative
@@ -149,7 +144,7 @@ class DB
 
     public function getUserCredentials($username, $password)
     {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE email = ? and password = ?");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE email = ? and password = ?");
         $stmt->bindValue(1,$username);
         $stmt->bindValue(2,$password);
         $stmt->execute();
@@ -165,7 +160,7 @@ class DB
  ////// EDIT CLASSES
     public function updateClass($id, $duration, $startTime, $capacity,$instructorID)
     {
-        $stmt = $this->conn->prepare("update dereeAthletics.classes set duration = ?, startTime = ?, capacity = ?,
+        $stmt = $this->conn->prepare("update {$this->dbname}.classes set duration = ?, startTime = ?, capacity = ?,
  instructorID = ?  WHERE id = ? ");
 
         try{
@@ -184,7 +179,7 @@ class DB
 
     public function searchClasses($keyword)
     {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.classes WHERE name LIKE ?");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.classes WHERE name LIKE ?");
 
             $stmt->bindValue(1, $keyword);
             $stmt->execute();
@@ -197,7 +192,7 @@ class DB
 
     public function addClass($name, $duration, $instructorID, $startTime, $period, $capacity, $location, $monday, $tuesday, $wednesday, $thursday, $friday)
     {
-        $stmt = $this->conn->prepare("insert into dereeAthletics.classes (name, duration, instructorID, startTime, period, 
+        $stmt = $this->conn->prepare("insert into {$this->dbname}.classes (name, duration, instructorID, startTime, period, 
 capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         try{
@@ -227,7 +222,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function deleteClass($id)
     {
-        $stmt = $this->conn->prepare("delete from dereeAthletics.classes WHERE id = ?");
+        $stmt = $this->conn->prepare("delete from {$this->dbname}.classes WHERE id = ?");
         $stmt->bindValue(1,$id);
         $stmt->execute();
     }
@@ -238,8 +233,8 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     {
         $stmt = $this->conn->prepare("
           select *
-          from dereeAthletics.users
-          join dereeAthletics.user_certificates
+          from {$this->dbname}.users
+          join {$this->dbname}.user_certificates
           on users.id = user_certificates.userID
           WHERE user_certificates.certificate_status = ?;
           ");
@@ -254,7 +249,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function approveUserCertificate($id)
     {
-        $stmt = $this->conn->prepare("update dereeAthletics.user_certificates set certificate_status = ? WHERE id = ? ");
+        $stmt = $this->conn->prepare("update {$this->dbname}.user_certificates set certificate_status = ? WHERE id = ? ");
 
         try{
             $stmt->bindValue(1, '1');
@@ -269,7 +264,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function rejectUserCertificate($id)
     {
-        $stmt = $this->conn->prepare("update dereeAthletics.user_certificates set certificate_status = ? WHERE id = ? ");
+        $stmt = $this->conn->prepare("update {$this->dbname}.user_certificates set certificate_status = ? WHERE id = ? ");
 
         try{
             $stmt->bindValue(1, '2');
@@ -286,8 +281,8 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     {
         $stmt = $this->conn->prepare("
           select *
-          from dereeAthletics.users
-          join dereeAthletics.user_certificates
+          from {$this->dbname}.users
+          join {$this->dbname}.user_certificates
           on users.id = user_certificates.userID
           WHERE user_certificates.certificate_status = ?;
           ");
@@ -304,8 +299,8 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     {
         $stmt = $this->conn->prepare("
           select *
-          from dereeAthletics.users
-          join dereeAthletics.user_certificates
+          from {$this->dbname}.users
+          join {$this->dbname}.user_certificates
           on users.id = user_certificates.userID
           WHERE user_certificates.certificate_status = ?;
           ");
@@ -322,7 +317,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function searchUsers($keyword)
     {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE name LIKE ? OR id LIKE ? OR email LIKE ?");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE name LIKE ? OR id LIKE ? OR email LIKE ?");
 
         $stmt->bindValue(1, $keyword);
         $stmt->bindValue(2, $keyword);
@@ -338,7 +333,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function updateUser($id, $name, $email, $password, $birthDate, $gender, $membershipType, $admin)
     {
-        $stmt = $this->conn->prepare("update dereeAthletics.users set name = ?, email = ?, password = ?, birthDate = ?,
+        $stmt = $this->conn->prepare("update {$this->dbname}.users set name = ?, email = ?, password = ?, birthDate = ?,
  gender = ?, membershipType = ?, admin = ? WHERE id = ? ");
 
         try{
@@ -359,7 +354,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsers()
     {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.users");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.users");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -370,7 +365,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsersByID($id)
     {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE id = ?");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE id = ?");
         $stmt->bindValue(1, $id);
         $stmt->execute();
         // set the resulting array to associative
@@ -382,7 +377,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function searchUsersByID($id, $keyword)
     {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.users WHERE id = ? AND (name LIKE ? or 
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE id = ? AND (name LIKE ? or 
     email like ? or gender like ? or birthDate like ?) ");
         $stmt->bindValue(1, $id);
         $stmt->bindValue(2, $keyword);
@@ -398,7 +393,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUserRegistrations($id)
     {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.registrations WHERE userID = ?");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.registrations WHERE userID = ?");
         $stmt->bindValue(1, $id);
         $stmt->execute();
         // set the resulting array to associative
@@ -412,10 +407,10 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     {
         $stmt = $this->conn->prepare("
             SELECT *
-            FROM dereeAthletics.users
-            INNER JOIN dereeAthletics.registrations
-            ON dereeAthletics.registrations.userID=dereeAthletics.users.id
-            AND dereeAthletics.registrations.classID=:class limit 5;"
+            FROM {$this->dbname}.users
+            INNER JOIN {$this->dbname}.registrations
+            ON {$this->dbname}.registrations.userID={$this->dbname}.users.id
+            AND {$this->dbname}.registrations.classID=:class limit 5;"
         );
 
         $stmt->bindParam(':class', $classID);
@@ -431,11 +426,11 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     {
         $stmt = $this->conn->prepare("
             SELECT *
-            FROM dereeAthletics.users
-            INNER JOIN dereeAthletics.registrations
-            ON dereeAthletics.registrations.userID=dereeAthletics.users.id
-            AND dereeAthletics.registrations.classID=:class WHERE dereeAthletics.users.id LIKE :id or dereeAthletics.users.email LIKE :email
-            OR dereeAthletics.users.name LIKE :username or dereeAthletics.users.gender LIKE :gender limit 5;"
+            FROM {$this->dbname}.users
+            INNER JOIN {$this->dbname}.registrations
+            ON {$this->dbname}.registrations.userID={$this->dbname}.users.id
+            AND {$this->dbname}.registrations.classID=:class WHERE {$this->dbname}.users.id LIKE :id or {$this->dbname}.users.email LIKE :email
+            OR {$this->dbname}.users.name LIKE :username or {$this->dbname}.users.gender LIKE :gender limit 5;"
         );
 
         $stmt->bindParam(':class', $classID);
@@ -454,7 +449,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     public function userExists($email)
     {
         $stmt = $this->conn->prepare("
- 				Select * FROM dereeAthletics.users
+ 				Select * FROM {$this->dbname}.users
  				WHERE email=:email;"
         );
         $stmt->bindParam(':email', $email);
@@ -494,7 +489,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
 
         $stmt = $this->conn->prepare("
-                    insert into dereeAthletics.users
+                    insert into {$this->dbname}.users
                     (name, email, password, birthDate, gender, membershipType, picture, admin, active)
                     VALUES  (:name, :email, :password, :birthDate, :gender, :membershipType, :picture, :admin, :active);"
         );
@@ -537,7 +532,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         //If user exists then update his info
         if (isset($row) && $row != false) {
             $stmt = $this->conn->prepare("
- 				update dereeAthletics.users
+ 				update {$this->dbname}.users
  				set name=:name, email=:email, password=:password, birthDate=:birthDate, gender=:gender, membershipType=:membershipType, picture=:picture, admin=:admin, active=:active
  				WHERE id=:id;"
             );
@@ -567,7 +562,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
         else { //if user does not exist then add a new one
             $stmt = $this->conn->prepare("
-                    insert into dereeAthletics.users
+                    insert into {$this->dbname}.users
                     (name, email, password, birthDate, gender, membershipType, picture, admin, active)
                     VALUES  (:name, :email, :password, :birthDate, :gender, :membershipType, :picture, :admin, :active);"
             );
@@ -602,14 +597,14 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function deleteUser($id)
     {
-        $stmt = $this->conn->prepare("delete from dereeAthletics.users WHERE id = ?");
+        $stmt = $this->conn->prepare("delete from {$this->dbname}.users WHERE id = ?");
         $stmt->bindValue(1,$id);
         $stmt->execute();
     }
 
     public function unregisterClass($id, $classID)
     {
-        $stmt = $this->conn->prepare("delete from dereeAthletics.registrations WHERE userID = ? and classID = ?");
+        $stmt = $this->conn->prepare("delete from {$this->dbname}.registrations WHERE userID = ? and classID = ?");
         $stmt->bindValue(1,$id);
         $stmt->bindValue(2,$classID);
         $stmt->execute();
@@ -618,7 +613,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     public function registerClass($id, $classID)
     {
         try{
-            $stmt = $this->conn->prepare("insert into dereeAthletics.registrations (userID, classID) VALUES  (?, ?)");
+            $stmt = $this->conn->prepare("insert into {$this->dbname}.registrations (userID, classID) VALUES  (?, ?)");
             $stmt->bindValue(1,$id);
             $stmt->bindValue(2,$classID);
             $stmt->execute();
@@ -631,7 +626,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUserLogin($id){
 
-        $stmt = $this->conn->prepare("select * from dereeAthletics.logs WHERE userID = ? AND logout IS NULL ");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs WHERE userID = ? AND logout IS NULL ");
         $stmt->bindValue(1, $id);
 //        $stmt->bindValue(2, NULL);
         $stmt->execute();
@@ -648,7 +643,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsersLogin(){
 
-        $stmt = $this->conn->prepare("select * from dereeAthletics.logs WHERE logout IS NULL ");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs WHERE logout IS NULL ");
 
         $stmt->execute();
         // set the resulting array to associative
@@ -661,7 +656,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsersLogs(){
 
-        $stmt = $this->conn->prepare("select * from dereeAthletics.logs");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs");
 
         $stmt->execute();
         // set the resulting array to associative
@@ -674,7 +669,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getRealtimeLogs(){
 
-        $stmt = $this->conn->prepare("select DISTINCT (userID) from dereeAthletics.logs WHERE logout is NULL");
+        $stmt = $this->conn->prepare("select DISTINCT (userID) from {$this->dbname}.logs WHERE logout is NULL");
 
         $stmt->execute();
         // set the resulting array to associative
@@ -690,7 +685,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsersLogsYears(){
 
-        $stmt = $this->conn->prepare("select YEAR (login) from dereeAthletics.logs");
+        $stmt = $this->conn->prepare("select YEAR (login) from {$this->dbname}.logs");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -703,10 +698,10 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     public function getUsersLogsMonths(){
 
         $stmt = $this->conn->prepare("
-            SELECT MONTH(dereeAthletics.logs.login)
-            FROM dereeAthletics.users
-            INNER JOIN dereeAthletics.logs
-            ON dereeAthletics.logs.userID=dereeAthletics.users.id;"
+            SELECT MONTH({$this->dbname}.logs.login)
+            FROM {$this->dbname}.users
+            INNER JOIN {$this->dbname}.logs
+            ON {$this->dbname}.logs.userID={$this->dbname}.users.id;"
         );
 
         $stmt->execute();
@@ -719,7 +714,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsersLogsDays(){
 
-        $stmt = $this->conn->prepare("select DAYOFWEEK (login) from dereeAthletics.logs");
+        $stmt = $this->conn->prepare("select DAYOFWEEK (login) from {$this->dbname}.logs");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -731,7 +726,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsersLogsHours(){
 
-        $stmt = $this->conn->prepare("select HOUR (login) from dereeAthletics.logs");
+        $stmt = $this->conn->prepare("select HOUR (login) from {$this->dbname}.logs");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -744,10 +739,10 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     public function getUsersLogsYearsFilter(){
 
         $statement = "
-            SELECT YEAR (dereeAthletics.logs.login)
-            FROM dereeAthletics.users
-            INNER JOIN dereeAthletics.logs
-            ON dereeAthletics.logs.userID=dereeAthletics.users.id";
+            SELECT YEAR ({$this->dbname}.logs.login)
+            FROM {$this->dbname}.users
+            INNER JOIN {$this->dbname}.logs
+            ON {$this->dbname}.logs.userID={$this->dbname}.users.id";
 
         $gender = $_POST['gender'];
         if($gender == 'b'){
@@ -755,11 +750,11 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
 
         if (!empty($gender)){
-            $statement = $statement . " AND dereeAthletics.users.gender=:gender";
+            $statement = $statement . " AND {$this->dbname}.users.gender=:gender";
         }
 
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
-            $statement = $statement . " AND dereeAthletics.users.birthDate BETWEEN :down AND :up";
+            $statement = $statement . " AND {$this->dbname}.users.birthDate BETWEEN :down AND :up";
         }
 
 
@@ -784,10 +779,10 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     public function getUsersLogsMonthsFilter(){
 
         $statement = "
-            SELECT MONTH(dereeAthletics.logs.login)
-            FROM dereeAthletics.users
-            INNER JOIN dereeAthletics.logs
-            ON dereeAthletics.logs.userID=dereeAthletics.users.id";
+            SELECT MONTH({$this->dbname}.logs.login)
+            FROM {$this->dbname}.users
+            INNER JOIN {$this->dbname}.logs
+            ON {$this->dbname}.logs.userID={$this->dbname}.users.id";
 
         $gender = $_POST['gender'];
         if($gender == 'b'){
@@ -795,11 +790,11 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
 
         if (!empty($gender)){
-            $statement = $statement . " AND dereeAthletics.users.gender=:gender";
+            $statement = $statement . " AND {$this->dbname}.users.gender=:gender";
         }
 
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
-            $statement = $statement . " AND dereeAthletics.users.birthDate BETWEEN :down AND :up";
+            $statement = $statement . " AND {$this->dbname}.users.birthDate BETWEEN :down AND :up";
         }
 
 
@@ -823,10 +818,10 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsersLogsDaysFilter(){
 
-        $statement = "SELECT DAYOFWEEK (dereeAthletics.logs.login)
-            FROM dereeAthletics.users
-            INNER JOIN dereeAthletics.logs
-            ON dereeAthletics.logs.userID=dereeAthletics.users.id";
+        $statement = "SELECT DAYOFWEEK ({$this->dbname}.logs.login)
+            FROM {$this->dbname}.users
+            INNER JOIN {$this->dbname}.logs
+            ON {$this->dbname}.logs.userID={$this->dbname}.users.id";
 
         $gender = $_POST['gender'];
         if($gender == 'b'){
@@ -834,11 +829,11 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
 
         if (!empty($gender)){
-            $statement = $statement . " AND dereeAthletics.users.gender=:gender";
+            $statement = $statement . " AND {$this->dbname}.users.gender=:gender";
         }
 
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
-            $statement = $statement . " AND dereeAthletics.users.birthDate BETWEEN :down AND :up";
+            $statement = $statement . " AND {$this->dbname}.users.birthDate BETWEEN :down AND :up";
         }
 
 
@@ -862,10 +857,10 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsersLogsHoursFilter(){
 
-        $statement = "SELECT HOUR (dereeAthletics.logs.login)
-            FROM dereeAthletics.users
-            INNER JOIN dereeAthletics.logs
-            ON dereeAthletics.logs.userID=dereeAthletics.users.id";
+        $statement = "SELECT HOUR ({$this->dbname}.logs.login)
+            FROM {$this->dbname}.users
+            INNER JOIN {$this->dbname}.logs
+            ON {$this->dbname}.logs.userID={$this->dbname}.users.id";
 
         $gender = $_POST['gender'];
         if($gender == 'b'){
@@ -873,11 +868,11 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
 
         if (!empty($gender)){
-            $statement = $statement . " AND dereeAthletics.users.gender=:gender";
+            $statement = $statement . " AND {$this->dbname}.users.gender=:gender";
         }
 
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
-            $statement = $statement . " AND dereeAthletics.users.birthDate BETWEEN :down AND :up";
+            $statement = $statement . " AND {$this->dbname}.users.birthDate BETWEEN :down AND :up";
         }
 
 
@@ -901,7 +896,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsersAge(){
 
-        $stmt = $this->conn->prepare("select TIMESTAMPDIFF(YEAR,birthDate,CURDATE()) AS age from dereeAthletics.users");
+        $stmt = $this->conn->prepare("select TIMESTAMPDIFF(YEAR,birthDate,CURDATE()) AS age from {$this->dbname}.users");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -913,7 +908,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsersGender(){
 
-        $stmt = $this->conn->prepare("select gender from dereeAthletics.users");
+        $stmt = $this->conn->prepare("select gender from {$this->dbname}.users");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -928,7 +923,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function signout($id, $date)
     {
-        $stmt = $this->conn->prepare("update dereeAthletics.logs set logout = ? WHERE userID = ? AND logout IS NULL ");
+        $stmt = $this->conn->prepare("update {$this->dbname}.logs set logout = ? WHERE userID = ? AND logout IS NULL ");
 
         try{
             $stmt->bindValue(1, $date);
@@ -944,7 +939,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function signin($id, $date)
     {
-        $stmt = $this->conn->prepare("insert into dereeAthletics.logs (userID, login) VALUES  (?,?)  ");
+        $stmt = $this->conn->prepare("insert into {$this->dbname}.logs (userID, login) VALUES  (?,?)  ");
 
         try{
 
@@ -960,7 +955,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     }
 
     public function getUserLogs ($id) {
-        $stmt = $this->conn->prepare("select * from dereeAthletics.logs WHERE userID = ? AND MONTH(login) = 10 AND YEAR(login) = 2016");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs WHERE userID = ? AND MONTH(login) = 10 AND YEAR(login) = 2016");
         $stmt->bindValue(1, $id);
         $stmt->execute();
         // set the resulting array to associative
@@ -985,7 +980,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         try
         {
             $stmt = $this->conn->prepare("
-                INSERT INTO dereeAthletics.program_requests 
+                INSERT INTO {$this->dbname}.program_requests 
                 (`userID`, `height`, `weight`, `pastExercise`, `currentlyExercising`, `currentExercisingIntensity`, `activities`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`, `comments`) 
                 VALUES (:userID, :height, :weight, :pastExercise, :currentlyExercising, :currentExercisingIntensity, :activities, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :comments );
             ");
@@ -1024,8 +1019,8 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     public function getPendingProgramRequests()
     {
         $stmt = $this->conn->prepare("select *
-          from dereeAthletics.users
-          join dereeAthletics.program_requests
+          from {$this->dbname}.users
+          join {$this->dbname}.program_requests
           on users.id = program_requests.userID
           WHERE program_requests.trainerResponse = 0;");
         $stmt->execute();
@@ -1040,7 +1035,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     {
         try
         {
-            $stmt = $this->conn->prepare("UPDATE dereeAthletics.program_requests SET trainerResponse = 1, trainerComments=:trainerComments WHERE id=:id");
+            $stmt = $this->conn->prepare("UPDATE {$this->dbname}.program_requests SET trainerResponse = 1, trainerComments=:trainerComments WHERE id=:id");
             $stmt->bindParam(':trainerComments', $trainerComments);
             $stmt->bindParam(':id', $id);
 
