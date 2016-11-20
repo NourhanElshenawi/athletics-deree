@@ -42,7 +42,7 @@ class DB
         public function __construct()
         {
             $cleardb_url = parse_url(getenv("CLEARDB_DATABASE_URL"));
-
+//            ddd($cleardb_url);
             $this->host = $cleardb_url["host"];;
             $this->port = 3306;
             $this->dbname = substr($cleardb_url["path"], 1);
