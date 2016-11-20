@@ -11,23 +11,20 @@
                         <i class="fa fa-home" style="margin-right: 4px;"></i>
                         <a href="/">home</a>
                     </li>
-
-
                     <li id="menu-item-15534" class="top-general menu-item menu-item-type-custom menu-item-object-custom menu-item-15534"><i class="fa fa-list-alt" style="margin-right: 4px;"></i>
                         <a href="/fitnessProgram">Fitness Program</a>
                     </li>
-                    <li id="menu-item-15534"
-                        class="top-general menu-item menu-item-type-custom menu-item-object-custom menu-item-15534">
-                        <i class="fa fa-plus-square" style="margin-right: 4px;"></i>
-                        <a href="/register">Register Class</a>
-                    </li>
-                    <li id="menu-item-15534"
-                        class="top-general menu-item menu-item-type-custom menu-item-object-custom menu-item-15534">
-                        <i class="fa fa-plus-square" style="margin-right: 4px;"></i>
-                        <a href="/requestProgram">Request Program</a>
-                    </li>
-
                     {% if session.user is defined %}
+                        <li id="menu-item-15534"
+                            class="top-general menu-item menu-item-type-custom menu-item-object-custom menu-item-15534">
+                            <i class="fa fa-plus-square" style="margin-right: 4px;"></i>
+                            <a href="/register">Register Class</a>
+                        </li>
+                        <li id="menu-item-15534"
+                            class="top-general menu-item menu-item-type-custom menu-item-object-custom menu-item-15534">
+                            <i class="fa fa-plus-square" style="margin-right: 4px;"></i>
+                            <a href="/requestProgram">Request Program</a>
+                        </li>
                         <li id="menu-item-600" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-600"><a href="/logout">Logout</a>
                             <i class="fa fa-sign-out"></i>
                         </li>
@@ -37,60 +34,16 @@
                             </li>
                     {% endif %}
 
-                </ul></div>		</nav><!-- #site-navigation --><div class="headerright">
-            <div>
-                <form role="search" method="get" class="search-form" action="http://www.acg.edu/">
-                    <label>
-                        <span class="screen-reader-text">Search for:</span>
-                        <input type="search" class="search-field" placeholder="Search …" value="" name="s">
-                    </label>
-                        <input type="submit" class="search-submit" value="Search">
-
-                </form>
+                </ul>
             </div>
+        </nav>
+        <!-- #site-navigation -->
+        <div class="headerright">
             <div>
                 <div class="menu-top-virtual-quick-n-more-container">
-                    <ul id="menu-top-virtual-quick-n-more" class="menu">
-
-                        <li id="menu-item-606" class="header-quick menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-has-children menu-item-606">
-                            <a href="http://www.acg.edu/#">Logs</a>
-                            <ul class="sub-menu">
-                                <li id="menu-item-12722"
-                                    class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12722">
-                                    <a target="_blank" href="/realtimelogs">Friends There Now!</a>
-                                </li>
-                                <li id="menu-item-12722"
-                                    class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12722">
-                                    <a target="_blank" href="/realtimelogs">Real Time</a>
-                                </li>
-                                <li id="menu-item-12722"
-                                    class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12722">
-                                    <a target="_blank" href="/logs">History Logs</a>
-                                </li>
-
-                            </ul>
-
-                        </li>
-
-                        {% if session.user.admin == 1 %}
-                        <li id="menu-item-606" class="header-quick menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-has-children menu-item-606"><a href="http://www.acg.edu/#">Statistics</a>
-                            <ul class="sub-menu">
-                                <li id="menu-item-12722"
-                                    class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12722">
-                                    <a target="_blank" href="/adminstatsmonth">Visitation Dates</a>
-                                </li>
-
-                                <li id="menu-item-12722"
-                                    class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12722">
-                                    <a target="_blank" href="/adminstatsuser">User Characteristics</a>
-                                </li>
-                            </ul>
-                        </li>
-                        {% endif %}
-
-                        <li id="menu-item-604" class="header-giving menu-item menu-item-type-post_type menu-item-object-page menu-item-604"><a href="http://www.acg.edu/why-give/">Giving</a></li>
-                        <li id="menu-item-605" class="header-alumni menu-item menu-item-type-post_type menu-item-object-page menu-item-605"><a href="http://www.acg.edu/alumni/">Alumni</a></li>
-                    </ul></div></div>					</div>
+                </div>
+            </div>
+        </div>
         <section class="storefront-primary-navigation">		<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Navigation">
                 <button class="menu-toggle" aria-controls="primary-navigation" aria-expanded="false"><span>Menu</span></button>
 
@@ -175,6 +128,35 @@
                         </li>
                     </ul>
                 </div>
+                    {% elseif session.user.admin == 0 %}
+                        <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Gym Logs</a>
+                            <ul class="sub-menu">
+                                <li id="menu-item-35" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35">
+                                    <a href="/friendsRealtimeLogs">Real-Time Logs</a>
+                                </li>
+                                <li id="menu-item-35" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35">
+                                    <a href="/realtimelogs">Real-Time Logs</a>
+                                </li>
+                                <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
+                                    <a href="/logs">History Logs</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Gym Statistics</a>
+                            <ul class="sub-menu">
+                                <li id="menu-item-35" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35">
+                                    <a href="/friendsRealtimeLogs">General Visitations</a>
+                                </li>
+                                <li id="menu-item-35" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35">
+                                    <a href="/realtimelogs">Personal Visitations</a>
+                                </li>
+                                <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
+                                    <a href="/logs">History Logs</a>
+                                </li>
+                            </ul>
+                        </li>
+
                 {% endif %}
 
             </nav><!-- #site-navigation -->

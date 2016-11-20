@@ -37,7 +37,7 @@
 
 {% block content %}
 
-    {#{{ dump(classes.1.users) }}#}
+    {#{{ dump(classes) }}#}
 
     {% set classExample = classes|first %}
     <div class="clearfix"></div>
@@ -83,7 +83,7 @@
                         <form action="/addclass" method="post">
                             <tr>
 
-                                <form action="/addclass" method="post">
+                                {#<form action="/addclass" method="post">#}
 
                                 <td>
                                     <input type="text" style="width: 100%;" name="name" required>
@@ -126,20 +126,13 @@
 
                                 <td>
                                     <select name="days[]" id="" multiple style="width: 120%;"required>
-
-
-
                                         {{ classExample.name }}
                                         {% for key, value in classExample.days %}
                                             <option value="{{ key }}"> {{ key }}</option>
                                         {% endfor %}
-
-
                                     </select>
-
-
                                 </td>
-
+                                 {#</form>#}
                             </tr>
 
 
@@ -147,11 +140,9 @@
                                 <td>
                                     <button type="submit"> Add Class</button>
                                 </td>
-
-                        </form>
                             </tr>
 
-
+                                 </form>
                         </tbody>
                     </table>
 
@@ -162,10 +153,10 @@
                     <tr>
 
                         <th>#</th>
-                        <th>Project Name</th>
+                        <th>Class Name</th>
 
-                        <th>Team Members</th>
-                        <th>Project Progress</th>
+                        <th>Sample of Users Registered</th>
+                        <th>Class Registration Capacity</th>
 
                     </tr>
                     </thead>
@@ -188,42 +179,21 @@
                                         </div>
 
                                         <div class="split" style="width: 32%; margin: 0;">
-                                            <a>{{ class.name }}</a>
+                                            <a>{{ class.className }}</a>
                                             <br />
-                                            <small>Instructor Name:
-                                                {% for instructor in allInstructors %}
-                                                    {% if class.instructorID == instructor.id %}
-                                                        {{ instructor.name }}
-                                                    {% endif %}
-                                                {% endfor %}
+                                            <small>Instructor Name: {{ class.instructorName }}
                                             </small>
                                         </div>
 
                                         <div class="split" style="width: 25%; margin: 0;">
                                             <ul class="list-inline">
-                                                {#<form action="" method="get">#}
                                                 {% for user in class.users %}
                                                     <li>
-
                                                         <a href="/adminsearchusers?keyword={{ user.id }}">
                                                             <img src="images/{{ user.picture }}" class="avatar" alt="Avatar" value="{{ user.name }}">
                                                         </a>
-                                                        {#<input type="hidden" value="{{ user.id }}">#}
                                                     </li>
                                                 {% endfor %}
-                                                {#</form>#}
-                                                {#<li>#}
-                                                    {#<img src="images/user.png" class="avatar" alt="Avatar">#}
-                                                {#</li>#}
-                                                {#<li>#}
-                                                    {#<img src="images/user.png" class="avatar" alt="Avatar">#}
-                                                {#</li>#}
-                                                {#<li>#}
-                                                    {#<img src="images/user.png" class="avatar" alt="Avatar">#}
-                                                {#</li>#}
-                                                {#<li>#}
-                                                    {#<img src="images/user.png" class="avatar" alt="Avatar">#}
-                                                {#</li>#}
                                             </ul>
                                         </div>
 
@@ -291,11 +261,7 @@
                                             <tr>
 
                                                 <td>
-                                                    {% for instructor in allInstructors %}
-                                                        {% if class.instructorID == instructor.id %}
-                                                            {{ instructor.name }}
-                                                        {% endif %}
-                                                    {% endfor %}
+                                                    {{ class.instructorName|capitalize }}
                                                 </td>
                                                 <td>{{ class.duration }}</td>
                                                 <td>{{ class.startTime }}</td>
@@ -323,7 +289,6 @@
                                                         <select name="instructor" id="" style="width: 100%;">
                                                             {% for instructor in allInstructors %}
                                                                 {% if instructor.id == class.instructorID %}
-
                                                                     <option value="{{ instructor.id }}" selected>{{ instructor.name }} </option>
                                                                 {% else %}
 
@@ -391,13 +356,7 @@
                                 </div>
                             </td>
                         </tr>
-
-
                     {% endfor %}
-
-
-
-
                     </tbody>
                 </table>
                 <!-- end project list -->

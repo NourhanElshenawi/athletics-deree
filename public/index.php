@@ -22,13 +22,13 @@ if (file_exists($path . '/.env'))
 
 $router = new Router\Router();
 
-
 /** PUBLIC **/
 $router->get('/', 'MainController', 'index');
 $router->get('/test', 'MainController', 'test');
 $router->get('/login', 'MainController', 'login');
 $router->get('/calendar', 'MainController', 'calendar');
 $router->get('/fitnessProgram', 'MainController', 'fitnessProgram');
+$router->get('/realtimelogs', 'MainController', 'realtimeLogs');
 
 /** USER **/
 $router->get('/profile', 'MainController', 'profileStats');
@@ -38,47 +38,41 @@ $router->get('/register', 'MainController', 'register');
 $router->post('/registerclass', 'MainController', 'registerClass');
 $router->post('/unregisterclass', 'MainController', 'unregisterClass');
 $router->get('/signin', 'MainController', 'signin');
-$router->get('/realtimelogs', 'MainController', 'realtimeLogs');
 $router->get('/requestProgram', 'UserController', 'requestProgram');
 $router->post('/submitProgram', 'UserController', 'submitProgram');
-
-/** ADMIN **/
-//CLASSES SCHEDULE
-$router->get('/editschedule', 'MainController', 'editSchedule');
-$router->get('/editclass', 'MainController', 'editClass');
-$router->post('/addclass', 'MainController', 'addClass');
-$router->post('/deleteclass', 'MainController', 'deleteClass');
-$router->post('/updateclass', 'MainController', 'updateClass');
-$router->get('/adminsearchclasses', 'MainController', 'searchClasses');
-
-/** Trainer **/
-$router->get('/programRequests', 'TrainerController', 'programRequests');
-$router->post('/trainerResponse', 'TrainerController', 'trainerResponse');
-
-
 
 //CLASS REGISTRATIONS
 $router->get('/registrations', 'MainController', 'registrations');
 $router->get('/searchregistrations', 'MainController', 'searchRegistrations');
 
+/** ADMIN **/
+//CLASSES SCHEDULE
+$router->get('/editschedule', 'AdminController', 'editSchedule');
+$router->get('/editclass', 'AdminController', 'editClass');
+$router->post('/addclass', 'AdminController', 'addClass');
+$router->post('/deleteclass', 'AdminController', 'deleteClass');
+$router->post('/updateclass', 'AdminController', 'updateClass');
+$router->get('/adminsearchclasses', 'AdminController', 'searchClasses');
+
+
 //Users
-$router->get('/editusers', 'MainController', 'editUsers');
-$router->get('/adminsearchusers', 'MainController', 'searchUsers');
-$router->post('/updateuser', 'MainController', 'updateUser');
-$router->post('/deleteuser', 'MainController', 'deleteUser');
-$router->post('/add_multiple_users', 'MainController', 'addMultipleUsers');
-$router->post('/add_user', 'MainController', 'addUser');
+$router->get('/editusers', 'AdminController', 'editUsers');
+$router->get('/adminsearchusers', 'AdminController', 'searchUsers');
+$router->post('/updateuser', 'AdminController', 'updateUser');
+$router->post('/deleteuser', 'AdminController', 'deleteUser');
+$router->post('/add_multiple_users', 'AdminController', 'addMultipleUsers');
+$router->post('/add_user', 'AdminController', 'addUser');
 
 //STATS
-$router->get('/adminvisitstats', 'MainController', 'stats');
-$router->get('/adminstatsuser', 'MainController', 'userStats');
-$router->get('/logs', 'MainController', 'usersLogs');
-$router->post('/adminstatsyear', 'MainController', 'postStatsYear');
-$router->post('/adminstatsmonth', 'MainController', 'postStatsMonth');
-$router->post('/adminstatsday', 'MainController', 'postStatsDay');
-$router->post('/adminstatshour', 'MainController', 'postStatsHour');
+$router->get('/adminvisitstats', 'AdminController', 'stats');
+$router->post('/adminstatsyear', 'AdminController', 'postStatsYear');
+$router->post('/adminstatsmonth', 'AdminController', 'postStatsMonth');
+$router->post('/adminstatsday', 'AdminController', 'postStatsDay');
+$router->post('/adminstatshour', 'AdminController', 'postStatsHour');
 
 //Logs
+$router->get('/adminstatsuser', 'MainController', 'userStats');
+$router->get('/logs', 'MainController', 'usersLogs');
 $router->get('/adminlogssearchclasses', 'MainController', 'searchLogs');
 $router->get('/adminsearchrealtime', 'MainController', 'searchRealtimeLogs');
 
@@ -88,6 +82,11 @@ $router->get('/nurse-approved', 'NurseController', 'seeApprovedCertificates');
 $router->get('/nurse-rejected', 'NurseController', 'seeRejectedCertificates');
 $router->post('/approveCertificate', 'NurseController', 'approveCertificate');
 $router->post('/rejectCertificate', 'NurseController', 'rejectCertificate');
+
+/** Trainer **/
+$router->get('/programRequests', 'TrainerController', 'programRequests');
+$router->post('/trainerResponse', 'TrainerController', 'trainerResponse');
+
 
 
 ////See inside $router

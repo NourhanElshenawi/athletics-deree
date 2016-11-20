@@ -70,7 +70,12 @@ class DB
 
     public function getClasses()
     {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.classes");
+
+        $stmt = $this->conn->prepare("select *, classes.name AS className, instructors.name AS instructorName
+                                      from {$this->dbname}.classes
+                                      join {$this->dbname}.instructors
+                                      on classes.instructorID = instructors.id");
+
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -179,9 +184,12 @@ class DB
 
     public function searchClasses($keyword)
     {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.classes WHERE name LIKE ?");
-
-            $stmt->bindValue(1, $keyword);
+        $stmt = $this->conn->prepare("select *, classes.name AS className, instructors.name AS instructorName
+                                      from {$this->dbname}.classes
+                                      join {$this->dbname}.instructors
+                                      on classes.instructorID = instructors.id
+                                      WHERE instructors.name LIKE :keyword or classes.name LIKE :keyword");
+            $stmt->bindParam(':keyword', $keyword);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();

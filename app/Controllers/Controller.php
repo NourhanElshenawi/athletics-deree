@@ -4,6 +4,7 @@ namespace Nourhan\Controllers;
 
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use Nourhan\Database\DB;
 
 class Controller
 {
@@ -18,4 +19,5 @@ class Controller
         $this->twig->addExtension(new \Twig_Extension_Debug());
         $this->twig->addGlobal('session', $_SESSION);
     }
+
 }
