@@ -25,7 +25,7 @@ $router = new Router\Router();
 /** PUBLIC **/
 $router->get('/', 'MainController', 'index');
 $router->get('/test', 'MainController', 'test');
-$router->get('/login', 'MainController', 'login');
+$router->get('/login', 'UserController', 'login');
 $router->get('/calendar', 'MainController', 'calendar');
 $router->get('/fitnessProgram', 'MainController', 'fitnessProgram');
 $router->get('/realtimelogs', 'MainController', 'realtimeLogs');
