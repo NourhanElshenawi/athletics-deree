@@ -8,7 +8,6 @@
 
 namespace Nourhan\Controllers;
 
-
 use Nourhan\Database\DB;
 
 class UserController extends Controller

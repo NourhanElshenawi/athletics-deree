@@ -69,8 +69,6 @@ class MainController extends Controller
 
         return $classes;
     }
-/*****CUSTOMER*****/
-
   /** Admin **/
     public function userStats(){
 
@@ -157,7 +155,5 @@ class MainController extends Controller
         echo "NEEDS IMPLEMENTATION!";
 
     }
-
-    /*********USER********/
 
 }
