@@ -408,13 +408,33 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUserRegistrations($id)
     {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.registrations WHERE userID = ?");
-        $stmt->bindValue(1, $id);
+        $stmt = $this->conn->prepare("select *
+                                      from {$this->dbname}.registrations
+                                      join {$this->dbname}.classes
+                                      on registrations.classID = classes.id
+                                      WHERE registrations.userID =:id ORDER BY registrations.id");
+        $stmt->bindParam(':id', $id);
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
 
+        return $result;
+    }
+
+    public function getUserRegistrationsForClass($id, $classID)
+    {
+        $stmt = $this->conn->prepare("select *
+                                      from {$this->dbname}.registrations
+                                      join {$this->dbname}.classes
+                                      on registrations.classID = classes.id
+                                      WHERE registrations.userID =:id AND registrations.classID=:classID");
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':classID', $classID);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
         return $result;
     }
 
@@ -619,21 +639,49 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function unregisterClass($id, $classID)
     {
-        $stmt = $this->conn->prepare("delete from {$this->dbname}.registrations WHERE userID = ? and classID = ?");
-        $stmt->bindValue(1,$id);
-        $stmt->bindValue(2,$classID);
-        $stmt->execute();
+        if($this->getUserRegistrationsForClass($id,$classID)) {
+            $stmt = $this->conn->prepare("delete from {$this->dbname}.registrations
+                                      WHERE userID =:userID and classID =:classID");
+            $stmt->bindParam(':userID', $id);
+            $stmt->bindParam(':classID', $classID);
+            $stmt->execute();
+
+            $result['success'] = true;
+            $result['msg'] = "Unregistered!";
+            return $result;
+        }
+        else{
+            $result['success'] = false;
+            $result['msg'] = "You're not Registered for This Class anyway";
+            return $result;
+        }
     }
 
     public function registerClass($id, $classID)
     {
-        try{
-            $stmt = $this->conn->prepare("insert into {$this->dbname}.registrations (userID, classID) VALUES  (?, ?)");
-            $stmt->bindValue(1,$id);
-            $stmt->bindValue(2,$classID);
-            $stmt->execute();
-        } catch (Exception $e) {
-            return false;
+//        return json_encode($this->getUserRegistrationsForClass($id,$classID));
+        if(!$this->getUserRegistrationsForClass($id,$classID)) {
+            try {
+                $stmt = $this->conn->prepare("insert into {$this->dbname}.registrations
+                                            (userID, classID) VALUES  (?, ?)");
+                $stmt->bindValue(1, $id);
+                $stmt->bindValue(2, $classID);
+                $stmt->execute();
+
+                $result['success'] = true;
+                $result['msg'] = "Registered!";
+                return $result;
+            } catch (Exception $e) {
+
+                $result['success'] = false;
+                $result['msg'] = "Could Not Register for Class!";
+                return $result;
+            }
+        }
+        else {
+            $result['success'] = false;
+            $result['msg'] = "Already Registered For This Class";
+            return $result;
         }
     }
 

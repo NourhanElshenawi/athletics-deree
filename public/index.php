@@ -31,13 +31,13 @@ $router->get('/fitnessProgram', 'MainController', 'fitnessProgram');
 $router->get('/realtimelogs', 'MainController', 'realtimeLogs');
 
 /** USER **/
-$router->get('/profile', 'MainController', 'profileStats');
-$router->post('/profile', 'MainController', 'userLogin');
-$router->get('/logout', 'MainController', 'logout');
-$router->get('/register', 'MainController', 'register');
-$router->post('/registerclass', 'MainController', 'registerClass');
-$router->post('/unregisterclass', 'MainController', 'unregisterClass');
-$router->get('/signin', 'MainController', 'signin');
+$router->get('/profile', 'UserController', 'profileStats');
+$router->post('/profile', 'UserController', 'userLogin');
+$router->get('/logout', 'UserController', 'logout');
+$router->get('/register', 'UserController', 'register');
+$router->post('/registerclass', 'UserController', 'registerClass');
+$router->post('/unregisterclass', 'UserController', 'unregisterClass');
+$router->get('/signin', 'UserController', 'signin');
 $router->get('/requestProgram', 'UserController', 'requestProgram');
 $router->post('/submitProgram', 'UserController', 'submitProgram');
 

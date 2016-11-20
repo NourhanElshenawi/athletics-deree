@@ -117,7 +117,7 @@
                                     var parseTime = time.split(":");
                                     console.log(parseTime[0]);
                                     events.push({
-                                        title: '{{ class.name }}',
+                                        title: '{{ class.className }}',
                                         start: new Date(column_date.setHours(parseTime[0], parseTime[1])),
                                         end: new Date(column_date.setMinutes({{ class.duration }})),
 //                                        end: new Date(column_date.setMinutes(90)),
@@ -190,7 +190,6 @@
 {% block content %}
 
     <div>
-        {#<img src="http://placehold.it/300x300" alt="">#}
         <img src="images/{{ session.user.picture }}" style="width: 5%; height: 10%;" alt="">
         <p style="font-weight: bold; font-size: large; padding: 0;">Name: {{ session.user.name }}</p>
         <p style="font-weight: bold; font-size: large; padding: 0;">ID: {{ session.user.id }}</p>
@@ -199,13 +198,10 @@
 
     <div id="fullcalendar" style="width: 50%; display: inline-block;"></div>
 
-
-
     <script>
         Chart.defaults.global.legend = {
             enabled: false
         };
-
         var ctx = document.getElementById("mybarChart");
         var mybarChart = new Chart(ctx, {
             type: 'bar',
@@ -232,25 +228,16 @@
                     data: [
 //                            51, 30, 40, 28, 92, 50, 45
                         {% for key,value in vals %}
-//                        "January", "February", "March", "April", "May", "June", "July"
                         {% if loop.last %}
                         {{ value }}
                         {% else %}
                         {{ value }},
                         {% endif %}
-
                         {% endfor %}
                     ]
                 }
-//                , {
-//                    label: '# of Votes',
-//                    backgroundColor: "#03586A",
-//                    data: [41, 56, 25, 48, 72, 34, 12]
-//                }
-
                 ]
             },
-
             options: {
                 scales: {
                     yAxes: [{
@@ -271,9 +258,7 @@
         {#<div class="col-md-12">#}
         <div class="x_panel2">
             <div class="x_title">
-                <h2 style="width: auto; margin-right: 3%;">Classes</h2>
-
-                <button class="fa fa-plus add" style="margin-top: 1%; border-radius: 25px;"></button>
+                <h2 style="width: auto; margin-right: 3%; color: #fff!important">Classes</h2>
 
                 <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/adminsearchclasses">
                     <label style="display: inline-block;">
@@ -286,10 +271,6 @@
                 <div class="clearfix"></div>
             </div>
             <div>
-                {#class="x_content"#}
-                {#<p>Simple table with project listing with progress and editing options</p>#}
-
-
                 <!-- start project list -->
                 <table class="table table-striped projects">
                     <thead>
@@ -298,8 +279,8 @@
                         <th>#</th>
                         <th>Class Name</th>
 
-                        <th>Team Members</th>
-                        <th>Project Progress</th>
+                        <th>Sample of Friends Registered </th>
+                        <th>Class Capacity so Far</th>
 
                     </tr>
                     </thead>
@@ -322,14 +303,8 @@
                                         </div>
 
                                         <div class="split" style="width: 32%; margin: 0;">
-                                            <a>{{ class.name }}</a>
-                                            <br />
-                                            <small>Instructor Name:
-                                                {% for instructor in allInstructors %}
-                                                    {% if class.instructorID == instructor.id %}
-                                                        {{ instructor.name }}
-                                                    {% endif %}
-                                                {% endfor %}
+                                            <p style="padding: 0;">{{ class.className|capitalize }}</p>
+                                            <small>Instructor: {{ class.instructorName|capitalize }}
                                             </small>
                                         </div>
 
@@ -368,14 +343,14 @@
 
                                             {% if class in userClasses %}
                                                 <li>
-                                                    <a class="dropdown-toggle unregisterClass" data-toggle="dropdown" role="button" aria-expanded="false" value="{{ class.id }}">
+                                                    <a class="dropdown-toggle unregisterClass" data-toggle="dropdown" role="button" aria-expanded="false" value="{{ class.classID }}">
                                                         <i class="fa fa-check-circle"></i>
                                                     </a>
                                                 </li>
                                                 {% else %}
 
                                                     <li>
-                                                        <a class="dropdown-toggle registerClass" data-toggle="dropdown" role="button" aria-expanded="false" value="{{ class.id }}">
+                                                        <a class="dropdown-toggle registerClass" data-toggle="dropdown" role="button" aria-expanded="false" value="{{ class.classID }}">
                                                             <i class="fa fa-plus"></i>
                                                         </a>
                                                     </li>
@@ -397,18 +372,13 @@
                                                 <th>Current Capacity</th>
                                                 <th>Location</th>
                                                 <th>Days</th>
-                                                <th>  </th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
 
                                                 <td>
-                                                    {% for instructor in allInstructors %}
-                                                        {% if class.instructorID == instructor.id %}
-                                                            {{ instructor.name }}
-                                                        {% endif %}
-                                                    {% endfor %}
+                                                    {{ class.instructorName|capitalize }}
                                                 </td>
                                                 <td>{{ class.duration }}</td>
                                                 <td>{{ class.startTime }}</td>
@@ -419,79 +389,13 @@
                                                     <ul>
                                                         {% for key, value in class.days %}
                                                             {% if value == 1 %}
-                                                                <li>{{ key }}</li>
+                                                                <li>{{ key|capitalize }}</li>
                                                             {% endif %}
                                                         {% endfor %}
                                                     </ul>
                                                 </td>
 
                                                 <td></td>
-                                            </tr>
-                                            <tr style="display: none;" class="updateInfo">
-                                                <form action="/updateclass" method="post">
-
-                                                    <td>
-                                                        {#make sure to add that#}
-                                                        {#<input type="" id="endTime" name="instructor" min="08:00" max="21:00" value="{{ class.endTime }}">#}
-                                                        <select name="instructor" id="" style="width: 100%;">
-                                                            {% for instructor in allInstructors %}
-                                                                {% if instructor.id == class.instructorID %}
-
-                                                                    <option value="{{ instructor.id }}" selected>{{ instructor.name }} </option>
-                                                                {% else %}
-
-                                                                    <option value="{{ instructor.id }}">{{ instructor.name }}</option>
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                        </select>
-                                                    </td>
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="number" id="duration" name="duration" min="1" max="100" value="{{ class.duration }}">
-                                                    </td>
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="time" id="startTime" name="startTime" min="08:00" max="21:00" value="{{ class.startTime }}">
-                                                    </td>
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="number" id="capacity" name="capacity" min="1" max="30" value="{{ class.capacity }}">
-                                                    </td>
-
-                                                    <td>
-                                                        {{ class.currentCapacity }}
-                                                    </td>
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="text" id="location" name="location" value="{{ class.location }}">
-                                                    </td>
-
-                                                    <td>
-
-                                                        <select name="" id="" multiple>
-
-
-
-                                                            {% for key, value in class.days %}
-                                                                {% if value == 1 %}
-
-                                                                    <option value="{{ key }}" selected> {{ key }}</option>
-                                                                {% else %}
-
-                                                                    <option value="{{ key }}"> {{ key }}</option>
-                                                                {% endif %}
-                                                            {% endfor %}
-
-                                                        </select>
-                                                    </td>
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="hidden" name="id" value="{{ class.id }}">
-
-                                                        {#remove unnecessary attributes#}
-                                                        <button type="submit" value="{{ class.id }}">Update</button>
-                                                    </td>
-                                                </form>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -537,6 +441,7 @@
 //                jQuery(this).closest('.x_panel').remove();
                 console.log(jQuery(this).attr('value'));
                 console.log({{ session.user.id }});
+                var $icon = jQuery(this);
 
                 jQuery.ajax(
                         {
@@ -548,23 +453,25 @@
                             },
                             success: function (msg) {
 
-                                console.log("SUCCESS AJAX!");
+                                console.log(msg);
 
                             }
                         }
                 );
+                $icon.toggleClass('unregisterClass');
+                $icon.toggleClass('registerClass');
+                console.log($icon);
+                $icon.find('i').toggleClass('fa-check-circle');
+                $icon.find('i').toggleClass(' fa-plus');
                 location.reload();
             }
-
         });
 
         jQuery('.registerClass').click(function() {
-
-
-
 //                jQuery(this).closest('.x_panel').remove();
                 console.log(jQuery(this).attr('value'));
-                console.log({{ session.user.id }});
+            console.log({{ session.user.id }});
+            var $icon = jQuery(this);
 
                 jQuery.ajax(
                         {
@@ -575,13 +482,16 @@
                                 userID: {{ session.user.id }}
                             },
                             success: function (msg) {
-
-                                console.log("SUCCESS AJAX!");
-
+                                console.log(msg);
                             }
                         }
                 );
-                location.reload();
+            $icon.toggleClass('registerClass');
+            $icon.toggleClass('unregisterClass');
+            console.log($icon);
+            $icon.find('i').toggleClass(' fa-plus');
+            $icon.find('i').toggleClass('fa-check-circle');
+            location.reload();
         });
 
         function toggle($this) {
@@ -646,9 +556,7 @@
 
     <script>
         jQuery('.edit').click(function() {
-
             var $id = jQuery(this).attr('value');
-
             jQuery(this).closest('.x_content').css('display','block');
             jQuery(this).closest('.x_content').css('style','');
 
@@ -671,10 +579,6 @@
     {#<script>jQuery.noConflict();</script>#}
     <script src="js/custom.min.js"></script>
 {% endblock content %}
-
-{% block info %}
-    {{ include('info.twig') }}
-{% endblock info %}
 
 
 

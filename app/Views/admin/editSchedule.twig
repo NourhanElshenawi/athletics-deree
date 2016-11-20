@@ -128,7 +128,7 @@
                                     <select name="days[]" id="" multiple style="width: 120%;"required>
                                         {{ classExample.name }}
                                         {% for key, value in classExample.days %}
-                                            <option value="{{ key }}"> {{ key }}</option>
+                                            <option value="{{ key }}"> {{ key|capitalize}}</option>
                                         {% endfor %}
                                     </select>
                                 </td>
