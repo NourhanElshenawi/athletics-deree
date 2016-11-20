@@ -10,7 +10,6 @@
     <link href="css/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
     <link href="css/green.css" rel="stylesheet">
-
     <!-- Custom Theme Style -->
     <link href="css/custom.min.css" rel="stylesheet">
     <style>
@@ -23,9 +22,6 @@
         .split {
             display: inline-block;
         }
-
-
-
     </style>
 
     <script src="js/bootstrap.js"></script>
@@ -131,10 +127,6 @@
                                         duration: "{{ class.duration }}"
                                     });
                                 }
-
-
-
-
                             } // for loop
 
                             // return events generated
@@ -389,9 +381,6 @@
                                                     </li>
 
                                             {% endif %}
-
-
-
                                         </ul>
                                         <div class="clearfix"></div>
                                     </div>
@@ -502,11 +491,7 @@
                                                         {#remove unnecessary attributes#}
                                                         <button type="submit" value="{{ class.id }}">Update</button>
                                                     </td>
-
-
-
                                                 </form>
-
                                             </tr>
                                             </tbody>
                                         </table>
@@ -515,67 +500,34 @@
                                 </div>
                             </td>
                         </tr>
-
-
                     {% endfor %}
-
-
-
-
                     </tbody>
                 </table>
                 <!-- end project list -->
-
             </div>
         </div>
     </div>
     </div>
 
-
-
     <script>
         jQuery(document).ready(function() {
-            console.log("HIII");
-
             jQuery('.collapse-link').click(function() {
                 toggle(this);
-
-            })  ;
-
-
+            });
             jQuery('.close-link').click(function () {
                 var $BOX_PANEL = jQuery(this).closest('.x_panel');
-//                console.log(jQuery(this).closest('.delete').attr('value'));
-
-//                $BOX_PANEL.remove();
             });
-
-
-
-
-
-
         });
         jQuery('.addClass').toggle();
         jQuery('.add').click(function() {
-
             jQuery('.addClass').toggle();
-//            toggleOnce(this);
-//            jQuery(this).toggleClass('fa-chevron-down');
-//            jQuery(this).find('i').toggleClass('fa-chevron-up');
-//            jQuery('.updateInfo').toggle();
-
         });
-
         jQuery('.edit').click(function() {
-
             toggleOnce(this);
             jQuery(this).toggleClass('fa-chevron-down');
             jQuery(this).find('i').toggleClass('fa-chevron-up');
             jQuery('.updateInfo').toggle();
-
         });
-
         jQuery('.unregisterClass').click(function() {
 
 
@@ -703,13 +655,6 @@
         });
 
     </script>
-
-
-
-
-
-
-
     <!-- jQuery -->
     {#<script src="js/jquery.min.js"></script>#}
     <!-- Bootstrap -->
@@ -725,10 +670,6 @@
     <!-- Custom Theme Scripts -->
     {#<script>jQuery.noConflict();</script>#}
     <script src="js/custom.min.js"></script>
-
-
-
-
 {% endblock content %}
 
 {% block info %}
