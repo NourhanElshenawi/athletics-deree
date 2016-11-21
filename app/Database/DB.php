@@ -369,12 +369,12 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsers()
     {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.users");
+        $stmt = $this->conn->prepare("select *
+                                      from {$this->dbname}.users");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
-
         return $result;
     }
 
@@ -719,13 +719,14 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsersLogs(){
 
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs
+                                      join {$this->dbname}.users
+                                      on logs.userID = users.id");
 
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
-
         return $result;
 
     }

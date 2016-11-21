@@ -231,7 +231,7 @@
                                             {#<a>{{ user.name }}</a>#}
                                             {#<br />#}
                                             {#<large>#}
-                                            <p>{{ user.name }}</p>
+                                            <p>{{ user.name|capitalize }}</p>
 
                                         </div>
 
@@ -261,17 +261,22 @@
                                             <p>{{ user.password }}</p>
                                         </div>
 
-                                        <div class="split" style="width: 15%">
-                                            <p>
-                                                {% if user.admin == 1 %}
-                                                    {{ admin }}
-
-                                                    {% else %}
-
-                                                    {{ notAdmin }}
-
-                                                {% endif %}
-                                            </p>
+                                        <div class="split" style="width: 15%; vertical-align: middle;">
+                                            {% if user.admin == 1 %}
+                                                <p style="padding: 0; font-size: medium;">{{ "Administrator" }}</p>
+                                            {% endif %}
+                                            {% if user.student == 1  %}
+                                                <p style="padding: 0; font-size: medium;">{{ "Student" }}</p>
+                                            {% endif %}
+                                            {% if user.faculty == 1  %}
+                                                <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
+                                            {% endif %}
+                                            {% if user.staff == 1  %}
+                                                <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
+                                            {% endif %}
+                                            {% if user.external == 1  %}
+                                                <p style="padding: 0; font-size: medium;">{{ "External Paying" }}</p>
+                                            {% endif %}
                                         </div>
 
 
@@ -328,13 +333,19 @@
                                             <tr>
 
                                                 <td>
-                                                    {{ user.name }}
+                                                    {{ user.name|capitalize }}
                                                 </td>
                                                 <td>{{ user.email }}</td>
                                                 <td>{{ user.password }}</td>
                                                 <td>{{ user.birthDate }}</td>
-                                                <td>{{ user.gender }}</td>
-                                                <td>TEMP</td>
+                                                <td>{{ user.gender|capitalize }}</td>
+                                                <td>
+                                                    <div>
+                                                        {% for registeredClass in user.classes %}
+                                                            <p style="padding: 0; font-size: medium;"> {{ registeredClass.name|capitalize }}</p>
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <ul>
                                                             {% if user.membershipType == 1 %}
@@ -345,14 +356,23 @@
                                                     </ul>
                                                 </td>
                                                 <td>
-                                                    {% if user.admin == 1 %}
-                                                        {{ admin }}
-
-                                                    {% else %}
-
-                                                        {{ notAdmin }}
-
-                                                    {% endif %}
+                                                    <div>
+                                                        {% if user.admin == 1 %}
+                                                            <p style="padding: 0; font-size: medium;">{{ "Administrator" }}</p>
+                                                        {% endif %}
+                                                        {% if user.student == 1  %}
+                                                            <p style="padding: 0; font-size: medium;">{{ "Student" }}</p>
+                                                        {% endif %}
+                                                        {% if user.faculty == 1  %}
+                                                            <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
+                                                        {% endif %}
+                                                        {% if user.staff == 1  %}
+                                                            <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
+                                                        {% endif %}
+                                                        {% if user.external == 1  %}
+                                                            <p style="padding: 0; font-size: medium;">{{ "External Paying" }}</p>
+                                                        {% endif %}
+                                                    </div>
                                                 </td>
                                                 <td></td>
                                             </tr>
@@ -391,28 +411,15 @@
                                                     <td>
 
                                                         <select name="" id="" multiple>
-
                                                             {% for class in classes %}
-
-                                                                {#{% for registered in user.registrations %}#}
-
-                                                                    {#{% if registered.id == class.id %}#}
-
-                                                                        {#<option value="{{ class.id }}" selected> {{ class.name }}</option>#}
-                                                                    {#{% endif %}#}
-
-                                                                {#{% endfor %}#}
-
-                                                                {% if class in user.registrations %}
+                                                            {% for registeredClass in user.classes %}
+                                                                {% if class.id == registeredClass.id %}
                                                                     <option value="{{ class.id }}" selected> {{ class.name }}</option>
                                                                     {% else %}
-
                                                                         <option value="{{ class.id }}"> {{ class.name }}</option>
                                                                 {% endif %}
-
-
                                                             {% endfor %}
-
+                                                            {% endfor %}
                                                         </select>
                                                     </td>
 
@@ -430,13 +437,31 @@
 
                                                     <td>
 
-                                                        <select name="admin" id="admin" style="width: 100%;">
+                                                        <select name="classification" id="classification" style="width: 100%;" multiple>
                                                             {% if user.admin == 1 %}
-                                                                <option value="1" selected>{{ admin }}</option>
-                                                                <option value="0">{{ notAdmin }}</option>
-                                                            {% else %}
-                                                                <option value="1">{{ admin }}</option>
-                                                                <option value="0" selected>{{ notAdmin }}</option>
+                                                                <option value="1" selected>{{ "Administrator" }}</option>
+                                                                {% else %}
+                                                                <option value="0">{{ "Administrator" }}</option>
+                                                            {% endif %}
+                                                            {% if user.student == 1 %}
+                                                                <option value="1" selected>{{ "Student" }}</option>
+                                                                {% else %}
+                                                                <option value="0">{{ "Student" }}</option>
+                                                            {% endif %}
+                                                            {% if user.faculty == 1 %}
+                                                                <option value="1" selected>{{ "Faculty" }}</option>
+                                                                {% else %}
+                                                                <option value="0">{{ "Faculty" }}</option>
+                                                            {% endif %}
+                                                            {% if user.staff == 1 %}
+                                                                <option value="1" selected>{{ "Staff" }}</option>
+                                                                {% else %}
+                                                                <option value="0">{{ "Staff" }}</option>
+                                                            {% endif %}
+                                                            {% if user.external == 1 %}
+                                                                <option value="1" selected>{{ "External Paying" }}</option>
+                                                                {% else %}
+                                                                <option value="0">{{ "External Paying" }}</option>
                                                             {% endif %}
                                                         </select>
 
@@ -460,7 +485,6 @@
                                 </div>
                             </td>
                         </tr>
-
 
                     {% endfor %}
 

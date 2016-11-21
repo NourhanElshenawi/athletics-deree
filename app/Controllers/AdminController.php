@@ -188,38 +188,28 @@ class AdminController extends Controller
 //    }
 
     ////////EDIT USERS
-    public function getUsersWithRegistrations()
+    public function getUsersWithRegistrations($users)
     {
-
         $db = new DB();
-        $users = $db->getUsers();
 
-        foreach ($users as $key=>$user )
+        foreach ($users as $key=>$user){
 
-        {
-            $registrations = $db->getUserRegistrations($user['id']);
-
-            foreach ($registrations as $registration){
-
-                $users[$key]['registrations'][] = $db->getClass($registration['classID']);
-
-            }
-
+            $users[$key]['classes']= $db->getUserRegistrations($user['id']);
         }
 
         return $users;
-
     }
 
     public function editUsers()
     {
         $db = new DB();
 
-        $users = $this->getUsersWithRegistrations();
+        $users = $db->getUsers();
+        $users = $this->getUsersWithRegistrations($users);
         $classes = $db->getClasses();
 
 
-        echo $this->twig->render('admin/editUsers.twig', array('users'=> $users, 'classes'=>$classes));
+        echo $this->twig->render('admin/editUsers.twig', array('users'=> $users, 'classes'=> $classes));
 
     }
 
@@ -227,9 +217,11 @@ class AdminController extends Controller
     {
         $db = new DB();
 
-        $user = $db->searchUsers($_GET['keyword']);
+        $users = $db->searchUsers($_GET['keyword']);
+        $users = $this->getUsersWithRegistrations($users);
+        $classes = $db->getClasses();
 
-        echo $this->twig->render('admin/editUsers.twig', array('users'=> $user));
+        echo $this->twig->render('admin/editUsers.twig', array('users'=> $users, 'classes'=> $classes));
 
     }
 

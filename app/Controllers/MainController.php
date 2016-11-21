@@ -99,9 +99,8 @@ class MainController extends Controller
 
         $db = new DB();
         $logs = $db->getUsersLogs();
-        $users = $db->getUsers();
 
-        echo $this->twig->render('admin/logs.twig', array('users'=>$users, 'logs'=>$logs));
+        echo $this->twig->render('admin/logs.twig', array('logs'=>$logs));
 
     }
 
