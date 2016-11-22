@@ -191,8 +191,6 @@
                     </form>
 
                 </div>
-
-
                 <!-- start project list -->
                 <table class="table table-striped projects">
                     <thead>
@@ -209,8 +207,6 @@
                     </thead>
                     <tbody>
 
-
-
                     {% for user in users %}
                         <tr style="padding: 0;">
 
@@ -219,39 +215,13 @@
                                 <div class="x_panel" style="padding: 0;">
 
                                     <div class="x_title" style="padding: 4px; border-bottom: none;">
-
-                                        {#<h2>Stripped table <small>Stripped table subtitle</small></h2>#}
                                         <div class="split" style="width: 5%">
-                                            {#style="width: 5%; margin: 0;"#}
                                             {{ loop.index }}
                                         </div>
 
                                         <div class="split" style="width: 15%">
-                                            {#style="width: 32%; margin: 0;"#}
-                                            {#<a>{{ user.name }}</a>#}
-                                            {#<br />#}
-                                            {#<large>#}
                                             <p>{{ user.name|capitalize }}</p>
-
                                         </div>
-
-                                        {#CLASSES REGISTERED#}
-                                        {#<div class="split" style="width: 25%; margin: 0;">#}
-                                            {#<ul class="list-inline">#}
-                                                {#<li>#}
-                                                    {#<img src="images/user.png" class="avatar" alt="Avatar">#}
-                                                {#</li>#}
-                                                {#<li>#}
-                                                    {#<img src="images/user.png" class="avatar" alt="Avatar">#}
-                                                {#</li>#}
-                                                {#<li>#}
-                                                    {#<img src="images/user.png" class="avatar" alt="Avatar">#}
-                                                {#</li>#}
-                                                {#<li>#}
-                                                    {#<img src="images/user.png" class="avatar" alt="Avatar">#}
-                                                {#</li>#}
-                                            {#</ul>#}
-                                        {#</div>#}
 
                                         <div class="split" style="width: 16%">
                                             <p>{{ user.email }}</p>
@@ -272,7 +242,10 @@
                                                 <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
                                             {% endif %}
                                             {% if user.staff == 1  %}
-                                                <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
+                                                <p style="padding: 0; font-size: medium;">{{ "Staff" }}</p>
+                                            {% endif %}
+                                            {% if user.alumni == 1  %}
+                                                <p style="padding: 0; font-size: medium;">{{ "Alumni" }}</p>
                                             {% endif %}
                                             {% if user.external == 1  %}
                                                 <p style="padding: 0; font-size: medium;">{{ "External Paying" }}</p>
@@ -290,7 +263,6 @@
                                                 </a>
                                                 <ul class="dropdown-menu" role="menu">
 
-                                                    {#<form action="/editclass" method="post" style="margin: 0;">#}
                                                     <li>
 
                                                         <input type="hidden" id="edit" name="edit" value="{{ user.id }}">
@@ -367,7 +339,10 @@
                                                             <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
                                                         {% endif %}
                                                         {% if user.staff == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
+                                                            <p style="padding: 0; font-size: medium;">{{ "Staff" }}</p>
+                                                        {% endif %}
+                                                        {% if user.alumni == 1  %}
+                                                            <p style="padding: 0; font-size: medium;">{{ "Alumni" }}</p>
                                                         {% endif %}
                                                         {% if user.external == 1  %}
                                                             <p style="padding: 0; font-size: medium;">{{ "External Paying" }}</p>
@@ -436,7 +411,6 @@
                                                     </td>
 
                                                     <td>
-
                                                         <select name="classification" id="classification" style="width: 100%;" multiple>
                                                             {% if user.admin == 1 %}
                                                                 <option value="1" selected>{{ "Administrator" }}</option>
@@ -457,6 +431,11 @@
                                                                 <option value="1" selected>{{ "Staff" }}</option>
                                                                 {% else %}
                                                                 <option value="0">{{ "Staff" }}</option>
+                                                            {% endif %}
+                                                            {% if user.alumni == 1 %}
+                                                                <option value="1" selected>{{ "Alumni" }}</option>
+                                                            {% else %}
+                                                                <option value="0">{{ "Alumni" }}</option>
                                                             {% endif %}
                                                             {% if user.external == 1 %}
                                                                 <option value="1" selected>{{ "External Paying" }}</option>

@@ -19,6 +19,8 @@
 
 {% block content %}
 
+    {#{{ dump(months) }}#}
+
     <div>
         <ul class="nav nav-tabs">
             <li id="years" role="presentation" class="active"><a style="font-weight: bold; font-size: large;">Years</a></li>
@@ -49,6 +51,23 @@
             <input type="number" min="16" name="age" id="ageUpper" value="16" disabled>
             <p style="display: inline-block;">To:</p>
             <input type="number" min="16" name="age" id="ageLower" value="80" disabled>
+
+            {#<select name="type" id="type" style="display: block;" required>#}
+                {#<option value="staff">Staff</option>#}
+                {#<option value="student">Student</option>#}
+                {#<option value="faculty">Faculty</option>#}
+                {#<option value="external">External</option>#}
+                {#<option value="alumni">Alumni</option>#}
+                {#<option value="admin">Admin</option>#}
+            {#</select>#}
+
+            <input type="checkbox" name="staff" id="staff" value="staff">Staff
+            <input type="checkbox" name="student" id="student" value="student">Student
+            <input type="checkbox" name="faculty" id="faculty" value="faculty">Faculty
+            <input type="checkbox" name="external" id="external" value="external">External Paying Customer
+            <input type="checkbox" name="alumni" id="alumni" value="alumni">Alumni
+            <input type="checkbox" name="admin" id="admin" value="admin">Admin
+
             <input type="submit" id="filter">
         </div>
 
@@ -246,9 +265,72 @@
         jQuery('#filter').click(function () {
             console.log("dfsgdfg");
 
-            var selectInput = document.getElementById("gender");
-            var selectValue = selectInput.options[selectInput.selectedIndex].value;
-            console.log(selectValue);
+            //checking for gender
+            var genderInput = document.getElementById("gender");
+            var genderValue = genderInput.options[genderInput.selectedIndex].value;
+            console.log(genderValue);
+
+            //checking for user type filters
+            var studentInput = jQuery('#student');
+            var studentValue = studentInput.is(':checked');
+
+            if(studentValue == true){
+                studentValue=1;
+            }else {
+                studentValue=0;
+            }
+            console.log(studentValue);
+
+            var staffInput = jQuery('#staff');
+            var staffValue = staffInput.is(':checked');
+
+            if(staffValue == true){
+                staffValue=1;
+            }else {
+                staffValue=0;
+            }
+            console.log(staffValue);
+
+            var alumniInput = jQuery('#alumni');
+            var alumniValue = alumniInput.is(':checked');
+            if(alumniValue == true){
+                alumniValue=1;
+            }else {
+                alumniValue=0;
+            }
+            console.log(alumniValue);
+
+            var externalInput = jQuery('#external');
+            var externalValue = externalInput.is(':checked');
+
+            if(externalValue == true){
+                externalValue=1;
+            }else {
+                externalValue=0;
+            }
+
+            console.log(externalValue);
+
+            var adminInput = jQuery('#admin');
+            var adminValue = adminInput.is(':checked');
+
+            if(adminValue == true){
+                adminValue=1;
+            }else {
+                adminValue=0;
+            }
+            console.log(adminValue);
+
+            var facultyInput = jQuery('#faculty');
+            var facultyValue = facultyInput.is(':checked');
+
+            if(facultyValue == true){
+                facultyValue=1;
+            }else {
+                facultyValue=0;
+            }
+            console.log(facultyValue);
+
             //get age range
             var year = new Date().getFullYear();
             console.log(year);
@@ -274,9 +356,15 @@
                     type: "POST",
                     url: '/adminstatsyear',
                     data: {
-                        gender: selectValue,
+                        gender: genderValue,
                         ageUpper: ageUpper,
-                        ageLower: ageLower
+                        ageLower: ageLower,
+                        student: studentValue,
+                        staff: staffValue,
+                        alumni: alumniValue,
+                        faculty: facultyValue,
+                        external: externalValue,
+                        admin: adminValue
                     },
                     success: function (year) {
                         console.log('Success Message: ' + year);
@@ -318,9 +406,15 @@
                     type: "POST",
                     url: '/adminstatsmonth',
                     data: {
-                        gender: selectValue,
+                        gender: genderValue,
                         ageUpper: ageUpper,
-                        ageLower: ageLower
+                        ageLower: ageLower,
+                        student: studentValue,
+                        staff: staffValue,
+                        alumni: alumniValue,
+                        faculty: facultyValue,
+                        external: externalValue,
+                        admin: adminValue
                     },
                     success: function (months) {
 //                    vals = months;
@@ -368,9 +462,15 @@
                     type: "POST",
                     url: '/adminstatsday',
                     data: {
-                        gender: selectValue,
+                        gender: genderValue,
                         ageUpper: ageUpper,
-                        ageLower: ageLower
+                        ageLower: ageLower,
+                        student: studentValue,
+                        staff: staffValue,
+                        alumni: alumniValue,
+                        faculty: facultyValue,
+                        external: externalValue,
+                        admin: adminValue
                     },
                     success: function (day) {
 //                    vals = months;
@@ -417,9 +517,15 @@
                     type: "POST",
                     url: '/adminstatshour',
                     data: {
-                        gender: selectValue,
+                        gender: genderValue,
                         ageUpper: ageUpper,
-                        ageLower: ageLower
+                        ageLower: ageLower,
+                        student: studentValue,
+                        staff: staffValue,
+                        alumni: alumniValue,
+                        faculty: facultyValue,
+                        external: externalValue,
+                        admin: adminValue
                     },
                     success: function (hour) {
 //                    vals = months;

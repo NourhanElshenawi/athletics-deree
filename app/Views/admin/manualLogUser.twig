@@ -100,9 +100,7 @@
 
                                     <div class="x_title" style="padding: 4px; border-bottom: none;">
 
-                                        {#<h2>Stripped table <small>Stripped table subtitle</small></h2>#}
                                         <div class="split" style="width: 7%">
-                                            {#style="width: 5%; margin: 0;"#}
                                             {{ loop.index }}
                                         </div>
 
@@ -126,7 +124,10 @@
                                                 <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
                                             {% endif %}
                                             {% if user.staff == 1  %}
-                                                <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
+                                                <p style="padding: 0; font-size: medium;">{{ "Staff" }}</p>
+                                            {% endif %}
+                                            {% if user.alumni == 1  %}
+                                                <p style="padding: 0; font-size: medium;">{{ "Alumni" }}</p>
                                             {% endif %}
                                             {% if user.external == 1  %}
                                                 <p style="padding: 0; font-size: medium;">{{ "External Paying" }}</p>
@@ -151,174 +152,11 @@
                                         </ul>
                                         <div class="clearfix"></div>
                                     </div>
-
-                                    <div class="x_content update" style="padding: 0; display: none;">
-
-                                        <table class="table table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Age</th>
-                                                <th>Gender</th>
-                                                <th>Membership Type</th>
-                                                <th>Classification</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-
-                                                <td>
-                                                    {{ user.name|capitalize }}
-                                                </td>
-                                                <td>{{ user.email }}</td>
-                                                <td>{{ user.birthDate }}</td>
-                                                <td>{{ user.gender|capitalize }}</td>
-                                                <td>
-                                                    <ul>
-                                                        {% if user.membershipType == 1 %}
-                                                            <li>Paid</li>
-                                                        {% else %}
-                                                            <li>Non-Paid</li>
-                                                        {% endif %}
-                                                    </ul>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        {% if user.admin == 1 %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Administrator" }}</p>
-                                                        {% endif %}
-                                                        {% if user.student == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Student" }}</p>
-                                                        {% endif %}
-                                                        {% if user.faculty == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
-                                                        {% endif %}
-                                                        {% if user.staff == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
-                                                        {% endif %}
-                                                        {% if user.external == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "External Paying" }}</p>
-                                                        {% endif %}
-                                                    </div>
-                                                </td>
-                                                <td></td>
-                                            </tr>
-                                            <tr style="display: none;" class="updateInfo">
-                                                <form action="/updateuser" method="post">
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="text" id="name" name="name" value="{{ user.name }}">
-                                                    </td>
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="email" id="email" name="email" value="{{ user.email }}">
-                                                    </td>
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="text" id="password" name="password" value="{{ user.password }}">
-                                                    </td>
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="date" id="birthDate" name="birthDate" value="{{ user.birthDate }}">
-                                                    </td>
-
-                                                    <td>
-                                                        <select name="gender" id="gender" style="width: 100%;">
-                                                            {% if user.gender == "f" %}
-
-                                                                <option value="F" selected>F</option>
-                                                                <option value="M">M</option>
-                                                            {% else %}
-                                                                <option value="F">F</option>
-                                                                <option value="M" selected>M</option>
-                                                            {% endif %}
-                                                        </select>
-                                                    </td>
-
-                                                    <td>
-
-                                                        <select name="" id="" multiple>
-                                                            {% for class in classes %}
-                                                                {% for registeredClass in user.classes %}
-                                                                    {% if class.id == registeredClass.id %}
-                                                                        <option value="{{ class.id }}" selected> {{ class.name }}</option>
-                                                                    {% else %}
-                                                                        <option value="{{ class.id }}"> {{ class.name }}</option>
-                                                                    {% endif %}
-                                                                {% endfor %}
-                                                            {% endfor %}
-                                                        </select>
-                                                    </td>
-
-                                                    <td>
-                                                        <select name="membershipType" id="membershipType" style="width: 100%;">
-                                                            {% if user.membershipType == 1 %}
-                                                                <option value="1" selected>Paid</option>
-                                                                <option value="0">Non-Paid</option>
-                                                            {% else %}
-                                                                <option value="1">Paid</option>
-                                                                <option value="0" selected>Non-Paid</option>
-                                                            {% endif %}
-                                                        </select>
-                                                    </td>
-
-                                                    <td>
-
-                                                        <select name="classification" id="classification" style="width: 100%;" multiple>
-                                                            {% if user.admin == 1 %}
-                                                                <option value="1" selected>{{ "Administrator" }}</option>
-                                                            {% else %}
-                                                                <option value="0">{{ "Administrator" }}</option>
-                                                            {% endif %}
-                                                            {% if user.student == 1 %}
-                                                                <option value="1" selected>{{ "Student" }}</option>
-                                                            {% else %}
-                                                                <option value="0">{{ "Student" }}</option>
-                                                            {% endif %}
-                                                            {% if user.faculty == 1 %}
-                                                                <option value="1" selected>{{ "Faculty" }}</option>
-                                                            {% else %}
-                                                                <option value="0">{{ "Faculty" }}</option>
-                                                            {% endif %}
-                                                            {% if user.staff == 1 %}
-                                                                <option value="1" selected>{{ "Staff" }}</option>
-                                                            {% else %}
-                                                                <option value="0">{{ "Staff" }}</option>
-                                                            {% endif %}
-                                                            {% if user.external == 1 %}
-                                                                <option value="1" selected>{{ "External Paying" }}</option>
-                                                            {% else %}
-                                                                <option value="0">{{ "External Paying" }}</option>
-                                                            {% endif %}
-                                                        </select>
-
-                                                    </td>
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="hidden" name="id" value="{{ user.id }}">
-
-                                                        {#remove unnecessary attributes#}
-                                                        <button type="submit" value="{{ user.id }}">Update</button>
-                                                    </td>
-
-
-                                                </form>
-
-                                            </tr>
-                                            </tbody>
-                                        </table>
-
-                                    </div>
                                 </div>
                             </td>
                         </tr>
 
                     {% endfor %}
-
-
-
-
                     </tbody>
                 </table>
                 <!-- end project list -->
@@ -434,9 +272,6 @@
 
 
     </script>
-
-
-
     <!-- jQuery -->
     {#<script src="js/jquery.min.js"></script>#}
     <!-- Bootstrap -->

@@ -441,7 +441,6 @@ class AdminController extends Controller
     public function getMonthsLogsFilter()
     {
         $db = new DB();
-
         $monthsDB = $db->getUsersLogsMonthsFilter();
         $months = array();
         //create an array with months as string values
