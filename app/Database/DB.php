@@ -730,6 +730,35 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
 
     }
+    public function getLogsByKeyword($keyword){
+
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs
+                                      join {$this->dbname}.users
+                                      on logs.userID = users.id
+                                      WHERE DATE (logs.login) like :date or TIME (logs.login) like :time or
+                                      HOUR (logs.login) =:hour or
+                                      MONTH (logs.login) like :month or DAYOFWEEK (logs.login) like :day or
+                                      YEAR (logs.login) like :year or users.name like :name or 
+                                      users.email like :email or MONTHNAME (logs.login) like :monthName");
+
+        $stmt->bindParam(':date', $keyword);
+        $stmt->bindParam(':time', $keyword);
+        $stmt->bindParam(':hour', $keyword);
+        $stmt->bindParam(':name', $keyword);
+        $stmt->bindParam(':email', $keyword);
+        $stmt->bindParam(':month', $keyword);
+        $stmt->bindParam(':day', $keyword);
+        $stmt->bindParam(':month', $keyword);
+        $stmt->bindParam(':monthName', $keyword);
+        $stmt->bindParam(':year', $keyword);
+
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+        return $result;
+
+    }
 
     public function getRealtimeLogs(){
 

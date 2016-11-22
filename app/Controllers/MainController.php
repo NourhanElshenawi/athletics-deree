@@ -95,14 +95,6 @@ class MainController extends Controller
     }
 
     /***********LOGS**************/
-    public function usersLogs(){
-
-        $db = new DB();
-        $logs = $db->getUsersLogs();
-
-        echo $this->twig->render('admin/logs.twig', array('logs'=>$logs));
-
-    }
 
     public function realtimeLogs(){
         $db = new DB();
@@ -144,14 +136,5 @@ class MainController extends Controller
         echo $this->twig->render('realtimeLogs.twig', array('users'=>$users));
     }
 
-    public function searchLogs(){
-//        $db = new DB();
-//        $logs = $db->getUsersLogs();
-//        $users = $db->getUsers();
-//
-//        echo $this->twig->render('admin/logs.twig', array('users'=>$users, 'logs'=>$logs));
-        echo "NEEDS IMPLEMENTATION!";
-
-    }
 
 }

@@ -203,27 +203,33 @@ class AdminController extends Controller
     public function editUsers()
     {
         $db = new DB();
+        if(isset($_GET['keyword'])){
 
-        $users = $db->getUsers();
-        $users = $this->getUsersWithRegistrations($users);
-        $classes = $db->getClasses();
-
-
-        echo $this->twig->render('admin/editUsers.twig', array('users'=> $users, 'classes'=> $classes));
-
-    }
-
-    public function searchUsers()
-    {
-        $db = new DB();
-
-        $users = $db->searchUsers($_GET['keyword']);
-        $users = $this->getUsersWithRegistrations($users);
-        $classes = $db->getClasses();
+            $users = $db->searchUsers($_GET['keyword']);
+            $users = $this->getUsersWithRegistrations($users);
+            $classes = $db->getClasses();
+        }
+        else{
+            $users = $db->getUsers();
+            $users = $this->getUsersWithRegistrations($users);
+            $classes = $db->getClasses();
+        }
 
         echo $this->twig->render('admin/editUsers.twig', array('users'=> $users, 'classes'=> $classes));
 
     }
+
+//    public function searchUsers()
+//    {
+//        $db = new DB();
+//
+//        $users = $db->searchUsers($_GET['keyword']);
+//        $users = $this->getUsersWithRegistrations($users);
+//        $classes = $db->getClasses();
+//
+//        echo $this->twig->render('admin/editUsers.twig', array('users'=> $users, 'classes'=> $classes));
+//
+//    }
 
 
     public function updateUser()
@@ -515,6 +521,18 @@ class AdminController extends Controller
         return $days;
     }
 
+    //Logs
+    public function usersLogs(){
+
+        $db = new DB();
+        if(isset($_GET['keyword'])){
+            $logs = $db->getLogsByKeyword($_GET['keyword']);
+        }
+        else {
+            $logs = $db->getUsersLogs();
+        }
+        echo $this->twig->render('admin/logs.twig', array('logs'=>$logs));
+    }
 
 
 

@@ -57,7 +57,7 @@ $router->get('/searchregistrations', 'AdminController', 'searchRegistrations');
 
 //Users
 $router->get('/editusers', 'AdminController', 'editUsers');
-$router->get('/adminsearchusers', 'AdminController', 'searchUsers');
+//$router->get('/adminsearchusers', 'AdminController', 'searchUsers');
 $router->post('/updateuser', 'AdminController', 'updateUser');
 $router->post('/deleteuser', 'AdminController', 'deleteUser');
 $router->post('/add_multiple_users', 'AdminController', 'addMultipleUsers');
@@ -72,9 +72,10 @@ $router->post('/adminstatshour', 'AdminController', 'postStatsHour');
 
 //Logs
 $router->get('/adminstatsuser', 'MainController', 'userStats');
-$router->get('/logs', 'MainController', 'usersLogs');
 $router->get('/adminlogssearchclasses', 'MainController', 'searchLogs');
 $router->get('/adminsearchrealtime', 'MainController', 'searchRealtimeLogs');
+$router->get('/logs', 'AdminController', 'usersLogs');
+$router->get('/admin-search-logs', 'AdminController', 'searchLogs');
 
 /** Nurse **/
 $router->get('/nurse-pending', 'NurseController', 'seePendingCertificates');
