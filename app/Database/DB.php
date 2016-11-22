@@ -687,22 +687,9 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     /*******GET USER LOGS FOR USER STATS*********/
 
-    public function getUserLogin($id){
-
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs WHERE userID = ? AND logout IS NULL ");
-        $stmt->bindValue(1, $id);
-//        $stmt->bindValue(2, NULL);
-        $stmt->execute();
-        // set the resulting array to associative
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetch();
-
-        return $result;
-
-    }
 
 
-    /*******GET ADMIN STATS*********/
+    /** Logs **/
 
     public function getUsersLogin(){
 
@@ -730,6 +717,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
 
     }
+
     public function getLogsByKeyword($keyword){
 
         $stmt = $this->conn->prepare("select * from {$this->dbname}.logs
@@ -769,6 +757,21 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
 
+        return $result;
+
+    }
+
+    public function userInGym($id){
+
+        $stmt = $this->conn->prepare("select *
+                                      from {$this->dbname}.logs
+                                      WHERE logs.userID =:id and logs.logout is NULL limit 1");
+
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
         return $result;
 
     }

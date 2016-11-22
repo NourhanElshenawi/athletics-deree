@@ -52,14 +52,16 @@ class UserController extends Controller
         $user = $db->getUserProfile($_GET['userID']);
         $classes = $this->getUserClasses($_GET['userID']);
         $classes = $this->beautifyClassesForCalendar($classes);
-        $test = $db->getUserLogin($_GET['userID']);
+        //check if user is already in gym
+        $test = $db->userInGym($_GET['userID']);
 
         if($test) {
-
+            //if user is in the gym log him out
             $db->signout($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
 //            echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes));
 
         } else {
+            //if user is not in the gym log him in
             $db->signin($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
             echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes));
         }

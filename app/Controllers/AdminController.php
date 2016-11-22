@@ -534,6 +534,71 @@ class AdminController extends Controller
         echo $this->twig->render('admin/logs.twig', array('logs'=>$logs));
     }
 
+    public function manualLogUser()
+    {
+        $db = new DB();
+
+        if(isset($_GET['keyword'])){
+
+            $users = $db->searchUsers($_GET['keyword']);
+            foreach ($users as $key=>$user){
+                if(empty($db->userInGym($user['id']))){
+                $users[$key]['inGym'] = false;
+            } else{
+                $users[$key]['inGym'] = true;
+            }
+            }
+        }
+        else{
+
+            $users = $db->getUsers();
+            foreach ($users as $key=>$user){
+                if(empty($db->userInGym($user['id']))){
+                    $users[$key]['inGym'] = false;
+                } else{
+                    $users[$key]['inGym'] = true;
+                }
+            }
+        }
+
+        echo $this->twig->render('admin/manualLogUser.twig', array('users'=> $users));
+    }
+
+    public function signin()
+    {
+        $db = new DB();
+        $date = date_create();
+
+        if(empty($db->userInGym($_POST['id']))) {
+            $db->signin($_POST['id'], date_format($date, 'Y-m-d H:i:s'));
+            $result['success'] = true;
+            $result['msg'] = "User Logged in Successfully!";
+            echo json_encode($result);
+        } else {
+            $result['success'] = false;
+            $result['msg'] = "User Already In The Gym";
+            echo json_encode($result);
+        }
+    }
+    public function signout()
+    {
+        $db = new DB();
+        $date = date_create();
+
+        if(!empty($db->userInGym($_POST['id']))){
+            $db->signout($_POST['id'],date_format($date, 'Y-m-d H:i:s'));
+
+            $result['success'] = true;
+            $result['msg'] = "User Logged out Successfully!";
+            echo json_encode($result);
+        } else{
+            $result['success'] = false;
+            $result['msg'] = "User Not In The Gym";
+            echo json_encode($result);
+        }
+
+    }
+
 
 
 }
