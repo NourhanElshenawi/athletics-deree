@@ -1019,6 +1019,30 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
             $statement = $statement . " AND {$this->dbname}.users.birthDate BETWEEN :down AND :up";
         }
 
+        if ($_POST['student']){
+            $statement = $statement . " AND {$this->dbname}.users.student=:student ";
+        }
+
+        if ($_POST['staff']){
+            $statement = $statement . " AND {$this->dbname}.users.staff=:staff ";
+        }
+
+        if ($_POST['alumni']){
+            $statement = $statement . " AND {$this->dbname}.users.alumni=:alumni ";
+        }
+
+        if ($_POST['faculty']){
+            $statement = $statement . " AND {$this->dbname}.users.faculty=:faculty ";
+        }
+
+        if ($_POST['admin']){
+            $statement = $statement . " AND {$this->dbname}.users.admin=:admin ";
+        }
+
+        if ($_POST['external']){
+            $statement = $statement . " AND {$this->dbname}.users.external=:external ";
+        }
+
 
         $stmt = $this->conn->prepare($statement);
 
@@ -1028,6 +1052,26 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
             $stmt->bindParam(':up', $_POST['ageUpper']);
             $stmt->bindParam(':down', $_POST['ageLower']);
+        }
+
+
+        if ($_POST['student']) {
+            $stmt->bindValue(':student', $_POST['student']);
+        }
+        if ($_POST['staff']) {
+            $stmt->bindValue(':staff', $_POST['staff']);
+        }
+        if ($_POST['alumni']) {
+            $stmt->bindValue(':alumni', $_POST['alumni']);
+        }
+        if ($_POST['faculty']) {
+            $stmt->bindValue(':faculty', $_POST['faculty']);
+        }
+        if ($_POST['admin']) {
+            $stmt->bindValue(':admin', $_POST['admin']);
+        }
+        if ($_POST['external']) {
+            $stmt->bindValue(':external', $_POST['external']);
         }
 
         $stmt->execute();
@@ -1059,6 +1103,31 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
 
 
+        if ($_POST['student']){
+            $statement = $statement . " AND {$this->dbname}.users.student=:student ";
+        }
+
+        if ($_POST['staff']){
+            $statement = $statement . " AND {$this->dbname}.users.staff=:staff ";
+        }
+
+        if ($_POST['alumni']){
+            $statement = $statement . " AND {$this->dbname}.users.alumni=:alumni ";
+        }
+
+        if ($_POST['faculty']){
+            $statement = $statement . " AND {$this->dbname}.users.faculty=:faculty ";
+        }
+
+        if ($_POST['admin']){
+            $statement = $statement . " AND {$this->dbname}.users.admin=:admin ";
+        }
+
+        if ($_POST['external']){
+            $statement = $statement . " AND {$this->dbname}.users.external=:external ";
+        }
+
+
         $stmt = $this->conn->prepare($statement);
 
         if (!empty($gender)) {
@@ -1067,6 +1136,26 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
             $stmt->bindParam(':up', $_POST['ageUpper']);
             $stmt->bindParam(':down', $_POST['ageLower']);
+        }
+
+
+        if ($_POST['student']) {
+            $stmt->bindValue(':student', $_POST['student']);
+        }
+        if ($_POST['staff']) {
+            $stmt->bindValue(':staff', $_POST['staff']);
+        }
+        if ($_POST['alumni']) {
+            $stmt->bindValue(':alumni', $_POST['alumni']);
+        }
+        if ($_POST['faculty']) {
+            $stmt->bindValue(':faculty', $_POST['faculty']);
+        }
+        if ($_POST['admin']) {
+            $stmt->bindValue(':admin', $_POST['admin']);
+        }
+        if ($_POST['external']) {
+            $stmt->bindValue(':external', $_POST['external']);
         }
 
         $stmt->execute();
