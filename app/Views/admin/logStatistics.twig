@@ -29,7 +29,7 @@
             <li id="hours" role="presentation"><a style="font-weight: bold; font-size: large;">Hours</a></li>
         </ul>
 
-        <div>
+        <div style="margin: auto;">
             <h2>Filter The Statistics Using The Filters Below</h2>
             <label for="gender">Choose gender: </label>
             <select name="gender" id="gender" style="display: block;" required>
@@ -62,24 +62,28 @@
             <input type="submit" id="filter">
         </div>
 
-        <div id="yearDiv" style="width: 80%; height: 50%; margin: auto;">
+        <div id="yearDiv" style="width: 80%; height: 50%; margin: 0;">
+            <br>
             <h2>Visitation Ranking by Busiest Year</h2>
             <canvas id="yearChart"></canvas>
         </div>
 
 
-        <div id="monthsDiv" style="width: 80%; height: 50%; margin: auto; display: none;">
+        <div id="monthsDiv" style="width: 80%; height: 50%; margin: 0; display: none;">
+            <br>
             <h2>Visitation Ranking by Busiest Month</h2>
             <canvas id="monthChart"></canvas>
         </div>
 
 
-        <div id="daysDiv" style="width: 80%; height: 50%; margin: auto; display: none;">
+        <div id="daysDiv" style="width: 80%; height: 50%; margin: 0; display: none;">
+            <br>
             <h2>Visitation Ranking by Busiest Day</h2>
             <canvas id="dayChart"></canvas>
         </div>
 
-        <div id="hoursDiv" style="width: 80%; height: 50%; margin: auto; display: none;">
+        <div id="hoursDiv" style="width: 80%; height: 50%; margin: 0; display: none;">
+            <br>
             <h2>Visitation Ranking by Busiest Hour</h2>
             <canvas id="hourChart"></canvas>
         </div>
