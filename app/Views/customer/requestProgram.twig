@@ -5,12 +5,27 @@
     <link href="css/bootstrap.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
+
+    <script src="js/jquery-1.12.4.js"></script>
+    <script src="js/jquery-ui.js"></script>
+
+    <script>
+        $( function() {
+            $( "#sortable" ).sortable();
+            $( "#sortable" ).disableSelection();
+        } );
+    </script>
+
+    <style>
+        #sortable { text-decoration:none; list-style: none; }
+        #sortable li { background-color: #DD9787; opacity: 0.8; margin: 1.5% 0; width: 50%; font-size: larger; padding: 0.5%;}
+    </style>
 {% endblock head %}
 
 
 {% block content %}
 
-    <form action="/submitProgram" method="post" class="form-horizontal">
+    {#<form action="/submitProgram" id="programForm" method="post" class="form-horizontal">#}
         <h3>Personal Details</h3>
         <div class="control-group">
             <label class="control-label" for="height">Height (in cm)</label>
@@ -29,11 +44,11 @@
             <label for="pastExercise" class="control-label">Have you been involved with any sort of exercise in the past?</label>
             <div class="controls">
                 <label class="radio">
-                    <input type="radio" name="pastExercise" id="optionsRadios1" value="1">
+                    <input type="radio" name="pastExercise" id="pastExercise" value="1">
                     Yes
                 </label>
                 <label class="radio">
-                    <input type="radio" name="pastExercise" id="optionsRadios1" value="0" checked>
+                    <input type="radio" name="pastExercise" id="pastExercise" value="0" checked>
                     No
                 </label>
             </div>
@@ -42,11 +57,11 @@
             <label for="currentlyExercising" class="control-label">Are you currently exercising?</label>
             <div class="controls">
                 <label class="radio">
-                    <input type="radio" name="currentlyExercising" id="optionsRadios1" value="1">
+                    <input type="radio" name="currentlyExercising" id="currentlyExercising" value="1">
                     Yes
                 </label>
                 <label class="radio">
-                    <input type="radio" name="currentlyExercising" id="optionsRadios1" value="0" checked>
+                    <input type="radio" name="currentlyExercising" id="currentlyExercising" value="0" checked>
                     No
                 </label>
             </div>
@@ -55,15 +70,15 @@
             <label for="currentExercisingIntensity" class="control-label">If yes, how intense?</label>
             <div class="controls">
                 <label class="radio">
-                    <input type="radio" name="currentExercisingIntensity" id="optionsRadios1" value="0" checked>
+                    <input type="radio" name="currentExercisingIntensity" id="currentExercisingIntensity" value="0" checked>
                     Light (1x/week)
                 </label>
                 <label class="radio">
-                    <input type="radio" name="currentExercisingIntensity" id="optionsRadios1" value="1">
+                    <input type="radio" name="currentExercisingIntensity" id="currentExercisingIntensity" value="1">
                     Moderate (2-3x/week)
                 </label>
                 <label class="radio">
-                    <input type="radio" name="currentExercisingIntensity" value="2">
+                    <input type="radio" name="currentExercisingIntensity" id="currentExercisingIntensity" value="2">
                     Heavy (5-6x/week)
                 </label>
             </div>
@@ -79,31 +94,31 @@
             <label class="control-label">Which days would you like to exercise?</label>
             <div class="controls">
                 <label class="checkbox">
-                    <input type="checkbox" name="monday" value=1>
+                    <input type="checkbox" name="monday" id="monday" value=1>
                     Monday
                 </label>
                 <label class="checkbox">
-                    <input type="checkbox" name="tuesday" value=1>
+                    <input type="checkbox" name="tuesday" id="tuesday" value=1>
                     Tuesday
                 </label>
                 <label class="checkbox">
-                    <input type="checkbox" name="wednesday" value=1>
+                    <input type="checkbox" name="wednesday" id="wednesday" value=1>
                     Wednesday
                 </label>
                 <label class="checkbox">
-                    <input type="checkbox" name="thursday" value=1>
+                    <input type="checkbox" name="thursday" id="thursday" value=1>
                     Thursday
                 </label>
                 <label class="checkbox">
-                    <input type="checkbox" name="friday" value=1>
+                    <input type="checkbox" name="friday" id="friday" value=1>
                     Friday
                 </label>
                 <label class="checkbox">
-                    <input type="checkbox" name="saturday" value=1>
+                    <input type="checkbox" name="saturday" id="saturday" value=1>
                     Saturday
                 </label>
                 <label class="checkbox">
-                    <input type="checkbox" name="sunday" value=1>
+                    <input type="checkbox" name="sunday" id="sunday" value=1>
                     Sunday
                 </label>
             </div>
@@ -114,14 +129,96 @@
                 <textarea id="comments" name="comments" placeholder="ex: health issues, etc." rows="3" maxlength="150"></textarea>
             </div>
         </div>
+        <div>
+
+            <ul id="sortable">
+                <li id="developMuscleStrength">
+                    Develop Muscle Tone/Strength 1
+                </li>
+                <li id="rehabilitateInjury">
+                    Rehabilitate an Injury
+                </li>
+                <li id="overallFitness">
+                    Overall Fitness
+                </li>
+                <li id="loseBodyFat">
+                    Lose Body Fat
+                </li>
+                <li id="startExerciseProgram">
+                    Start and Exercise Program
+                </li>
+                <li id="designAdvancedProgram">
+                    Design a More Advanced Program
+                </li>
+                <li id="increaseFlexibility">
+                    Increase Flexibility
+                </li>
+                <li id="sportsSpecificTraining">
+                    Sports Specific Training
+                </li>
+                <li id="increaseMuscleSize">
+                    Increase Muscle Size
+                </li>
+                <li id="CardioExercise">
+                    Cardiovascular Exercise/Aerobic Training
+                </li>
+                <li>
+                    <input type="text" placeholder="Other">
+                </li>
+            </ul>
+
+            <input type="hidden" id="test" value="">TEST</input>
+        </div>
+
         <hr>
         <div class="control-group">
             <div class="controls">
-                <button type="submit" class="btn">Submit Request</button>
+                <button type="submit" id="submit" class="btn">Submit Request</button>
             </div>
         </div>
-    </form>
+    {#</form>#}
 
+
+
+    <script>
+        var list = [];
+        jQuery('#submit').click(function() {
+            jQuery('#sortable').children().each(function (index) {
+                console.log("ID: " + jQuery(this).attr('id'))
+                list.push(jQuery(this).attr('id'))
+            });
+
+        });
+
+
+        jQuery.ajax(
+                {
+                    type: 'POST',
+                    url: '/submitProgram',
+                    data: {
+                        goal: list,
+                        id:{{ session.user.id }},
+                        monday:jQuery('#monday').val(),
+                        tuesday:jQuery('#tuesday').val(),
+                        wednesday:jQuery('#wednesday').val(),
+                        thursday:jQuery('#thursday').val(),
+                        friday:jQuery('#friday').val(),
+                        saturday:jQuery('#saturday').val(),
+                        sunday:jQuery('#sunday').val(),
+                        height:jQuery('#height').val(),
+                        weight:jQuery('#weight').val(),
+                        pastExercise:jQuery('#pastExercise').val(),
+                        currentlyExercising:jQuery('#currentlyExercising').val(),
+                        currentExerciseintensity:jQuery('#currentExercisingIntensity').val(),
+                        activity:jQuery('#activities').val(),
+                        comments:jQuery('#comments').val(),
+                    },
+                    success: function (msg) {
+                        console.log(msg);
+                    }
+                }
+        );
+    </script>
 
 
 

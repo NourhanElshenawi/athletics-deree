@@ -232,6 +232,7 @@ class UserController extends Controller
     public function submitProgram ()
     {
         d($_POST);
+        return json_encode($_POST);
 
         $db = new DB();
 
