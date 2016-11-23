@@ -13,39 +13,8 @@ use Nourhan\ReCaptcha;
 
 class UserController extends Controller
 {
-    /*****CUSTOMER*****/
-    /*********USER********/
 
-    public function register()
-    {
-        $db = new DB();
-
-        $calendarClasses = $db->getClasses();
-        $classes = $db->getClasses();
-        $userClasses = $this->getUserClasses($_SESSION['user']['id']);
-
-        $classes = $this->beautifyClasses($classes);
-        $userClasses = $this->beautifyClasses($userClasses);
-        $calendarClasses = $this->beautifyClassesForCalendar($calendarClasses);
-        d($userClasses);
-
-        echo $this->twig->render('customer/register.twig', array('calendarClasses'=>$calendarClasses, 'classes'=>$classes,'userClasses'=>$userClasses));
-    }
-
-    public function unregisterClass()
-    {
-        $db = new DB();
-        echo  json_encode($db->unregisterClass($_POST['userID'], $_POST['classID']));
-
-    }
-
-    public function registerClass()
-    {
-        $db = new DB();
-        echo json_encode($db->registerClass($_POST['userID'], $_POST['classID']));
-
-    }
-
+/** Signin **/
     public function signin() {
         $db = new DB();
         $date = date_create();
@@ -70,81 +39,6 @@ class UserController extends Controller
 //        d($db->getUserLogin("1"));
 //        http://athletics-deree.app/signin?userID=1
 //       http://athletics-deree.app/?name1=value1&name2=value2
-    }
-
-    public function profileStats()
-    {
-
-        $db = new DB();
-        $logs = $db->getUserLogs($_SESSION['user']['id']);
-        foreach ($logs as $log) {
-            $date = $log['login'];
-            //below i get the year, month and the rest of the DateTime format (day and time)
-            $array = explode('-',$date,3);
-            //below i add the day to the date array
-            $temp = $array[2];
-            $array[2] = explode(' ',$array[2],2)[0];
-//                    d($array);
-            $monthNum  = $array[1];
-            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
-            $monthName = $dateObj->format('F'); // March
-            $array[1] = $monthName;
-//            $dayNum  = $array[1];
-//            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
-//            $monthName = $dateObj->format('F'); // March
-//            $array[1] = $monthName;
-
-//            d($array);
-
-        }
-
-//        $d(array_count_values($array[]));
-        /*  $date = "2016-06-09 00:38:47";
-          //below i get the year, month and the rest of the DateTime format (day and time)
-  //        $array = explode('-',$date,3);
-          //below i add the day to the date array
-  //        $temp = $array[2];
-  //        $array[2] = explode(' ',$array[2],2)[0];
-
-  //        echo "date </br>";
-  //        var_dump($date);
-  //        echo "split array </br>";
-  //        var_dump($array);
-  //        echo "complete </br>";
-  //        var_dump($array);
-  //        $monthNum  = $array[1];
-  //        $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
-  //        $monthName = $dateObj->format('F'); // March
-
-  */
-//        $array[1] = $monthName;
-//        var_dump($array);
-        $array = array("January", "January", "January", "February", "February", "March");
-        $vals = array_count_values($array);
-        for ($x=0; $x<count($array);){
-
-            $x++;
-        }
-
-        $classes = $this->getUserClasses($_SESSION['user']['id']);
-        $classes = $this->beautifyClassesForCalendar($classes);
-
-        echo $this->twig->render('customer/profile.twig', array('vals'=>$vals, 'classes'=>$classes));
-    }
-
-    public function getUserClasses($id) {
-
-        $db = new DB();
-
-        $userRegistrations = $db->getUserRegistrations($id);
-
-        foreach ($userRegistrations as $registration){
-
-            $classes[] = $db->getClass($registration['classID']);
-
-        }
-
-        return $classes;
     }
 
     public function login()
@@ -219,11 +113,91 @@ class UserController extends Controller
         header('Location: /login');
     }
 
+
+/** Profile**/
+    public function profileStats()
+    {
+
+        $db = new DB();
+        $logs = $db->getUserLogs($_SESSION['user']['id']);
+        foreach ($logs as $log) {
+            $date = $log['login'];
+            //below i get the year, month and the rest of the DateTime format (day and time)
+            $array = explode('-',$date,3);
+            //below i add the day to the date array
+            $temp = $array[2];
+            $array[2] = explode(' ',$array[2],2)[0];
+//                    d($array);
+            $monthNum  = $array[1];
+            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
+            $monthName = $dateObj->format('F'); // March
+            $array[1] = $monthName;
+//            $dayNum  = $array[1];
+//            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
+//            $monthName = $dateObj->format('F'); // March
+//            $array[1] = $monthName;
+
+//            d($array);
+
+        }
+
+//        $d(array_count_values($array[]));
+        /*  $date = "2016-06-09 00:38:47";
+          //below i get the year, month and the rest of the DateTime format (day and time)
+  //        $array = explode('-',$date,3);
+          //below i add the day to the date array
+  //        $temp = $array[2];
+  //        $array[2] = explode(' ',$array[2],2)[0];
+
+  //        echo "date </br>";
+  //        var_dump($date);
+  //        echo "split array </br>";
+  //        var_dump($array);
+  //        echo "complete </br>";
+  //        var_dump($array);
+  //        $monthNum  = $array[1];
+  //        $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
+  //        $monthName = $dateObj->format('F'); // March
+
+  */
+//        $array[1] = $monthName;
+//        var_dump($array);
+        $array = array("January", "January", "January", "February", "February", "March");
+        $vals = array_count_values($array);
+        for ($x=0; $x<count($array);){
+
+            $x++;
+        }
+
+        $classes = $this->getUserClasses($_SESSION['user']['id']);
+        $classes = $this->beautifyClassesForCalendar($classes);
+
+        echo $this->twig->render('customer/profile.twig', array('vals'=>$vals, 'classes'=>$classes));
+    }
+
+    public function getUserClasses($id) {
+
+        $db = new DB();
+
+        $userRegistrations = $db->getUserRegistrations($id);
+        $classes = array();
+
+        foreach ($userRegistrations as $registration){
+
+            $classes[] = $db->getClass($registration['classID']);
+
+        }
+
+        return $classes;
+    }
+
     public function profile()
     {
         echo $this->twig->render('customer/profile.twig');
     }
 
+
+/** Requesting workout programs **/
     public function requestProgram ()
     {
         echo $this->twig->render('customer/requestProgram.twig');
@@ -237,7 +211,65 @@ class UserController extends Controller
     }
 
 
+/** Registration for classes **/
+    public function register()
+    {
+        $db = new DB();
 
+        $calendarClasses = $db->getClasses();
+        $classes = $db->getClasses();
+        $userClasses = $this->getUserClasses($_SESSION['user']['id']);
+
+        $classes = $this->beautifyClasses($classes);
+        $userClasses = $this->beautifyClasses($userClasses);
+        $calendarClasses = $this->beautifyClassesForCalendar($calendarClasses);
+        d($userClasses);
+
+        echo $this->twig->render('customer/register.twig', array('calendarClasses'=>$calendarClasses, 'classes'=>$classes,'userClasses'=>$userClasses));
+    }
+
+    public function unregisterClass()
+    {
+        $db = new DB();
+        echo  json_encode($db->unregisterClass($_POST['userID'], $_POST['classID']));
+
+    }
+
+    public function registerClass()
+    {
+        $db = new DB();
+        echo json_encode($db->registerClass($_POST['userID'], $_POST['classID']));
+
+    }
+
+
+/** Workout Program history **/
+
+    public function programHistory()
+    {
+        $db = new DB();
+        $allRequests = $db->getUserProgramRequests($_SESSION['user']['id']);
+        foreach ($allRequests as $key=>$request){
+            $goal = array();
+            $goal['developMuscleStrength']= $request['developMuscleStrength'];
+            $goal['rehabilitateInjury'] = $request['rehabilitateInjury'];
+            $goal['overallFitness'] = $request['overallFitness'];
+            $goal['loseBodyFat'] = $request['loseBodyFat'];
+            $goal['startExerciseProgram'] = $request['startExerciseProgram'];
+            $goal['designAdvanceProgram'] = $request['designAdvanceProgram'];
+            $goal['increaseFlexibility'] = $request['increaseFlexibility'];
+            $goal['sportsSpecificTraining'] = $request['sportsSpecificTraining'];
+            $goal['increaseMuscleSize'] = $request['increaseMuscleSize'];
+            $goal['cardioExercise'] = $request['cardioExercise'];
+            asort($goal);
+            $allRequests[$key]['goals'] = $goal;
+        }
+
+        echo "hiii";
+        echo $this->twig->render('customer/previousProgramRequests.twig', array('requests'=>$allRequests));
+    }
+
+/** General functions **/
 
     public function beautifyClassesForCalendar($classes) {
         foreach ($classes as $key=>$class) {

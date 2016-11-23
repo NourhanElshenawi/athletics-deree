@@ -40,6 +40,7 @@ $router->post('/unregisterclass', 'UserController', 'unregisterClass');
 $router->get('/signin', 'UserController', 'signin');
 $router->get('/requestProgram', 'UserController', 'requestProgram');
 $router->post('/submitProgram', 'UserController', 'submitProgram');
+$router->get('/workoutProgramHistory', 'UserController', 'programHistory');
 
 
 /** ADMIN **/

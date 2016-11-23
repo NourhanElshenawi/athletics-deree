@@ -48,9 +48,9 @@
         <section class="storefront-primary-navigation">		<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Navigation">
                 <button class="menu-toggle" aria-controls="primary-navigation" aria-expanded="false"><span>Menu</span></button>
 
-                {% if session.user.admin == 1 %}
                 <div class="primary-navigation">
                     <ul id="menu-main-menu" class="menu nav-menu" aria-expanded="false">
+                        {% if session.user.admin == 1 %}
                         <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Gym Statistics</a>
                             <ul class="sub-menu">
                                 <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36"><a href="/adminvisitstats">Visitation</a>
@@ -130,9 +130,15 @@
                                 </li>
                             </ul>
                         </li>
-                    </ul>
-                </div>
                     {% elseif session.user.admin == 0 %}
+                        <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Workout Programs</a>
+                            <ul class="sub-menu">
+                                <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36"><a href="/adminvisitstats">Current Program</a>
+                                </li>
+                                <li id="menu-item-35" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35"><a href="/workoutProgramHistory">History</a>
+                                </li>
+                            </ul>
+                        </li>
                         <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Gym Logs</a>
                             <ul class="sub-menu">
                                 <li id="menu-item-35" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35">
@@ -160,9 +166,11 @@
                                 </li>
                             </ul>
                         </li>
-
                 {% endif %}
 
+
+                    </ul>
+                </div>
             </nav><!-- #site-navigation -->
         </section>
     </div>

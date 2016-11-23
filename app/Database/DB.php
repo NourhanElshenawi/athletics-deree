@@ -67,7 +67,6 @@ class DB
         }
     }
 
-
     public function getClasses()
     {
 
@@ -685,6 +684,21 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
     }
 
+    public function getUserProgramRequests($id)
+    {
+        $stmt = $this->conn->prepare("select *
+          from {$this->dbname}.program_requests
+          WHERE program_requests.userID =:id ORDER BY program_requests.date;");
+
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     /*******GET USER LOGS FOR USER STATS*********/
 
 
@@ -1280,12 +1294,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
             foreach($goal as $key => $value)
             {
-                d(":".$value);
-                $stmt->bindValue(":".$value, $key ?? 0);
-//                $mykey = $key;
-//                echo $mykey;
-//                echo $value;
-//                echo "<br>";
+                $stmt->bindValue(":".$value, (int)$key ?? 0);
             }
 
             $stmt->execute();
