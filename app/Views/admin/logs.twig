@@ -54,13 +54,13 @@
         {#<div class="col-md-12">#}
         <div class="x_panel2">
             <div class="x_title">
-                <h2 style="width: auto; margin-right: 3%;">Gym Users</h2>
+                <h2 style="width: auto; margin-right: 3%;">Gym Logs</h2>
 
                 <button class="fa fa-plus add" style="margin-top: 1%; border-radius: 25px;"></button>
 
                 {#NEEDS IMPLEMENTATION!!!!!#}
 
-                <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/adminlogsearchusers">
+                <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/logs">
                     <label style="display: inline-block;">
                         <span class="screen-reader-text">Search for:</span>
                         <input style="margin: 0;" type="search" class="search-field" placeholder="Search …" value="" name="keyword">
@@ -84,6 +84,7 @@
                         <th>Login</th>
                         <th>Logout</th>
                         <th></th>
+                        <th></th>
 
                     </tr>
                     </thead>
@@ -93,12 +94,12 @@
 
                     {% for log in logs %}
 
-                        {% set currentUser = '' %}
-                        {% for user in users %}
-                            {% if user.id == log.userID %}
-                                {% set currentUser = user %}
-                            {% endif %}
-                        {% endfor %}
+                        {#{% set currentUser = '' %}#}
+                        {#{% for user in users %}#}
+                            {#{% if user.id == log.userID %}#}
+                                {#{% set currentUser = user %}#}
+                            {#{% endif %}#}
+                        {#{% endfor %}#}
                         <tr style="padding: 0;">
 
                             <td colspan="6" style="border: none; padding: 0;">
@@ -115,7 +116,7 @@
                                             <p>
                                                 {#{% for user in users %}#}
                                                     {#{% if user.id == log.userID %}#}
-                                                    {{ currentUser.name|capitalize }}
+                                                    {{ log.name|capitalize }}
                                                 {#{% endif %}#}
                                                 {#{% endfor %}#}
                                             </p>
@@ -130,8 +131,14 @@
                                             <p>{{ log.login }}</p>
                                         </div>
 
-                                        <div class="split" style="width: 25%">
+                                        <div class="split" style="width: 15%">
                                             <p>{{ log.logout }}</p>
+                                        </div>
+
+                                        <div class="split">
+                                            <a href="/editusers?keyword={{ log.userID }}">
+                                                <button>More Info</button>
+                                            </a>
                                         </div>
 
 
@@ -152,7 +159,6 @@
                                                 <th>Email</th>
                                                 <th>Age</th>
                                                 <th>Gender</th>
-                                                <th>Registered Classes</th>
                                                 <th>Membership Type</th>
                                                 <th>Classification</th>
                                             </tr>
@@ -161,15 +167,14 @@
                                             <tr>
 
                                                 <td>
-                                                    {{ currentUser.name }}
+                                                    {{ log.name|capitalize }}
                                                 </td>
-                                                <td>{{ currentUser.email }}</td>
-                                                <td>{{ currentUser.birthDate }}</td>
-                                                <td>{{ currentUser.gender|capitalize }}</td>
-                                                <td>TEMP</td>
+                                                <td>{{ log.email }}</td>
+                                                <td>{{ log.birthDate }}</td>
+                                                <td>{{ log.gender|capitalize }}</td>
                                                 <td>
                                                     <ul>
-                                                        {% if currentUser.membershipType == 1 %}
+                                                        {% if log.membershipType == 1 %}
                                                             <li>Paid</li>
                                                         {% else %}
                                                             <li>Non-Paid</li>
@@ -177,12 +182,23 @@
                                                     </ul>
                                                 </td>
                                                 <td>
-                                                    {% if currentUser.admin == 1 %}
-                                                        <p>Admin</p>
-
-                                                    {% else %}
-                                                        <p>Not Admin</p>
-                                                    {% endif %}
+                                                    <div>
+                                                        {% if log.admin == 1 %}
+                                                            <p style="padding: 0; font-size: medium;">{{ "Administrator" }}</p>
+                                                        {% endif %}
+                                                        {% if log.student == 1  %}
+                                                            <p style="padding: 0; font-size: medium;">{{ "Student" }}</p>
+                                                        {% endif %}
+                                                        {% if log.faculty == 1  %}
+                                                            <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
+                                                        {% endif %}
+                                                        {% if log.staff == 1  %}
+                                                            <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
+                                                        {% endif %}
+                                                        {% if log.external == 1  %}
+                                                            <p style="padding: 0; font-size: medium;">{{ "External Paying" }}</p>
+                                                        {% endif %}
+                                                    </div>
                                                 </td>
                                                 <td></td>
                                             </tr>
@@ -193,7 +209,6 @@
                                     </div>
                                 </div>
                             </td>
-                        </tr>
 
 
                     {% endfor %}

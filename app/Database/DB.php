@@ -67,7 +67,6 @@ class DB
         }
     }
 
-
     public function getClasses()
     {
 
@@ -369,12 +368,12 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsers()
     {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.users");
+        $stmt = $this->conn->prepare("select *
+                                      from {$this->dbname}.users");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
-
         return $result;
     }
 
@@ -685,24 +684,26 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
     }
 
-    /*******GET USER LOGS FOR USER STATS*********/
+    public function getUserProgramRequests($id)
+    {
+        $stmt = $this->conn->prepare("select *
+          from {$this->dbname}.program_requests
+          WHERE program_requests.userID =:id ORDER BY program_requests.date;");
 
-    public function getUserLogin($id){
-
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs WHERE userID = ? AND logout IS NULL ");
-        $stmt->bindValue(1, $id);
-//        $stmt->bindValue(2, NULL);
+        $stmt->bindParam(':id', $id);
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetch();
+        $result = $stmt->fetchAll();
 
         return $result;
-
     }
 
+    /*******GET USER LOGS FOR USER STATS*********/
 
-    /*******GET ADMIN STATS*********/
+
+
+    /** Logs **/
 
     public function getUsersLogin(){
 
@@ -719,13 +720,44 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
 
     public function getUsersLogs(){
 
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs
+                                      join {$this->dbname}.users
+                                      on logs.userID = users.id");
 
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
+        return $result;
 
+    }
+
+    public function getLogsByKeyword($keyword){
+
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs
+                                      join {$this->dbname}.users
+                                      on logs.userID = users.id
+                                      WHERE DATE (logs.login) like :date or TIME (logs.login) like :time or
+                                      HOUR (logs.login) =:hour or
+                                      MONTH (logs.login) like :month or DAYOFWEEK (logs.login) like :day or
+                                      YEAR (logs.login) like :year or users.name like :name or 
+                                      users.email like :email or MONTHNAME (logs.login) like :monthName");
+
+        $stmt->bindParam(':date', $keyword);
+        $stmt->bindParam(':time', $keyword);
+        $stmt->bindParam(':hour', $keyword);
+        $stmt->bindParam(':name', $keyword);
+        $stmt->bindParam(':email', $keyword);
+        $stmt->bindParam(':month', $keyword);
+        $stmt->bindParam(':day', $keyword);
+        $stmt->bindParam(':month', $keyword);
+        $stmt->bindParam(':monthName', $keyword);
+        $stmt->bindParam(':year', $keyword);
+
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
         return $result;
 
     }
@@ -739,6 +771,21 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
 
+        return $result;
+
+    }
+
+    public function userInGym($id){
+
+        $stmt = $this->conn->prepare("select *
+                                      from {$this->dbname}.logs
+                                      WHERE logs.userID =:id and logs.logout is NULL limit 1");
+
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
         return $result;
 
     }
@@ -820,6 +867,30 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
             $statement = $statement . " AND {$this->dbname}.users.birthDate BETWEEN :down AND :up";
         }
 
+        if ($_POST['student']){
+            $statement = $statement . " AND {$this->dbname}.users.student=:student ";
+        }
+
+        if ($_POST['staff']){
+            $statement = $statement . " AND {$this->dbname}.users.staff=:staff ";
+        }
+
+        if ($_POST['alumni']){
+            $statement = $statement . " AND {$this->dbname}.users.alumni=:alumni ";
+        }
+
+        if ($_POST['faculty']){
+            $statement = $statement . " AND {$this->dbname}.users.faculty=:faculty ";
+        }
+
+        if ($_POST['admin']){
+            $statement = $statement . " AND {$this->dbname}.users.admin=:admin ";
+        }
+
+        if ($_POST['external']){
+            $statement = $statement . " AND {$this->dbname}.users.external=:external ";
+        }
+
 
         $stmt = $this->conn->prepare($statement);
 
@@ -829,6 +900,26 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
             $stmt->bindParam(':up', $_POST['ageUpper']);
             $stmt->bindParam(':down', $_POST['ageLower']);
+        }
+
+
+        if ($_POST['student']) {
+            $stmt->bindValue(':student', $_POST['student']);
+        }
+        if ($_POST['staff']) {
+            $stmt->bindValue(':staff', $_POST['staff']);
+        }
+        if ($_POST['alumni']) {
+            $stmt->bindValue(':alumni', $_POST['alumni']);
+        }
+        if ($_POST['faculty']) {
+            $stmt->bindValue(':faculty', $_POST['faculty']);
+        }
+        if ($_POST['admin']) {
+            $stmt->bindValue(':admin', $_POST['admin']);
+        }
+        if ($_POST['external']) {
+            $stmt->bindValue(':external', $_POST['external']);
         }
 
         $stmt->execute();
@@ -860,6 +951,30 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
             $statement = $statement . " AND {$this->dbname}.users.birthDate BETWEEN :down AND :up";
         }
 
+        if ($_POST['student']){
+            $statement = $statement . " AND {$this->dbname}.users.student=:student ";
+        }
+
+        if ($_POST['staff']){
+            $statement = $statement . " AND {$this->dbname}.users.staff=:staff ";
+        }
+
+        if ($_POST['alumni']){
+            $statement = $statement . " AND {$this->dbname}.users.alumni=:alumni ";
+        }
+
+        if ($_POST['faculty']){
+            $statement = $statement . " AND {$this->dbname}.users.faculty=:faculty ";
+        }
+
+        if ($_POST['admin']){
+            $statement = $statement . " AND {$this->dbname}.users.admin=:admin ";
+        }
+
+        if ($_POST['external']){
+            $statement = $statement . " AND {$this->dbname}.users.external=:external ";
+        }
+
 
         $stmt = $this->conn->prepare($statement);
 
@@ -869,6 +984,25 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
             $stmt->bindParam(':up', $_POST['ageUpper']);
             $stmt->bindParam(':down', $_POST['ageLower']);
+        }
+
+        if ($_POST['student']) {
+            $stmt->bindValue(':student', $_POST['student']);
+        }
+        if ($_POST['staff']) {
+            $stmt->bindValue(':staff', $_POST['staff']);
+        }
+        if ($_POST['alumni']) {
+            $stmt->bindValue(':alumni', $_POST['alumni']);
+        }
+        if ($_POST['faculty']) {
+            $stmt->bindValue(':faculty', $_POST['faculty']);
+        }
+        if ($_POST['admin']) {
+            $stmt->bindValue(':admin', $_POST['admin']);
+        }
+        if ($_POST['external']) {
+            $stmt->bindValue(':external', $_POST['external']);
         }
 
         $stmt->execute();
@@ -899,6 +1033,30 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
             $statement = $statement . " AND {$this->dbname}.users.birthDate BETWEEN :down AND :up";
         }
 
+        if ($_POST['student']){
+            $statement = $statement . " AND {$this->dbname}.users.student=:student ";
+        }
+
+        if ($_POST['staff']){
+            $statement = $statement . " AND {$this->dbname}.users.staff=:staff ";
+        }
+
+        if ($_POST['alumni']){
+            $statement = $statement . " AND {$this->dbname}.users.alumni=:alumni ";
+        }
+
+        if ($_POST['faculty']){
+            $statement = $statement . " AND {$this->dbname}.users.faculty=:faculty ";
+        }
+
+        if ($_POST['admin']){
+            $statement = $statement . " AND {$this->dbname}.users.admin=:admin ";
+        }
+
+        if ($_POST['external']){
+            $statement = $statement . " AND {$this->dbname}.users.external=:external ";
+        }
+
 
         $stmt = $this->conn->prepare($statement);
 
@@ -908,6 +1066,26 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
             $stmt->bindParam(':up', $_POST['ageUpper']);
             $stmt->bindParam(':down', $_POST['ageLower']);
+        }
+
+
+        if ($_POST['student']) {
+            $stmt->bindValue(':student', $_POST['student']);
+        }
+        if ($_POST['staff']) {
+            $stmt->bindValue(':staff', $_POST['staff']);
+        }
+        if ($_POST['alumni']) {
+            $stmt->bindValue(':alumni', $_POST['alumni']);
+        }
+        if ($_POST['faculty']) {
+            $stmt->bindValue(':faculty', $_POST['faculty']);
+        }
+        if ($_POST['admin']) {
+            $stmt->bindValue(':admin', $_POST['admin']);
+        }
+        if ($_POST['external']) {
+            $stmt->bindValue(':external', $_POST['external']);
         }
 
         $stmt->execute();
@@ -939,6 +1117,31 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
 
 
+        if ($_POST['student']){
+            $statement = $statement . " AND {$this->dbname}.users.student=:student ";
+        }
+
+        if ($_POST['staff']){
+            $statement = $statement . " AND {$this->dbname}.users.staff=:staff ";
+        }
+
+        if ($_POST['alumni']){
+            $statement = $statement . " AND {$this->dbname}.users.alumni=:alumni ";
+        }
+
+        if ($_POST['faculty']){
+            $statement = $statement . " AND {$this->dbname}.users.faculty=:faculty ";
+        }
+
+        if ($_POST['admin']){
+            $statement = $statement . " AND {$this->dbname}.users.admin=:admin ";
+        }
+
+        if ($_POST['external']){
+            $statement = $statement . " AND {$this->dbname}.users.external=:external ";
+        }
+
+
         $stmt = $this->conn->prepare($statement);
 
         if (!empty($gender)) {
@@ -947,6 +1150,26 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
             $stmt->bindParam(':up', $_POST['ageUpper']);
             $stmt->bindParam(':down', $_POST['ageLower']);
+        }
+
+
+        if ($_POST['student']) {
+            $stmt->bindValue(':student', $_POST['student']);
+        }
+        if ($_POST['staff']) {
+            $stmt->bindValue(':staff', $_POST['staff']);
+        }
+        if ($_POST['alumni']) {
+            $stmt->bindValue(':alumni', $_POST['alumni']);
+        }
+        if ($_POST['faculty']) {
+            $stmt->bindValue(':faculty', $_POST['faculty']);
+        }
+        if ($_POST['admin']) {
+            $stmt->bindValue(':admin', $_POST['admin']);
+        }
+        if ($_POST['external']) {
+            $stmt->bindValue(':external', $_POST['external']);
         }
 
         $stmt->execute();
@@ -1039,20 +1262,26 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         $friday = $data['friday'] ?? 0;
         $saturday = $data['saturday'] ?? 0;
         $sunday = $data['sunday'] ?? 0;
+        $goal = json_decode($_POST['goal']);
+
 
         try
         {
             $stmt = $this->conn->prepare("
                 INSERT INTO {$this->dbname}.program_requests 
-                (`userID`, `height`, `weight`, `pastExercise`, `currentlyExercising`, `currentExercisingIntensity`, `activities`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`, `comments`) 
-                VALUES (:userID, :height, :weight, :pastExercise, :currentlyExercising, :currentExercisingIntensity, :activities, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :comments );
+                (`userID`, `height`, `weight`, `pastExercise`, `currentlyExercising`, `currentExercisingIntensity`, `activities`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`,
+                 `developMuscleStrength`, `rehabilitateInjury`, `overallFitness`, `loseBodyFat`, `startExerciseProgram`, `designAdvanceProgram`, `increaseFlexibility`, `sportsSpecificTraining`,
+                 `increaseMuscleSize`, `cardioExercise`,`comments`) 
+                VALUES (:userID, :height, :weight, :pastExercise, :currentlyExercising, :currentExercisingIntensity, :activities, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday,
+                 :developMuscleStrength, :rehabilitateInjury, :overallFitness, :loseBodyFat,:startExerciseProgram, :designAdvanceProgram, :increaseFlexibility, :sportsSpecificTraining,
+                 :increaseMuscleSize, :cardioExercise, :comments );
             ");
             $stmt->bindParam(':userID', $userID);
             $stmt->bindValue(':height', $data['height'] ?? 0);
             $stmt->bindValue(':weight', $data['weight'] ?? 0);
             $stmt->bindParam(':pastExercise', $data['pastExercise']);
             $stmt->bindParam(':currentlyExercising', $data['currentlyExercising']);
-            $stmt->bindParam(':currentExercisingIntensity', $data['currentExercisingIntensity']);
+            $stmt->bindValue(':currentExercisingIntensity', $data['currentExercisingIntensity']??0);
             $stmt->bindValue(':activities', $data['activities'] ?? "");
             $stmt->bindValue(':monday', (int) $monday ?? 0);
             $stmt->bindValue(':tuesday', (int) $tuesday ?? 0);
@@ -1062,6 +1291,11 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
             $stmt->bindValue(':saturday', (int) $saturday ?? 0);
             $stmt->bindValue(':sunday', (int) $sunday ?? 0);
             $stmt->bindValue(':comments', $data['comments'] ?? "");
+
+            foreach($goal as $key => $value)
+            {
+                $stmt->bindValue(":".$value, (int)$key ?? 0);
+            }
 
             $stmt->execute();
 

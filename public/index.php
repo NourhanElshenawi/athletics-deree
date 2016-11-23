@@ -40,6 +40,7 @@ $router->post('/unregisterclass', 'UserController', 'unregisterClass');
 $router->get('/signin', 'UserController', 'signin');
 $router->get('/requestProgram', 'UserController', 'requestProgram');
 $router->post('/submitProgram', 'UserController', 'submitProgram');
+$router->get('/workoutProgramHistory', 'UserController', 'programHistory');
 
 
 /** ADMIN **/
@@ -57,11 +58,12 @@ $router->get('/searchregistrations', 'AdminController', 'searchRegistrations');
 
 //Users
 $router->get('/editusers', 'AdminController', 'editUsers');
-$router->get('/adminsearchusers', 'AdminController', 'searchUsers');
+//$router->get('/adminsearchusers', 'AdminController', 'searchUsers');
 $router->post('/updateuser', 'AdminController', 'updateUser');
 $router->post('/deleteuser', 'AdminController', 'deleteUser');
 $router->post('/add_multiple_users', 'AdminController', 'addMultipleUsers');
 $router->post('/add_user', 'AdminController', 'addUser');
+
 
 //STATS
 $router->get('/adminvisitstats', 'AdminController', 'stats');
@@ -72,9 +74,13 @@ $router->post('/adminstatshour', 'AdminController', 'postStatsHour');
 
 //Logs
 $router->get('/adminstatsuser', 'MainController', 'userStats');
-$router->get('/logs', 'MainController', 'usersLogs');
 $router->get('/adminlogssearchclasses', 'MainController', 'searchLogs');
 $router->get('/adminsearchrealtime', 'MainController', 'searchRealtimeLogs');
+$router->get('/logs', 'AdminController', 'usersLogs');
+//$router->get('/admin-search-logs', 'AdminController', 'searchLogs');
+$router->get('/manualLog', 'AdminController', 'manualLogUser');
+$router->post('/manualSignin', 'AdminController', 'signin');
+$router->post('/manualSignout', 'AdminController', 'signout');
 
 /** Nurse **/
 $router->get('/nurse-pending', 'NurseController', 'seePendingCertificates');
