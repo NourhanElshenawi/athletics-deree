@@ -126,13 +126,18 @@ class DB
 
     public function getUser($email, $password)
     {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE email = ? and password = ?");
-        $stmt->bindValue(1,$email);
-        $stmt->bindValue(2,$password);
-        $stmt->execute();
-        // set the resulting array to associative
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetch();
+        try {
+            $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE email = ? and password = ?");
+            $stmt->bindValue(1, $email);
+            $stmt->bindValue(2, $password);
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetch();
+        } catch (PDOException $e) {
+            $result["success"] = 0;
+            $result["message"] = "Database Error1. Please Try Again!";
+        }
 
         return $result;
     }

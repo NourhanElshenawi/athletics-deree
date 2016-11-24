@@ -302,6 +302,7 @@ class UserController extends Controller
 
         return $classes;
     }
+
     public function beautifyClasses($classes){
 
         $db = new DB();
@@ -353,4 +354,25 @@ class UserController extends Controller
 
         return $classes;
     }
+
+
+    /** Android **/
+
+    public function androidLogin()
+    {
+        $db = new DB();
+
+        $user = $db->getUser($_POST["username"], $_POST["password"]);
+
+        if ($user['success']) {
+            $response["success"] = 1;
+            $response["message"] = "Login successful!";
+        } else {
+            $response["success"] = 0;
+            $response["message"] = "Invalid Credentials!";
+        }
+
+        echo json_encode($response);
+    }
+
 }

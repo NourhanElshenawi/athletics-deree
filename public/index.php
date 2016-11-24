@@ -42,6 +42,10 @@ $router->get('/requestProgram', 'UserController', 'requestProgram');
 $router->post('/submitProgram', 'UserController', 'submitProgram');
 $router->get('/workoutProgramHistory', 'UserController', 'programHistory');
 
+/** Android App Web Service**/
+$router->post('/androidLogin', 'UserController', 'androidLogin');
+
+
 
 /** ADMIN **/
 //CLASSES SCHEDULE
