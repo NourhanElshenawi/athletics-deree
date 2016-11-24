@@ -173,6 +173,8 @@ class DB
 
     public function androidViewProgram($id)
     {
+        $result = [];
+
         try {
             $stmt = $this->conn->prepare("select *
                                           from {$this->dbname}.program_requests
@@ -183,9 +185,8 @@ class DB
             $stmt->execute();
             $program = $stmt->fetch();
 
-
             $result["success"] = 1;
-            $result["message"] = "Success";
+            $result["message"] = "Success. Program found!";
             $result["program"] = $program;
 
         } catch (PDOException $e) {
