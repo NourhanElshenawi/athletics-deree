@@ -369,7 +369,7 @@ class UserController extends Controller
             $response["message"] = "Login successful!";
         } else {
             $response["success"] = 0;
-            $response["message"] = "Invalid Credentials!";
+            $response["message"] = "Invalid Credentials! username: " . $_POST["username"] ." and pass : " .$_POST["password"];
         }
 
         echo json_encode($response);
