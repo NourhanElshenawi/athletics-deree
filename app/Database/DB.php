@@ -179,7 +179,7 @@ class DB
             $stmt = $this->conn->prepare("select *
                                           from {$this->dbname}.program_requests
                                           WHERE userID=:id and trainerResponse=:trainerResponse
-                                          ORDER by program_requests.date DESC limit 1");
+                                           DESC limit 1");
             $stmt->bindParam(':id', $id);
             $stmt->bindParam(':trainerResponse', 1);
             $stmt->execute();
