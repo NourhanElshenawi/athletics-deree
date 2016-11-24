@@ -190,6 +190,7 @@ class DB
             $result["message"] = "Success. Program found!";
             $result["row"] = $row;
             $result["program"] = $row['trainerComments'];
+            $result["trainer"] = $row['trainerName'];
 
         } catch (PDOException $e) {
             $result["success"] = 0;
