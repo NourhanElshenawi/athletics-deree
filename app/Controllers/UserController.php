@@ -364,15 +364,7 @@ class UserController extends Controller
 
         $user = $db->getUser($_POST["username"], $_POST["password"]);
 
-        if ($user['success']) {
-            $response["success"] = 1;
-            $response["message"] = "Login successful!";
-        } else {
-            $response["success"] = 0;
-            $response["message"] = "Invalid Credentials! username: " . $_POST["username"] ." and pass : " .$_POST["password"];
-        }
-
-        echo json_encode($response);
+        echo json_encode($user);
     }
 
 }

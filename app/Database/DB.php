@@ -134,6 +134,34 @@ class DB
             // set the resulting array to associative
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetch();
+
+        } catch (PDOException $e) {
+            $result["success"] = 0;
+            $result["message"] = "Database Error1. Please Try Again!";
+        }
+
+        return $result;
+    }
+
+
+
+    public function androidLogin($email, $password)
+    {
+        try {
+            $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE email = ? and password = ?");
+            $stmt->bindValue(1, $email);
+            $stmt->bindValue(2, $password);
+            $stmt->execute();
+            $numberOfRows = $stmt->fetchColumn();
+
+            if($numberOfRows>0) {
+                $result["success"] = 1;
+                $result["message"] = "Welcome";
+            } else {
+                $result["success"] = 0;
+                $result["message"] = "Invalid Credentials";
+            }
+
         } catch (PDOException $e) {
             $result["success"] = 0;
             $result["message"] = "Database Error1. Please Try Again!";
