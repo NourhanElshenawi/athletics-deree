@@ -181,15 +181,12 @@ class DB
             $stmt->bindParam(':id', $id);
             $stmt->bindParam(':trainerResponse', 1);
             $stmt->execute();
-            $numberOfRows = $stmt->fetchColumn();
+            $program = $stmt->fetch();
 
-            if($numberOfRows>0) {
-                $result["success"] = 1;
-                $result["message"] = "Program Found!";
-            } else {
-                $result["success"] = 0;
-                $result["message"] = "Your program is not ready yet!";
-            }
+
+            $result["success"] = 1;
+            $result["message"] = "Success";
+            $result["program"] = $program;
 
         } catch (PDOException $e) {
             $result["success"] = 0;
