@@ -362,7 +362,7 @@ class UserController extends Controller
     {
         $db = new DB();
 
-        $user = $db->getUser($_POST["username"], $_POST["password"]);
+        $user = $db->androidLogin($_POST["username"], $_POST["password"]);
 
         echo json_encode($user);
     }
