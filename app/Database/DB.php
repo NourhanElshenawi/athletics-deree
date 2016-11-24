@@ -183,11 +183,11 @@ class DB
             $stmt->bindParam(':id', $id);
             $stmt->bindValue(':trainerResponse', 1);
             $stmt->execute();
-            $program = $stmt->fetch();
+//            $program = $stmt->fetch();
 
             $result["success"] = 1;
             $result["message"] = "Success. Program found!";
-            $result["program"] = $program;
+//            $result["program"] = $program;
 
         } catch (PDOException $e) {
             $result["success"] = 0;
