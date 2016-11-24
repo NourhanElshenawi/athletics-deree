@@ -176,19 +176,18 @@ class DB
         $result = [];
 
         try {
-//            $stmt = $this->conn->prepare("select *
-//                                          from {$this->dbname}.program_requests
-//                                          WHERE userID=:id and trainerResponse=:trainerResponse
-//                                           DESC limit 1");
-//            $stmt->bindParam(':id', $id);
-//            $stmt->bindParam(':trainerResponse', 1);
-//            $stmt->execute();
-//            $program = $stmt->fetch();
+            $stmt = $this->conn->prepare("select *
+                                          from {$this->dbname}.program_requests
+                                          WHERE userID=:id and trainerResponse=:trainerResponse
+                                           DESC limit 1");
+            $stmt->bindParam(':id', $id);
+            $stmt->bindValue(':trainerResponse', 1);
+            $stmt->execute();
+            $program = $stmt->fetch();
 
             $result["success"] = 1;
             $result["message"] = "Success. Program found!";
-//            $result["program"] = $program;
-            $result["program"] = "Hello there!!";
+            $result["program"] = $program;
 
         } catch (PDOException $e) {
             $result["success"] = 0;
