@@ -44,6 +44,7 @@ $router->get('/workoutProgramHistory', 'UserController', 'programHistory');
 
 /** Android App Web Service**/
 $router->post('/androidLogin', 'UserController', 'androidLogin');
+$router->post('/androidViewProgram', 'UserController', 'androidViewProgram');
 
 
 

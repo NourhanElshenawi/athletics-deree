@@ -170,6 +170,35 @@ class DB
         return $result;
     }
 
+
+    public function androidViewProgram($id)
+    {
+        try {
+            $stmt = $this->conn->prepare("select *
+                                          from {$this->dbname}.program_requests
+                                          WHERE userID=:id and trainerResponse=:trainerResponse
+                                          ORDER by program_requests.date DESC limit 1");
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':trainerResponse', 1);
+            $stmt->execute();
+            $numberOfRows = $stmt->fetchColumn();
+
+            if($numberOfRows>0) {
+                $result["success"] = 1;
+                $result["message"] = "Program Found!";
+            } else {
+                $result["success"] = 0;
+                $result["message"] = "Your program is not ready yet!";
+            }
+
+        } catch (PDOException $e) {
+            $result["success"] = 0;
+            $result["message"] = "Database Error1. Please Try Again!";
+        }
+
+        return $result;
+    }
+
     public function getUserProfile($id)
     {
         $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE id = ?");

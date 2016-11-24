@@ -367,4 +367,13 @@ class UserController extends Controller
         echo json_encode($user);
     }
 
+    public function androidViewProgram()
+    {
+        $db = new DB();
+
+        $program = $db->androidViewProgram($_POST["id"]);
+
+        echo json_encode($program);
+    }
+
 }
