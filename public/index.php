@@ -22,9 +22,12 @@ if (file_exists($path . '/.env'))
 
 $router = new Router\Router();
 
+
+$router->get('/test', 'MainController', 'test');
+
+
 /** PUBLIC **/
 $router->get('/', 'MainController', 'index');
-$router->get('/test', 'MainController', 'test');
 $router->get('/login', 'UserController', 'login');
 $router->get('/calendar', 'MainController', 'calendar');
 $router->get('/fitnessProgram', 'MainController', 'fitnessProgram');

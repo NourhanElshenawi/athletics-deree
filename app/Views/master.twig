@@ -4,6 +4,26 @@
 <head>
 
     {{ include('head.twig') }}
+
+
+    {#<!-- Bootstrap -->#}
+    {#<link href="master/css/bootstrap.min.css" rel="stylesheet">#}
+    {#<!-- Font Awesome -->#}
+    {#<link href="master/css/font-awesome.min.css" rel="stylesheet">#}
+    {#<link href="css/font-awesome.min.css" rel="stylesheet">#}
+    {#<!-- NProgress -->#}
+    {#<link href="master/css/nprogress.css" rel="stylesheet">#}
+    {#<!-- iCheck -->#}
+    {#<link href="master/css/green.css" rel="stylesheet">#}
+    {#<!-- bootstrap-progressbar -->#}
+    {#<link href="master/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">#}
+    {#<!-- JQVMap -->#}
+    {#<link href="master/css/jqvmap.min.css" rel="stylesheet"/>#}
+    {#<!-- bootstrap-daterangepicker -->#}
+    {#<link href="master/css/daterangepicker.css" rel="stylesheet">#}
+
+    <!-- Custom Theme Style -->
+    {#<link href="master/css/custom.min.css" rel="stylesheet">#}
     {% block head %}
     {% endblock %}
 
@@ -20,16 +40,10 @@
 
 <body class="home page page-id-6 page-template page-template-template-homepage page-template-template-homepage-php wp-custom-logo _masterslider _msp_version_2.29.0 siteorigin-panels siteorigin-panels-home fully-background group-blog no-wc-breadcrumb storefront-full-width-content right-sidebar page-home yesp-youtube-iframe-ready mg_new_loader">
 <!-- Google Tag Manager -->
-<noscript>&lt;iframe src="//www.googletagmanager.com/ns.html?id=GTM-5563K6"
-    height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;</noscript>
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-5563K6');</script>
-<!-- End Google Tag Manager -->
+
     {% block nav %}
         {{ include('nav.twig') }}
+        {#{{ include('nav2.twig') }}#}
     {% endblock nav %}
 
     <div style="padding: 2%;">
@@ -45,187 +59,62 @@
 {% block footer %}
 {% endblock %}
 
-</div>
-<div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="fb_xdm_frame_http" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" id="fb_xdm_frame_http" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="http://staticxx.facebook.com/connect/xd_arbiter/r/Lcj5EtQ5qmD.js?version=42#channel=f2c7d51ae51ad2c&amp;origin=http%3A%2F%2Fwww.acg.edu" style="border: none;"></iframe><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="https://staticxx.facebook.com/connect/xd_arbiter/r/Lcj5EtQ5qmD.js?version=42#channel=f2c7d51ae51ad2c&amp;origin=http%3A%2F%2Fwww.acg.edu" style="border: none;"></iframe></div></div><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div></div></div></div><!-- #page -->
+{#<script type="text/javascript" src="acg/js/overlays.js"></script>#}
+{#<script type="text/javascript" src="acg/js/frontend.js"></script>#}
+{#<script type="text/javascript" src="http://w.sharethis.com/button/st_insights.js"></script>#}
+{#<script type="text/javascript" src="acg/js/ssba.min.js"></script>#}
+{#<script type="text/javascript" src="acg/js/navigation.min.js"></script>#}
+{#<script type="text/javascript" src="acg/js/wp-embed.min.js"></script>#}
+{#<script type="text/javascript" src="acg/js/lightbox-frontend/custom.js"></script>#}
+{#<script type="text/javascript" src="acg/js/jquery.colorbox.js"></script>#}
+{#<script type="text/javascript" src="acg/js/jquery.easing.min.js"></script>#}
+{#<script type="text/javascript" src="acg/js/masterslider.min.js"></script>#}
+{#<script type="text/javascript" src="acg/js/jquery.mobile.min.js"></script>#}
 
-<script type="text/javascript">
-    if(	navigator.appVersion.indexOf("MSIE 8.") != -1 || navigator.appVersion.indexOf("MSIE 9.") != -1 ) {
-        document.body.className += ' mg_old_loader';
-    } else {
-        document.body.className += ' mg_new_loader';
-    }
-    if(navigator.appVersion.indexOf("MSIE") != -1 || navigator.appVersion.indexOf("rv:11.") != -1) {
-        document.body.className += ' mg_side_ie_fix';
-    }
-</script>
-<script type="text/javascript">
-    /*<![CDATA[*/
-    var gmapstyles = 'default';
-    /* ]]> */
-</script>
-<div id="su-footer-links" style="text-align: center;"></div><link rel="stylesheet" id="style-name-css" href="http://www.acg.edu/wp-content/plugins/lightbox/css/frontend/colorbox-2.css?ver=4.5.2" type="text/css" media="all">
-<link rel="stylesheet" id="eventon_dynamic_styles-css" href="acg/css/eventon_dynamic_styles.css" type="text/css" media="all">
-<script type="text/javascript" src="acg/js/overlays.js"></script>
-<script type="text/javascript" src="acg/js/frontend.js"></script>
-<script type="text/javascript" src="http://w.sharethis.com/button/st_insights.js"></script>
-<script type="text/javascript" src="acg/js/ssba.min.js"></script>
-<script type="text/javascript">
-    /* <![CDATA[ */
-    var ajax = {"url":"http:\/\/www.acg.edu\/wp-admin\/admin-ajax.php"};
-    /* ]]> */
-</script>
-<script type="text/javascript" src="acg/jsuwpqsfscript.js"></script>
-<script type="text/javascript" src="acg/js/navigation.min.js"></script>
-<script type="text/javascript" src="acg/js/skip-link-focus-fix.min.js"></script>
-<script type="text/javascript" src="acg/js/wp-embed.min.js"></script>
-<script type="text/javascript" src="acg/js/lightbox-frontend/custom.js"></script>
-<script type="text/javascript" src="acg/js/jquery.colorbox.js"></script>
-<script type="text/javascript" src="acg/js/jquery.easing.min.js"></script>
-<script type="text/javascript" src="acg/js/masterslider.min.js"></script>
-<script type="text/javascript" src="acg/js/eventon_functions.js"></script>
-<script type="text/javascript" src="acg/js/jquery.mobile.min.js"></script>
-<script type="text/javascript">
-    /* <![CDATA[ */
-    var the_ajax_script = {"ajaxurl":"http:\/\/www.acg.edu\/wp-admin\/admin-ajax.php","postnonce":"ca76e2cde9"};
-    /* ]]> */
-</script>
-<script type="text/javascript" src="acg/js/eventon_script.js"></script>
-<script type="text/javascript" src="acg/js/eventon_init_gmap_blank.js"></script>
-<script type="text/javascript" src="acg/js/eventon_gen_maps.js"></script>
-<script type="text/javascript" src="acg/js/el_script.js"></script>
-<script type="text/javascript">
-    // Media Grid global dynamic vars
-    mg_boxMargin = 5;
-    mg_boxBorder = 0;
-    mg_imgPadding = 0;
-    mg_delayed_fx = false;
-    mg_filters_behav = 'standard';
-    mg_lightbox_mode = "mg_classic_lb";
-    mg_lb_touchswipe = false;
-    mg_mobile = 800;
 
-    // Galleria global vars
-    mg_galleria_fx = 'fadeslide';
-    mg_galleria_fx_time = 400;
-    mg_galleria_interval = 3000;
 
-    // LC micro slider vars
-    mg_inl_slider_fx = 'fadeslide';
-    mg_inl_slider_fx_time = 400;
-    mg_inl_slider_intval = 3000;
-    mg_inl_slider_touch = true;
-    mg_inl_slider_pause_on_h = false;
-</script>
-<!-- Google Code for Remarketing Tag -->
-<!--------------------------------------------------
-Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. See more information and instructions on how to setup the tag on: http://google.com/ads/remarketingsetup
---------------------------------------------------->
-<script type="text/javascript">
-    /* <![CDATA[ */
-    var google_conversion_id = 976819837;
-    var google_custom_params = window.google_tag_params;
-    var google_remarketing_only = true;
-    /* ]]> */
-</script>
-<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
-</script><iframe name="google_conversion_frame" title="Google conversion frame" width="300" height="13" src="https://googleads.g.doubleclick.net/pagead/viewthroughconversion/976819837/?random=1470361974717&amp;cv=8&amp;fst=1470361974717&amp;num=1&amp;fmt=1&amp;guid=ON&amp;u_h=1080&amp;u_w=1920&amp;u_ah=1032&amp;u_aw=1920&amp;u_cd=24&amp;u_his=2&amp;u_tz=180&amp;u_java=false&amp;u_nplug=5&amp;u_nmime=7&amp;frm=0&amp;url=http%3A//www.acg.edu/&amp;tiba=The%20American%20College%20of%20Greece" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no"></iframe>
-<noscript>
-    &lt;div style="display:inline;"&gt;
-    &lt;img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/976819837/?value=0&amp;guid=ON&amp;script=0"/&gt;
-    &lt;/div&gt;
-</noscript>
-<script type="text/javascript">
-    if(typeof(MediaElementPlayer) != 'function') {
-        jQuery(document).ready(function(e) {
 
-            var s = document.createElement("script");
+{#<!-- jQuery -->#}
+{#<script src="master/js/jquery.min.js"></script>#}
+{#<!-- Bootstrap -->#}
+{#<script src="master/js/bootstrap.min.js"></script>#}
+{#<!-- FastClick -->#}
+{#<script src="master/js/fastclick.js"></script>#}
+{#<!-- NProgress -->#}
+{#<script src="master/js/nprogress.js"></script>#}
+{#<!-- Chart.js -->#}
+{#<script src="master/js/Chart.min.js"></script>#}
+{#<!-- gauge.js -->#}
+{#<script src="master/js/gauge.min.js"></script>#}
+{#<!-- bootstrap-progressbar -->#}
+{#<script src="master/js/bootstrap-progressbar.min.js"></script>#}
+{#<!-- iCheck -->#}
+{#<script src="master/js/icheck.min.js"></script>#}
+{#<!-- Skycons -->#}
+{#<script src="master/js/skycons.js"></script>#}
+{#<!-- Flot -->#}
+{#<script src="master/js/jquery.flot.js"></script>#}
+{#<script src="master/js/jquery.flot.pie.js"></script>#}
+{#<script src="master/js/jquery.flot.time.js"></script>#}
+{#<script src="master/js/jquery.flot.stack.js"></script>#}
+{#<script src="master/js/jquery.flot.resize.js"></script>#}
+{#<!-- Flot plugins -->#}
+{#<script src="master/js/jquery.flot.orderBars.js"></script>#}
+{#<script src="master/js/jquery.flot.spline.min.js"></script>#}
+{#<script src="master/js/curvedLines.js"></script>#}
+{#<!-- DateJS -->#}
+{#<script src="master/js/date.js"></script>#}
+{#<!-- JQVMap -->#}
+{#<script src="master/js/jquery.vmap.js"></script>#}
+{#<script src="master/js/jquery.vmap.world.js"></script>#}
+{#<script src="master/js/jquery.vmap.sampledata.js"></script>#}
+{#<!-- bootstrap-daterangepicker -->#}
+{#<script src="master/js/moment.min.js"></script>#}
+{#<script src="master/js/daterangepicker.js"></script>#}
 
-            s.type = "text/javascript";
-            s.id = "mediaelement-js";
-            s.src = "http://www.acg.edu/wp-content/plugins/media-grid/js/mediaelement/mediaelement-and-player.min.js";
+{#<!-- Custom Theme Scripts -->#}
+{#<script src="master/js/custom.min.js"></script>#}
 
-            var head = document.getElementsByTagName('head');
-            jQuery('head').append("<link rel='stylesheet' href='http://www.acg.edu/wp-content/plugins/media-grid/js/mediaelement/mediaelementplayer.min.css' type='text/css' media='all' />");
 
-            var body = document.getElementsByTagName('body');
-            jQuery('body').append(s);
-        });
-    }
-</script>
-
-<div id="mg_full_overlay">
-    <div class="mg_item_load">
-        <div class="mg_loader">
-            <div class="mgl_1">
-
-            </div>
-            <div class="mgl_2">
-
-            </div>
-            <div class="mgl_3">
-
-            </div>
-            <div class="mgl_4">
-
-            </div>
-        </div>
-    </div>
-    <div id="mg_overlay_content">
-
-    </div>
-    <div id="mg_lb_scroll_helper" class="mg_classic_lb">
-
-    </div>
-</div>
-<div id="mg_full_overlay_wrap" class="mg_classic_lb">
-
-</div>
-<div id="cboxOverlay" style="display: none;">
-
-</div>
-<div id="colorbox" class="" role="dialog" tabindex="-1" style="display: none;">
-    <div id="cboxWrapper"><div><div id="cboxTopLeft" style="float: left;">
-
-            </div>
-            <div id="cboxTopCenter" style="float: left;">
-
-            </div>
-            <div id="cboxTopRight" style="float: left;">
-
-            </div>
-        </div>
-        <div style="clear: left;">
-            <div id="cboxMiddleLeft" style="float: left;">
-
-            </div>
-            <div id="cboxContent" style="float: left;">
-                <div id="cboxTitle" style="float: left;">
-
-                </div>
-                <div id="cboxCurrent" style="float: left;">
-
-                </div>
-                <button type="button" id="cboxPrevious">
-
-                </button>
-                <button type="button" id="cboxNext">
-
-                </button>
-                <button id="cboxSlideshow">
-
-                </button>
-                <div id="cboxLoadingOverlay" style="float: left;">
-
-                </div>
-                <div id="cboxLoadingGraphic" style="float: left;">
-
-                </div></div><div id="cboxMiddleRight" style="float: left;">
-
-            </div>
-        </div>
-        <div style="clear: left;">
-            <div id="cboxBottomLeft" style="float: left;">
-
-            </div><div id="cboxBottomCenter" style="float: left;"></div><div id="cboxBottomRight" style="float: left;"></div></div></div><div style="position: absolute; width: 9999px; visibility: hidden; display: none; max-width: none;"></div></div><div class="evo_lightbox evo_popup"><div class="evo_content_in"><div class="evo_content_inin"><div class="evo_lightbox_content"><a class="evolbclose">X</a><div class="evo_lightbox_body eventon_list_event evo_pop_body evcal_eventcard"></div></div></div></div></div><script type="text/javascript" id="mediaelement-js" src="http://www.acg.edu/wp-content/plugins/media-grid/js/mediaelement/mediaelement-and-player.min.js"></script>
 </body>
 </html>
