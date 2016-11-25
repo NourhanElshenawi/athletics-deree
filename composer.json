@@ -21,8 +21,7 @@
         }
     },
     "files": [
-        "core/helpers.php",
-        "core/constants.php"
+        "app/helpers.php"
     ]
 
 
