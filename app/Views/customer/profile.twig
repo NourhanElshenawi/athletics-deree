@@ -72,11 +72,6 @@
 //                    width: 100,
                     buttons: false,
                     header: false
-//                    {
-//                        left: 'title',
-//                        center: '',
-//                        right: 'today prev,next'
-//                    }
                     ,
                     minTime: "07:00:00",
                     maxTime: "21:00:00",
@@ -99,8 +94,7 @@
                 });
 
                 {% for class in classes %}
-
-                {% for key, value in class.days %}
+                    {% for key, value in class.days %}
 
                 $('#fullcalendar').fullCalendar( 'addEventSource',
                         function(start, end, callback) {
@@ -138,10 +132,7 @@
                             callback( events );
                         }
                 );
-                {#{% endif %}#}
-
-                {% endfor %}
-
+                    {% endfor %}
                 {% endfor %}
                 $('#fullcalendar').fullCalendar('changeView', 'agendaWeek');
 
@@ -157,21 +148,34 @@
 {% block content %}
 
     <div>
-        {#<img src="http://placehold.it/300x300" alt="">#}
+        {#
+        User's Profile Picture
+        #}
         <img src="images/{{ session.user.picture }}" style="width: 15%; height: 20%;" alt="">
+        {#
+        User's Name
+        #}
         <p style="font-weight: bold; font-size: large; padding: 0;">Name: {{ session.user.name }}</p>
+        {#
+        User's ID
+        #}
         <p style="font-weight: bold; font-size: large; padding: 0;">ID: {{ session.user.id }}</p>
 
     </div>
 
+    {#
+        User's Monthly Stast
+        #}
     <div style="width: 50%; height: 50%;">
-        <h2>Your Schedule of Classes You're Registered For: </h2>
+        <h2 style="color: lightcoral; opacity: 0.8; font-size: large; font-weight: bold;">Your Monthly Visitation Statistics</h2>
         <canvas id="mybarChart">
-
         </canvas>
     </div>
 
-
+    {#
+        User's Schedule of registered classes
+        #}
+    <h2 style="color: lightcoral; opacity: 0.8; font-size: large; font-weight: bold;">Your Schedule of Classes You're Registered For: </h2>
     <div id="fullcalendar"></div>
 
     <!-- jQuery -->
@@ -201,11 +205,10 @@
                         //get the months to act as labels for the chart. they are the keys of the array.
                     {% for key,value in logs %}
                         {% if loop.last %}
-                        "{{ key }}"
+                            "{{ key }}"
                             {% else %}
-                        "{{ key }}",
+                                "{{ key }}",
                         {% endif %}
-
                     {% endfor %}
                 ],
 
@@ -215,12 +218,11 @@
                     data: [
                         //get the number of visits to act as the dataset for the chart. they are the values of the array.
                         {% for key,value in logs %}
-                        {% if loop.last %}
-                        {{ value }}
-                        {% else %}
-                        {{ value }},
-                        {% endif %}
-
+                            {% if loop.last %}
+                                {{ value }}
+                            {% else %}
+                                {{ value }},
+                            {% endif %}
                         {% endfor %}
                     ]
                 }

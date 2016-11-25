@@ -78,7 +78,10 @@
                         var content = '<h3>'+data.title+'       </h3>' +
                                 '<p><b>Start:</b> '+data.time+'<br />' +
                                 '<p><b>Duration:</b> '+data.duration+' Min<br /></p>'+
-                                '<p><b>Location:</b> '+data.location+'<br /></p>'
+                                '<p><b>Location:</b> '+data.location+'<br /></p>'+
+                                '<p><b>Instructor:</b> '+data.instructorName+'<br /></p>'
+
+                                //could add a button to register from the calendar directly
 //                                +'<p><input type="button" value="Register"></p>'
                                 ;
 
@@ -94,9 +97,7 @@
                 });
 
                 {% for class in calendarClasses %}
-
-                {% for key, value in class.days %}
-
+                    {% for key, value in class.days %}
                 $('#fullcalendar').fullCalendar( 'addEventSource',
                         function(start, end, callback) {
                             // When requested, dynamically generate a
@@ -116,6 +117,7 @@
                                     var time = "{{ class.startTime }}";
                                     var parseTime = time.split(":");
                                     console.log(parseTime[0]);
+                                    //adding event information as variables
                                     events.push({
                                         title: '{{ class.className }}',
                                         start: new Date(column_date.setHours(parseTime[0], parseTime[1])),
@@ -124,58 +126,20 @@
                                         allDay: false,
                                         location: "{{ class.location }}",
                                         time: "{{ class.startTime }}",
-                                        duration: "{{ class.duration }}"
+                                        duration: "{{ class.duration }}",
+                                        instructorName: "{{ class.instructorName }}"
                                     });
                                 }
-                            } // for loop
-
-                            // return events generated
+                            }
                             callback( events );
                         }
                 );
-                {#{% endif %}#}
-
+                    {% endfor %}
                 {% endfor %}
-
-                {% endfor %}
-//                $('#fullcalendar').fullCalendar( 'addEventSource',
-//                        function(start, end, callback) {
-//                            // When requested, dynamically generate a
-//                            // repeatable event for every monday.
-//                            var events = [];
-//                            var monday = 1;
-//                            var one_day = (24 * 60 * 60 * 1000);
-//
-//                            for (loop = start.getTime();
-//                                 loop <= end.getTime();
-//                                 loop = loop + one_day) {
-//
-//                                var column_date = new Date(loop);
-//
-//                                if (column_date.getDay() == monday) {
-//                                    // we're in Moday, create the event
-//                                    events.push({
-//                                        title: 'Morning Meeting',
-//                                        start: new Date(column_date.setHours(10, 00)),
-//                                        end: new Date(column_date.setHours(10, 40)),
-//                                        allDay: false
-//                                    });
-//                                }
-//
-//
-//
-//
-//                            } // for loop
-//
-//                            // return events generated
-//                            callback( events );
-//                        }
-//                );
                 $('#fullcalendar').fullCalendar('changeView', 'agendaWeek');
-//                $('#fullcalendar').fullCalendar('option', 'aspectRatio', 3);
 
             }());
-        });//]]>
+        });
 
 
 
@@ -198,69 +162,17 @@
 
     <div id="fullcalendar" style="width: 50%; display: inline-block;"></div>
 
-    <script>
-        Chart.defaults.global.legend = {
-            enabled: false
-        };
-        var ctx = document.getElementById("mybarChart");
-        var mybarChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [
-                    {% for key,value in vals %}
-//                        "January", "February", "March", "April", "May", "June", "July"
-                    {% if loop.last %}
-                    "{{ key }}"
-                    {% else %}
-                    "{{ key }}",
-                    {% endif %}
-
-                    {% endfor %}
-                ],
-
-                {#{% for key,value in vals %}#}
-                {##}
-                {#{% endfor %}#}
-
-                datasets: [{
-                    label: '# of Visits',
-                    backgroundColor: "#26B99A",
-                    data: [
-//                            51, 30, 40, 28, 92, 50, 45
-                        {% for key,value in vals %}
-                        {% if loop.last %}
-                        {{ value }}
-                        {% else %}
-                        {{ value }},
-                        {% endif %}
-                        {% endfor %}
-                    ]
-                }
-                ]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
-
-
     {% set classExample = classes|first %}
     <div class="clearfix" style="width: 40%; display: inline-block;"></div>
-    {#style="width: 40%; display: inline-block;"#}
     <div class="row">
-        {#<div class="col-md-12">#}
         <div class="x_panel2">
             <div class="x_title">
                 <h2 style="width: auto; margin-right: 3%; color: #fff!important">Classes</h2>
 
-                <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/adminsearchclasses">
+                {#
+                TODO: Search for classes to register for
+                #}
+                <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/registersearchclasses">
                     <label style="display: inline-block;">
                         <span class="screen-reader-text">Search for:</span>
                         <input style="margin: 0;" type="search" class="search-field" placeholder="Search …" value="" name="keyword">
@@ -286,18 +198,17 @@
                     </thead>
                     <tbody>
 
-
-
+                    {#
+                     create a row for each class with its info
+                     #}
                     {% for class in classes %}
                         <tr style="padding: 0;">
-
                             <td colspan="4" style="border: none; padding: 0;">
-
                                 <div class="x_panel" style="padding: 0;">
-
                                     <div class="x_title" style="padding: 4px; border-bottom: none;">
-
-                                        {#<h2>Stripped table <small>Stripped table subtitle</small></h2>#}
+                                        {#
+                                        number of class in the list
+                                        #}
                                         <div class="split" style="width: 5%; margin: 0;">
                                             {{ loop.index }}
                                         </div>
@@ -308,6 +219,9 @@
                                             </small>
                                         </div>
 
+                                        {#
+                                        TODO: Sample of users/friends registered for the class
+                                        #}
                                         <div class="split" style="width: 25%; margin: 0;">
                                             <ul class="list-inline">
                                                 <li>
@@ -324,7 +238,9 @@
                                                 </li>
                                             </ul>
                                         </div>
-
+                                        {#
+                                        display how many poeple are registered so far
+                                        #}
                                         <div class="split" style="width: 25%; margin: 0;">
                                             <div class="project_progress">
                                                 <div class="progress progress_sm">
@@ -337,16 +253,27 @@
                                         </div>
 
                                         <ul class="nav navbar-right panel_toolbox">
+                                            {#
+                                            Display more info for user about the class.
+                                            it is displaye if he clicks on it.
+                                            #}
                                             <li>
                                                 <a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
                                             </li>
-
+                                            {#
+                                            if user is registered display a check so knows he is registered to it.
+                                            id he clicks on it he unregisters
+                                            #}
                                             {% if class in userClasses %}
                                                 <li>
                                                     <a class="dropdown-toggle unregisterClass" data-toggle="dropdown" role="button" aria-expanded="false" value="{{ class.classID }}">
                                                         <i class="fa fa-check-circle"></i>
                                                     </a>
                                                 </li>
+                                                {#
+                                                if user is not registered display a plus so knows he is not registered to it.
+                                                id he clicks on it he registers
+                                                #}
                                                 {% else %}
 
                                                     <li>
@@ -359,9 +286,11 @@
                                         </ul>
                                         <div class="clearfix"></div>
                                     </div>
-
+                                    {#
+                                    Display more info for user about the class.
+                                    it is displaye if he clicks on the expand button.
+                                    #}
                                     <div class="x_content update" style="padding: 0; display: none;">
-
                                         <table class="table table-striped">
                                             <thead>
                                             <tr>
