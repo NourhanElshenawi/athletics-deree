@@ -68,7 +68,7 @@ class UserController extends Controller
             else {
                 $_SESSION['user'] = $user;
                 // FIXME: Call to undefined function
-                redirect("/profile");
+                redirect('/profile');
             }
 
         }

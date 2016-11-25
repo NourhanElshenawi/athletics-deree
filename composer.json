@@ -18,11 +18,11 @@
         "psr-4":{
             "Nourhan\\": "app/",
             "Core\\": "core/"
-        }
-    },
-    "files": [
-        "app/helpers.php"
-    ]
-
+        },
+        "files": [
+            "app/helpers.php",
+            "app/setup.php"
+        ]
+    }
 
 }

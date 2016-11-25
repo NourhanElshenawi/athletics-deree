@@ -25,16 +25,6 @@ function between ($this, $that, $inthat)
     return before($that, after($this, $inthat));
 }
 
-function ddd ($var)
-{
-    die(var_dump($var));
-}
-
-function d ($var)
-{
-    var_dump($var);
-}
-
 function redirect($url, $statusCode = 303)
 {
     header('Location: ' . $url, true, $statusCode);
