@@ -24,6 +24,7 @@ class DB
      * @param string $password
      */
 
+    /** Local DB for testing **/
 //    public function __construct($host = "127.0.0.1", $port = "33060", $dbName = "dereeAthletics",$username = "homestead", $password = "secret" )
 //    {
 //        $this->host = $host;
@@ -38,11 +39,11 @@ class DB
 
     /**
      * DB constructor. Connect to Heroku's DB (ClearDB).
+     * Live DB
      */
         public function __construct()
         {
             $cleardb_url = parse_url(getenv("CLEARDB_DATABASE_URL"));
-//            ddd($cleardb_url);
             $this->host = $cleardb_url["host"];;
             $this->port = 3306;
             $this->dbname = substr($cleardb_url["path"], 1);
@@ -54,28 +55,27 @@ class DB
             $this->connect();
         }
 
-
+        // connecting to the DB
     public function connect()
     {
         try{
             $conn = new PDO("mysql:host=$this->host;port:$this->port;dbname=$this->dbName", $this->username, $this->password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->conn = $conn;
-//            echo "Connection Established!";
         }   catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
         }
     }
 
+    //get all the classes offered by the gym as well as the information for the instructor giving the class
     public function getClasses()
     {
-
+        //joining the classes and instructors tables to get the information on the classes plus the instructor giving the class
         $stmt = $this->conn->prepare("select *, classes.name AS className, instructors.name AS instructorName,
                                       classes.id AS classID, instructors.id AS instructorID
                                       from {$this->dbname}.classes
                                       join {$this->dbname}.instructors
                                       on classes.instructorID = instructors.id");
-
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -84,6 +84,7 @@ class DB
         return $result;
     }
 
+    //get a specific class offered by the gym using its id as well as the information for the instructor giving the class
     public function getClass($id)
     {
         $stmt = $this->conn->prepare("select *, classes.name AS className, instructors.name AS instructorName,
@@ -101,6 +102,7 @@ class DB
         return $result;
     }
 
+    //get all the instructors at the gym
     public function getInstructors()
     {
         $stmt = $this->conn->prepare("select * from {$this->dbname}.instructors");
@@ -112,6 +114,7 @@ class DB
         return $result;
     }
 
+    //get a specific instructor using his id
     public function getInstructor($id)
     {
         $stmt = $this->conn->prepare("select * from {$this->dbname}.instructors WHERE id=?");
@@ -200,6 +203,8 @@ class DB
         return $result;
     }
 
+    /** User**/
+
     public function getUserProfile($id)
     {
         $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE id = ?");
@@ -208,6 +213,90 @@ class DB
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetch();
+
+        return $result;
+    }
+
+    public function getUserLogs ($id) {
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs WHERE userID = ? AND MONTH(login) = 10 AND YEAR(login) = 2016");
+        $stmt->bindValue(1, $id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function createProgramRequest ($data)
+    {
+        $result = [];
+        $userID = $_SESSION['user']['id'];
+        $monday = $data['monday'] ?? 0;
+        $tuesday = $data['tuesday'] ?? 0;
+        $wednesday = $data['wednesday'] ?? 0;
+        $thursday = $data['thursday'] ?? 0;
+        $friday = $data['friday'] ?? 0;
+        $saturday = $data['saturday'] ?? 0;
+        $sunday = $data['sunday'] ?? 0;
+        $goal = json_decode($_POST['goal']);
+
+
+        try
+        {
+            $stmt = $this->conn->prepare("
+                INSERT INTO {$this->dbname}.program_requests 
+                (`userID`, `height`, `weight`, `pastExercise`, `currentlyExercising`, `currentExercisingIntensity`, `activities`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`,
+                 `developMuscleStrength`, `rehabilitateInjury`, `overallFitness`, `loseBodyFat`, `startExerciseProgram`, `designAdvanceProgram`, `increaseFlexibility`, `sportsSpecificTraining`,
+                 `increaseMuscleSize`, `cardioExercise`,`comments`) 
+                VALUES (:userID, :height, :weight, :pastExercise, :currentlyExercising, :currentExercisingIntensity, :activities, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday,
+                 :developMuscleStrength, :rehabilitateInjury, :overallFitness, :loseBodyFat,:startExerciseProgram, :designAdvanceProgram, :increaseFlexibility, :sportsSpecificTraining,
+                 :increaseMuscleSize, :cardioExercise, :comments );
+            ");
+            $stmt->bindParam(':userID', $userID);
+            $stmt->bindValue(':height', $data['height'] ?? 0);
+            $stmt->bindValue(':weight', $data['weight'] ?? 0);
+            $stmt->bindParam(':pastExercise', $data['pastExercise']);
+            $stmt->bindParam(':currentlyExercising', $data['currentlyExercising']);
+            $stmt->bindValue(':currentExercisingIntensity', $data['currentExercisingIntensity']??0);
+            $stmt->bindValue(':activities', $data['activities'] ?? "");
+            $stmt->bindValue(':monday', (int) $monday ?? 0);
+            $stmt->bindValue(':tuesday', (int) $tuesday ?? 0);
+            $stmt->bindValue(':wednesday', (int) $wednesday ?? 0);
+            $stmt->bindValue(':thursday', (int) $thursday ?? 0);
+            $stmt->bindValue(':friday', (int) $friday ?? 0);
+            $stmt->bindValue(':saturday', (int) $saturday ?? 0);
+            $stmt->bindValue(':sunday', (int) $sunday ?? 0);
+            $stmt->bindValue(':comments', $data['comments'] ?? "");
+
+            foreach($goal as $key => $value)
+            {
+                $stmt->bindValue(":".$value, (int)$key ?? 0);
+            }
+
+            $stmt->execute();
+
+            $result['success'] = 1;
+            $result['message'] = "Request Successfully Submitted!";
+        }
+        catch (PDOException $exception)
+        {
+            ddd($exception->getMessage());
+            $result['success'] = 0;
+            $result['message'] = $exception->getMessage();
+        }
+
+        return $result;
+    }
+
+    public function getUserMonthlyVisits($id)
+    {
+        $stmt = $this->conn->prepare("select MONTH(login) from {$this->dbname}.logs WHERE userID = ?");
+        $stmt->bindValue(1, $id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
 
         return $result;
     }
@@ -1301,78 +1390,6 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
             //redirect error!
             return false;
         }
-    }
-
-    public function getUserLogs ($id) {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs WHERE userID = ? AND MONTH(login) = 10 AND YEAR(login) = 2016");
-        $stmt->bindValue(1, $id);
-        $stmt->execute();
-        // set the resulting array to associative
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetchAll();
-
-        return $result;
-    }
-
-    public function createProgramRequest ($data)
-    {
-        $result = [];
-        $userID = $_SESSION['user']['id'];
-        $monday = $data['monday'] ?? 0;
-        $tuesday = $data['tuesday'] ?? 0;
-        $wednesday = $data['wednesday'] ?? 0;
-        $thursday = $data['thursday'] ?? 0;
-        $friday = $data['friday'] ?? 0;
-        $saturday = $data['saturday'] ?? 0;
-        $sunday = $data['sunday'] ?? 0;
-        $goal = json_decode($_POST['goal']);
-
-
-        try
-        {
-            $stmt = $this->conn->prepare("
-                INSERT INTO {$this->dbname}.program_requests 
-                (`userID`, `height`, `weight`, `pastExercise`, `currentlyExercising`, `currentExercisingIntensity`, `activities`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`,
-                 `developMuscleStrength`, `rehabilitateInjury`, `overallFitness`, `loseBodyFat`, `startExerciseProgram`, `designAdvanceProgram`, `increaseFlexibility`, `sportsSpecificTraining`,
-                 `increaseMuscleSize`, `cardioExercise`,`comments`) 
-                VALUES (:userID, :height, :weight, :pastExercise, :currentlyExercising, :currentExercisingIntensity, :activities, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday,
-                 :developMuscleStrength, :rehabilitateInjury, :overallFitness, :loseBodyFat,:startExerciseProgram, :designAdvanceProgram, :increaseFlexibility, :sportsSpecificTraining,
-                 :increaseMuscleSize, :cardioExercise, :comments );
-            ");
-            $stmt->bindParam(':userID', $userID);
-            $stmt->bindValue(':height', $data['height'] ?? 0);
-            $stmt->bindValue(':weight', $data['weight'] ?? 0);
-            $stmt->bindParam(':pastExercise', $data['pastExercise']);
-            $stmt->bindParam(':currentlyExercising', $data['currentlyExercising']);
-            $stmt->bindValue(':currentExercisingIntensity', $data['currentExercisingIntensity']??0);
-            $stmt->bindValue(':activities', $data['activities'] ?? "");
-            $stmt->bindValue(':monday', (int) $monday ?? 0);
-            $stmt->bindValue(':tuesday', (int) $tuesday ?? 0);
-            $stmt->bindValue(':wednesday', (int) $wednesday ?? 0);
-            $stmt->bindValue(':thursday', (int) $thursday ?? 0);
-            $stmt->bindValue(':friday', (int) $friday ?? 0);
-            $stmt->bindValue(':saturday', (int) $saturday ?? 0);
-            $stmt->bindValue(':sunday', (int) $sunday ?? 0);
-            $stmt->bindValue(':comments', $data['comments'] ?? "");
-
-            foreach($goal as $key => $value)
-            {
-                $stmt->bindValue(":".$value, (int)$key ?? 0);
-            }
-
-            $stmt->execute();
-
-            $result['success'] = 1;
-            $result['message'] = "Request Successfully Submitted!";
-        }
-        catch (PDOException $exception)
-        {
-            ddd($exception->getMessage());
-            $result['success'] = 0;
-            $result['message'] = $exception->getMessage();
-        }
-
-        return $result;
     }
 
     /** Trainer **/

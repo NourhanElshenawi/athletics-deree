@@ -9,7 +9,7 @@
 namespace Nourhan\Controllers;
 
 use Nourhan\Database\DB;
-use Nourhan\ReCaptcha;
+
 
 class UserController extends Controller
 {
@@ -46,70 +46,39 @@ class UserController extends Controller
         echo $this->twig->render('login.twig');
     }
 
-    public function verifyResponse()
-    {
-// your secret key
-        $secret = "6Lel3ggUAAAAACT3Xz7dfhUhvFGALwDrXgtwFeON";
-//        $secret = "6Ld91QgUAAAAAIRUcZnJqHYO836O9dCCesrdMgLg"; //for productions
-// empty response
-        $response = null;
-// check secret key
-        $reCaptcha = new ReCaptcha\ReCaptcha($secret);
-
-// if submitted check response
-        if ($_POST["g-recaptcha-response"]) {
-            $response = $reCaptcha->verifyResponse(
-                $_SERVER["REMOTE_ADDR"],
-                $_POST["g-recaptcha-response"]
-            );
-        }
-
-        if ($response != null && $response->success) {
-            //REDIRECT TO PROFILE
-//            echo "Hi " . $_POST["username"] . " (" . $_POST["password"] . "), thanks for submitting the form!";
-            return true;
-
-        } else {
-            return false;
-            //REDIRECT TO ERROR'
-//            echo "not submitted";
-            return false;
-        }
-    }
-
     public function userLogin()
     {
-
+        // check if a user is logged in at the moment. if he is the session user should be set
         if(isset($_SESSION['user'])){
 
             header('Location: /profile');
         }
+        // if a user is not logged in attempt to login
         else {
+            $db = new DB();
+            //get any user with the collected credentials
+            $user = $db->getUser($_POST["username"], $_POST["password"]);
 
-            if (($this->verifyResponse())) {
-
-                $db = new DB();
-                $user = $db->getUser($_POST["username"], $_POST["password"]);
-
-                if (empty($user)) {
-                    //404 or something
-                    echo "user not found";
-                } else {
-//                $this->profileStats();
-                    $_SESSION['user'] = $user;
-//                    echo $this->twig->render('customer/profile.twig');
-                    header('Location: /profile');
-                }
-
-
+            //check if there was indeed a user found matching these credentials
+            if (empty($user)) {
+                $error['message'] = "Invalid Credentials!";
+                echo $this->twig->render('login.twig', array('error'=>$error));
             }
+            //if a user was found with these credentials, set the session user variable with all his information
+            else {
+                $_SESSION['user'] = $user;
+                // FIXME: Call to undefined function
+                redirect("/profile");
+            }
+
         }
     }
 
     public function logout()
     {
+        //remove session user variable as the user will logout
         unset($_SESSION['user']);
-//        echo $this->twig->render('login.twig');
+        // TODO: Use global redirect function
         header('Location: /login');
     }
 
@@ -119,60 +88,18 @@ class UserController extends Controller
     {
 
         $db = new DB();
-        $logs = $db->getUserLogs($_SESSION['user']['id']);
-        foreach ($logs as $log) {
-            $date = $log['login'];
-            //below i get the year, month and the rest of the DateTime format (day and time)
-            $array = explode('-',$date,3);
-            //below i add the day to the date array
-            $temp = $array[2];
-            $array[2] = explode(' ',$array[2],2)[0];
-//                    d($array);
-            $monthNum  = $array[1];
-            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
-            $monthName = $dateObj->format('F'); // March
-            $array[1] = $monthName;
-//            $dayNum  = $array[1];
-//            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
-//            $monthName = $dateObj->format('F'); // March
-//            $array[1] = $monthName;
+        $logs = $db->getUserMonthlyVisits($_SESSION['user']['id']);
 
-//            d($array);
+        $logs = $this->convertDateToString($logs);
 
-        }
+        $logs = array_count_values($logs);
+        $logs = $this->convertMonths($logs);
 
-//        $d(array_count_values($array[]));
-        /*  $date = "2016-06-09 00:38:47";
-          //below i get the year, month and the rest of the DateTime format (day and time)
-  //        $array = explode('-',$date,3);
-          //below i add the day to the date array
-  //        $temp = $array[2];
-  //        $array[2] = explode(' ',$array[2],2)[0];
-
-  //        echo "date </br>";
-  //        var_dump($date);
-  //        echo "split array </br>";
-  //        var_dump($array);
-  //        echo "complete </br>";
-  //        var_dump($array);
-  //        $monthNum  = $array[1];
-  //        $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
-  //        $monthName = $dateObj->format('F'); // March
-
-  */
-//        $array[1] = $monthName;
-//        var_dump($array);
-        $array = array("January", "January", "January", "February", "February", "March");
-        $vals = array_count_values($array);
-        for ($x=0; $x<count($array);){
-
-            $x++;
-        }
 
         $classes = $this->getUserClasses($_SESSION['user']['id']);
         $classes = $this->beautifyClassesForCalendar($classes);
 
-        echo $this->twig->render('customer/profile.twig', array('vals'=>$vals, 'classes'=>$classes));
+        echo $this->twig->render('customer/profile.twig', array('logs'=>$logs, 'classes'=>$classes));
     }
 
     public function getUserClasses($id) {
@@ -379,6 +306,32 @@ class UserController extends Controller
 //        $result["success"] = 1;
 //        $result["message"] = "Success. We did it!";
 //        $result["program"] = "Trainer comments for program go here.";
+    }
+
+    public function convertMonths($months)
+    {
+        foreach ($months as $monthNum=>$value){
+
+            //convert month number to name
+            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
+            //use name of the month as the new key of the array
+            $months[$dateObj->format('F')] = $months[$monthNum]; // March
+            //unset old array key
+            unset($months[$monthNum]);
+
+        }
+        return $months;
+    }
+
+    public function convertDateToString($dates)
+    {
+        $date = array();
+        foreach ($dates as $dt){
+            foreach ($dt as $r){
+                $date[]= $r;
+            }
+        }
+        return $date;
     }
 
 }

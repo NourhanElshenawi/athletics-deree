@@ -306,8 +306,11 @@ class AdminController extends Controller
         //sort the array by year
         ksort($years);
         //sort the array by month number
+        d($months);
         ksort($months);
+        d($months);
         $months = $this->convertMonths($months);
+        d($months);
         //sort the array by day number
         ksort($days);
         $days = $this->convertDays($days);
@@ -380,7 +383,6 @@ class AdminController extends Controller
         $db = new DB();
 
         $monthsDB = $db->getUsersLogsMonths();
-//        , $ageUpperLimit, $ageLowerLimit
 
         //create an array with months as string values
         foreach ($monthsDB as $mon){
@@ -388,6 +390,7 @@ class AdminController extends Controller
                 $months[]= $r;
             }
         }
+
         return $months;
     }
 

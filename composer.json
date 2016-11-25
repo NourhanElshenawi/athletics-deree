@@ -16,7 +16,14 @@
     },
     "autoload":{
         "psr-4":{
-            "Nourhan\\": "app/"
+            "Nourhan\\": "app/",
+            "Core\\": "core/"
         }
-    }
+    },
+    "files": [
+        "core/helpers.php",
+        "core/constants.php"
+    ]
+
+
 }

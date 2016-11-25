@@ -198,7 +198,8 @@
             type: 'bar',
             data: {
                 labels: [
-                    {% for key,value in vals %}
+                        //get the months to act as labels for the chart. they are the keys of the array.
+                    {% for key,value in logs %}
                         {% if loop.last %}
                         "{{ key }}"
                             {% else %}
@@ -212,7 +213,8 @@
                     label: '# of Visits',
                     backgroundColor: "#26B99A",
                     data: [
-                        {% for key,value in vals %}
+                        //get the number of visits to act as the dataset for the chart. they are the values of the array.
+                        {% for key,value in logs %}
                         {% if loop.last %}
                         {{ value }}
                         {% else %}
@@ -222,11 +224,6 @@
                         {% endfor %}
                     ]
                 }
-//                , {
-//                    label: '# of Votes',
-//                    backgroundColor: "#03586A",
-//                    data: [41, 56, 25, 48, 72, 34, 12]
-//                }
 
                 ]
             },

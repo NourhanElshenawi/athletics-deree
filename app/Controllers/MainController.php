@@ -39,30 +39,23 @@ class MainController extends Controller
 
     public function beautifyClassesForCalendar($classes) {
         foreach ($classes as $key=>$class) {
-//            var_dump($class);
 
             $class['days']=array();
 
             if($class['monday']){
                 $classes[$key]['days'][]="1";
-//                $classes[$key]['days'][]="monday";
-//                echo $class['monday'];
             }
             if($class['tuesday']){
                 $classes[$key]['days'][]="2";
-//                $classes[$key]['days'][]="tuesday";
             }
             if($class['wednesday']){
                 $classes[$key]['days'][]="3";
-//                $classes[$key]['days'][]="wednesday";
             }
             if($class['thursday']){
                 $classes[$key]['days'][]="4";
-//                $classes[$key]['days'][]="thursday";
             }
             if($class['friday']){
                 $classes[$key]['days'][]="5";
-//                $classes[$key]['days'][]="friday";
             }
         }
 

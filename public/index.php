@@ -32,7 +32,7 @@ $router->get('/realtimelogs', 'MainController', 'realtimeLogs');
 
 /** USER **/
 $router->get('/profile', 'UserController', 'profileStats');
-$router->post('/profile', 'UserController', 'userLogin');
+$router->post('/login', 'UserController', 'userLogin');
 $router->get('/logout', 'UserController', 'logout');
 $router->get('/register', 'UserController', 'register');
 $router->post('/registerclass', 'UserController', 'registerClass');
