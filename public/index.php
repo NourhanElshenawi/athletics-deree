@@ -1,7 +1,5 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../app/setup.php';
-require_once __DIR__ . '/../app/helpers.php';
 
 require_once __DIR__ . '/../app/recaptchalib.php';
 
