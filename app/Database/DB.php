@@ -301,6 +301,53 @@ class DB
         return $result;
     }
 
+    public function getUserProgramRequests($id)
+    {
+        try {
+            $stmt = $this->conn->prepare("select *
+                                      from {$this->dbname}.program_requests
+                                      join {$this->dbname}.instructors
+                                      on program_requests.instructorID = instructors.id
+                                      WHERE program_requests.userID =:id
+                                      ORDER BY program_requests.date DESC;");
+
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+            d($id);
+            d($result);
+            return $result;
+        } catch (PDOException $e){
+            ddd($e);
+        }
+    }
+
+    public function getUserCurrentProgram($id)
+    {
+        try {
+            $stmt = $this->conn->prepare("select *
+                                      from {$this->dbname}.program_requests
+                                      join {$this->dbname}.instructors
+                                      on program_requests.instructorID = instructors.id
+                                      WHERE program_requests.userID =:id and trainerResponse =:trainerResponse
+                                      ORDER BY program_requests.date DESC limit 1;");
+
+            $stmt->bindParam(':id', $id);
+            $stmt->bindValue(':trainerResponse', 1);
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+            d($id);
+            d($result);
+            return $result;
+        } catch (PDOException $e){
+            ddd($e);
+        }
+    }
+
 
     /*********USER VERIFICATION************/
 
@@ -836,20 +883,6 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
     }
 
-    public function getUserProgramRequests($id)
-    {
-        $stmt = $this->conn->prepare("select *
-          from {$this->dbname}.program_requests
-          WHERE program_requests.userID =:id ORDER BY program_requests.date;");
-
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        // set the resulting array to associative
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetchAll();
-
-        return $result;
-    }
 
     /*******GET USER LOGS FOR USER STATS*********/
 

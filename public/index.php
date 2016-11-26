@@ -43,6 +43,7 @@ $router->get('/signin', 'UserController', 'signin');
 $router->get('/requestProgram', 'UserController', 'requestProgram');
 $router->post('/submitProgram', 'UserController', 'submitProgram');
 $router->get('/workoutProgramHistory', 'UserController', 'programHistory');
+$router->get('/currentProgramRequest', 'UserController', 'currentProgramRequest');
 
 /** Android App Web Service**/
 $router->post('/androidLogin', 'UserController', 'androidLogin');

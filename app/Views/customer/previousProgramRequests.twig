@@ -59,7 +59,7 @@
                     <tr>
 
                         <th>#</th>
-                        <th>Member's Name</th>
+                        <th>Date of The Request</th>
                         <th></th>
                         {#<th>Team Members</th>#}
                         {#<th>Project Progress</th>#}
@@ -75,18 +75,12 @@
                             <td colspan="3" style="border: none; padding: 0;">
                                 <div class="x_panel" style="padding: 0;">
                                     <div class="x_title" style="padding: 4px; border-bottom: none;">
-                                        <div class="split" style="margin-right: 7%">
+                                        <div class="split" style="margin-right: 12%">
                                             {{ loop.index }}
                                         </div>
 
                                         <div class="split" style="margin-right: 4%">
-                                            <ul class="list-inline">
-                                                <li>
-                                                    <a href="/adminsearchusers?keyword={{ request.userID }}">
-                                                        <img src="images/{{ request.picture }}" class="avatar" alt="Avatar" value="{{ request.name }}">
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                            <p>{{ request.date }}</p>
                                         </div>
 
                                         <div class="split">
@@ -196,7 +190,7 @@
                                                     </div>
                                                 </td>
                                                 <td style="border-top: none;">
-                                                   <p style="color: #0e90d2;">{{ request.trainerComments }}</p>
+                                                   <p style="color: lightcoral; opacity: 0.8;">{{ request.trainerComments }}</p>
                                                 </td>
 
                                             </tr>

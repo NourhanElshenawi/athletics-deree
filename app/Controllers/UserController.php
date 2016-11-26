@@ -20,7 +20,7 @@ class UserController extends Controller
         $date = date_create();
         $user = $db->getUserProfile($_GET['userID']);
         $classes = $this->getUserClasses($_GET['userID']);
-        $classes = $this->beautifyClassesForCalendar($classes);
+        $classes = beautifyClassesForCalendar($classes);
         //check if user is already in gym
         $test = $db->userInGym($_GET['userID']);
 
@@ -41,6 +41,7 @@ class UserController extends Controller
 //       http://athletics-deree.app/?name1=value1&name2=value2
     }
 
+
     public function login()
     {
         echo $this->twig->render('login.twig');
@@ -50,8 +51,7 @@ class UserController extends Controller
     {
         // check if a user is logged in at the moment. if he is the session user should be set
         if(isset($_SESSION['user'])){
-
-            header('Location: /profile');
+            redirect('/profile');
         }
         // if a user is not logged in attempt to login
         else {
@@ -67,7 +67,6 @@ class UserController extends Controller
             //if a user was found with these credentials, set the session user variable with all his information
             else {
                 $_SESSION['user'] = $user;
-                // FIXME: Call to undefined function
                 redirect('/profile');
             }
 
@@ -78,8 +77,7 @@ class UserController extends Controller
     {
         //remove session user variable as the user will logout
         unset($_SESSION['user']);
-        // TODO: Use global redirect function
-        header('Location: /login');
+        redirect('/login');
     }
 
 
@@ -97,7 +95,7 @@ class UserController extends Controller
 
 
         $classes = $this->getUserClasses($_SESSION['user']['id']);
-        $classes = $this->beautifyClassesForCalendar($classes);
+        $classes = beautifyClassesForCalendar($classes);
 
         echo $this->twig->render('customer/profile.twig', array('logs'=>$logs, 'classes'=>$classes));
     }
@@ -147,9 +145,9 @@ class UserController extends Controller
         $classes = $db->getClasses();
         $userClasses = $this->getUserClasses($_SESSION['user']['id']);
 
-        $classes = $this->beautifyClasses($classes);
-        $userClasses = $this->beautifyClasses($userClasses);
-        $calendarClasses = $this->beautifyClassesForCalendar($calendarClasses);
+        $classes = beautifyClasses($classes);
+        $userClasses = beautifyClasses($userClasses);
+        $calendarClasses = beautifyClassesForCalendar($calendarClasses);
         d($userClasses);
 
         echo $this->twig->render('customer/register.twig', array('calendarClasses'=>$calendarClasses, 'classes'=>$classes,'userClasses'=>$userClasses));
@@ -170,117 +168,29 @@ class UserController extends Controller
     }
 
 
-/** Workout Program history **/
+/** Workout Program **/
 
     public function programHistory()
     {
         $db = new DB();
         $allRequests = $db->getUserProgramRequests($_SESSION['user']['id']);
-        foreach ($allRequests as $key=>$request){
-            $goal = array();
-            $goal['developMuscleStrength']= $request['developMuscleStrength'];
-            $goal['rehabilitateInjury'] = $request['rehabilitateInjury'];
-            $goal['overallFitness'] = $request['overallFitness'];
-            $goal['loseBodyFat'] = $request['loseBodyFat'];
-            $goal['startExerciseProgram'] = $request['startExerciseProgram'];
-            $goal['designAdvanceProgram'] = $request['designAdvanceProgram'];
-            $goal['increaseFlexibility'] = $request['increaseFlexibility'];
-            $goal['sportsSpecificTraining'] = $request['sportsSpecificTraining'];
-            $goal['increaseMuscleSize'] = $request['increaseMuscleSize'];
-            $goal['cardioExercise'] = $request['cardioExercise'];
-            asort($goal);
-            $allRequests[$key]['goals'] = $goal;
-        }
+        $allRequests = convertGoalsList($allRequests);
 
-        echo "hiii";
         echo $this->twig->render('customer/previousProgramRequests.twig', array('requests'=>$allRequests));
     }
 
-/** General functions **/
-
-    public function beautifyClassesForCalendar($classes) {
-        foreach ($classes as $key=>$class) {
-//            var_dump($class);
-
-            $class['days']=array();
-
-            if($class['monday']){
-                $classes[$key]['days'][]="1";
-//                $classes[$key]['days'][]="monday";
-//                echo $class['monday'];
-            }
-            if($class['tuesday']){
-                $classes[$key]['days'][]="2";
-//                $classes[$key]['days'][]="tuesday";
-            }
-            if($class['wednesday']){
-                $classes[$key]['days'][]="3";
-//                $classes[$key]['days'][]="wednesday";
-            }
-            if($class['thursday']){
-                $classes[$key]['days'][]="4";
-//                $classes[$key]['days'][]="thursday";
-            }
-            if($class['friday']){
-                $classes[$key]['days'][]="5";
-//                $classes[$key]['days'][]="friday";
-            }
-        }
-
-        return $classes;
-    }
-
-    public function beautifyClasses($classes){
-
+    public function currentProgramRequest()
+    {
         $db = new DB();
+        $allRequests = $db->getUserCurrentProgram($_SESSION['user']['id']);
+        $allRequests = convertGoalsList($allRequests);
 
-        foreach ($classes as $key=>$class ){
-
-            $temp = ($class['currentCapacity']*100)/$class['capacity'];
-            $temp2 = $class['currentCapacity'];
-
-            $classes[$key]['currentCapacityPercentage'] = $temp;
-            $classes[$key]['currentCapacity'] = $temp2;
-
-            $classes[$key]['users'] = $db->getRegisteredUsers($class['id']);
-
-            $class['days']=array();
-
-            if($class['monday']){
-                $classes[$key]['days']['monday']="1";
-//                $classes[$key]['days'][]="monday";
-//                echo $class['monday'];
-            } else {
-                $classes[$key]['days']['monday']="0";
-            }
-            if($class['tuesday']){
-                $classes[$key]['days']['tuesday']="1";
-//                $classes[$key]['days'][]="tuesday";
-            }else {
-                $classes[$key]['days']['tuesday']="0";
-            }
-            if($class['wednesday']){
-                $classes[$key]['days']['wednesday']="1";
-//                $classes[$key]['days'][]="wednesday";
-            }else {
-                $classes[$key]['days']['wednesday']="0";
-            }
-            if($class['thursday']){
-                $classes[$key]['days']['thursday']="1";
-//                $classes[$key]['days'][]="thursday";
-            }else {
-                $classes[$key]['days']['thursday']="0";
-            }
-            if($class['friday']){
-                $classes[$key]['days']['friday']="1";
-//                $classes[$key]['days'][]="friday";
-            }else {
-                $classes[$key]['days']['friday']="0";
-            }
-        }
-
-        return $classes;
+        echo $this->twig->render('customer/currentProgramRequest.twig', array('requests'=>$allRequests));
     }
+
+
+
+
 
 
     /** Android **/
