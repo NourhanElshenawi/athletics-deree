@@ -60,6 +60,7 @@
 
                         <th>#</th>
                         <th>Member's Name</th>
+                        <th>Date Submitted</th>
                         <th></th>
                         {#<th>Team Members</th>#}
                         {#<th>Project Progress</th>#}
@@ -75,22 +76,25 @@
                             <td colspan="3" style="border: none; padding: 0;">
                                 <div class="x_panel" style="padding: 0;">
                                     <div class="x_title" style="padding: 4px; border-bottom: none;">
-                                        <div class="split" style="margin-right: 7%">
+                                        <div class="split" style="margin-right: 7%; width: 2%">
                                             {{ loop.index }}
                                         </div>
 
-                                        <div class="split" style="margin-right: 4%">
+                                        <div class="split" style="margin-right: 4%; width: 5%">
                                             <ul class="list-inline">
                                                 <li>
-                                                    <a href="/adminsearchusers?keyword={{ request.userID }}">
+                                                    <a href="/editusers?keyword={{ request.userID }}">
                                                         <img src="images/{{ request.picture }}" class="avatar" alt="Avatar" value="{{ request.name }}">
                                                     </a>
                                                 </li>
                                             </ul>
                                         </div>
 
-                                        <div class="split">
+                                        <div class="split" style="margin-right: 30%; width: 5%;">
                                             {{ request.name|capitalize }}
+                                        </div>
+                                        <div class="split">
+                                            {{ request.date }}
                                         </div>
 
 
@@ -100,29 +104,8 @@
                                             <li>
                                                 <a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
                                             </li>
-                                            <li class="dropdown">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                                    <i class="fa fa-wrench"></i>
-                                                </a>
-                                                <ul class="dropdown-menu" role="menu">
-
-                                                    {#<form action="/editclass" method="post" style="margin: 0;">#}
-                                                    <li>
-
-                                                        <input type="hidden" id="edit" name="edit" value="{{ class.id }}">
-                                                        <a href="#" class="edit" value="{{ class.id }}">Edit Class</a>
-
-                                                    </li>
-                                                    <li>
-                                                        <input type="hidden" name="hold" value="{{ class.id }}">
-                                                        <a href="#" class="hold" value="{{ class.id }}" >Hold</a>
-                                                    </li>
-
-                                                    {#</form>#}
-                                                </ul>
-                                            </li>
                                             <li>
-                                                <a class="close-link delete" value="{{ class.id }}">
+                                                <a class="close-link delete" value="{{ request.id }}">
                                                     <i class="fa fa-close"></i></a>
 
                                             </li>
@@ -284,6 +267,31 @@
                                 console.log($returnedValue['success']);
                                 if ($returnedValue['success'] == true) {
                                     $button.closest('.x_panel').remove();
+                                }
+                            }
+                        }
+                );
+            }
+        });
+
+        jQuery('.delete').click(function() {
+            var element = jQuery(this);
+            if(confirm("Are you sure you want to permanently remove this program?")){
+
+                console.log(jQuery(this).attr('value'));
+                jQuery.ajax(
+                        {
+                            type: 'POST',
+                            url: '/deleteProgramRequest',
+                            data: {
+                                id: jQuery(this).attr('value')
+                            },
+                            success: function (data) {
+                                data = JSON.parse(data);
+                                if(data['success']==true){
+                                    element.closest('.x_panel').remove();
+                                } else {
+                                    alert("Could not delete program. \n Please contact support.")
                                 }
                             }
                         }

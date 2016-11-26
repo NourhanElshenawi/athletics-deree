@@ -214,7 +214,6 @@
                 var element = jQuery(this);
                 if(confirm("Are you sure you want to permanently remove this program?")){
 
-                    console.log(jQuery(this).attr('value'));
                     jQuery.ajax(
                             {
                                 type: 'POST',
@@ -222,9 +221,9 @@
                                 data: {
                                     id: jQuery(this).attr('value')
                                 },
-                                success: function (msg) {
-                                    console.log(msg);
-                                    if(msg['success']==true){
+                                success: function (data) {
+                                    data = JSON.parse(data);
+                                    if(data['success']==true){
                                         element.closest('.x_panel').remove();
                                     } else {
                                         alert("Could not delete program. \n Please contact support.")
@@ -234,6 +233,7 @@
                     );
                 }
             });
+
         });
 
         function toggle($this) {

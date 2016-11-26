@@ -1457,7 +1457,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
           from {$this->dbname}.users
           join {$this->dbname}.program_requests
           on users.id = program_requests.userID
-          WHERE program_requests.trainerResponse = 0;");
+          WHERE program_requests.trainerResponse = 0 ORDER by program_requests.DATE  ASC ;");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);

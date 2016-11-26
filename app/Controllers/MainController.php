@@ -61,6 +61,16 @@ class MainController extends Controller
 
         return $classes;
     }
+    /**
+     * Workout Program
+     */
+
+    public function deleteProgramRequest()
+    {
+        $db = new DB();
+        echo json_encode($db->deleteProgramRequest($_POST['id']));
+    }
+
   /** Admin **/
     public function userStats(){
 
