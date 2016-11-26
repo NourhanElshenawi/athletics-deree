@@ -138,8 +138,6 @@ class DB
         return $result;
     }
 
-
-
     public function addInstructor($userID, $specialty)
     {
         $stmt = $this->conn->prepare("
@@ -166,6 +164,26 @@ class DB
         }
 
         return $result;
+    }
+
+    public function searchInstructors($keyword)
+    {
+        $stmt = $this->conn->prepare("select *, instructors.id as id, 
+                                      users.id as userID, users.name as name
+                                      from {$this->dbname}.instructors
+                                      join {$this->dbname}.users
+                                      on instructors.userID = users.id
+                                      WHERE users.name LIKE :keyword OR instructors.id LIKE :keyword OR users.email LIKE :keyword or
+                                      instructors.userID LIKE :keyword ");
+
+        $stmt->bindParam(':keyword', $keyword);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+
     }
 
 
@@ -1538,8 +1556,6 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
                                       join {$this->dbname}.instructors
                                       on instructors.id = classes .instructorID
                                       where classes.instructorID =:id");
-
-            d($id);
             $stmt->bindParam(':id', $id);
             $stmt->execute();
             // set the resulting array to associative

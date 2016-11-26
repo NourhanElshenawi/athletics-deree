@@ -63,7 +63,7 @@
 
                 <button class="fa fa-users add-multiple" style="margin-top: 1%; border-radius: 25px;"></button>
 
-                <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/editusers">
+                <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/editInstructors">
                     <label style="display: inline-block;">
                         <span class="screen-reader-text">Search for:</span>
                         <input style="margin: 0;" type="search" class="search-field" placeholder="Search …" value="" name="keyword">
@@ -238,12 +238,6 @@
                                                         <a href="#" class="edit" value="{{ instructor.id }}">Edit User</a>
 
                                                     </li>
-                                                    <li>
-                                                        <input type="hidden" name="hold" value="{{ class.id }}">
-                                                        <a href="#" class="hold" value="{{ class.id }}" >Hold</a>
-                                                    </li>
-
-                                                    {#</form>#}
                                                 </ul>
                                             </li>
                                             <li>
@@ -265,9 +259,9 @@
                                                 <th>Password</th>
                                                 <th>Age</th>
                                                 <th>Gender</th>
-                                                <th>Registered Classes</th>
-                                                <th>Membership Type</th>
+                                                <th>Assigned Classes</th>
                                                 <th>Classification</th>
+                                                <th>Specialty</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -294,16 +288,10 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <ul>
-                                                        {% if instructor.membershipType == 1 %}
-                                                            <li>Paid</li>
-                                                        {% else %}
-                                                            <li>Non-Paid</li>
-                                                        {% endif %}
-                                                    </ul>
-                                                </td>
-                                                <td>
                                                     <div>
+                                                        {% if instructor.admin == 0 and instructor.student == 0 and instructor.faculty == 0 and instructor.staff == 0 and instructor.alumni == 0 and instructor.external == 0 %}
+                                                            {{ "N/A" }}
+                                                        {% endif %}
                                                         {% if instructor.admin == 1 %}
                                                             <p style="padding: 0; font-size: medium;">{{ "Administrator" }}</p>
                                                         {% endif %}
@@ -324,7 +312,9 @@
                                                         {% endif %}
                                                     </div>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    {{ instructor.specialty|capitalize }}
+                                                </td>
                                             </tr>
                                             <tr style="display: none;" class="updateInfo">
                                                 <form action="/updateUser" method="post">
@@ -374,18 +364,6 @@
                                                     </td>
 
                                                     <td>
-                                                        <select name="membershipType" id="membershipType" style="width: 100%;">
-                                                            {% if instructor.membershipType == 1 %}
-                                                                <option value="1" selected>Paid</option>
-                                                                <option value="0">Non-Paid</option>
-                                                            {% else %}
-                                                                <option value="1">Paid</option>
-                                                                <option value="0" selected>Non-Paid</option>
-                                                            {% endif %}
-                                                        </select>
-                                                    </td>
-
-                                                    <td>
                                                         <select name="classification" id="classification" style="width: 100%;" multiple>
                                                             {% if instructor.admin == 1 %}
                                                                 <option value="1" selected>{{ "Administrator" }}</option>
@@ -419,6 +397,9 @@
                                                             {% endif %}
                                                         </select>
 
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" value="{{ instructor.specialty|capitalize }}">
                                                     </td>
 
                                                     <td>

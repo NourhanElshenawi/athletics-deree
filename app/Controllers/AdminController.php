@@ -225,7 +225,7 @@ class AdminController extends Controller
 
         if(isset($_GET['keyword'])){
 
-            $instructors = $db->searchUsers($_GET['keyword']);
+            $instructors = $db->searchInstructors($_GET['keyword']);
 
             foreach ($instructors as $key=>$instructor){
                 $instructors[$key]['classes'] = $db->getInstructorsClasses($instructor['id']);
@@ -240,7 +240,6 @@ class AdminController extends Controller
 
         }
 
-        d($instructors);
 
         echo $this->twig->render('admin/editInstructors.twig', array('instructors'=> $instructors, 'classes'=> $classes));
 
@@ -249,9 +248,6 @@ class AdminController extends Controller
     public function updateInstructor()
     {
         $DB = new DB();
-
-        var_dump($_POST);
-
 
         if($DB->updateUser($_POST['id'],$_POST['name'],$_POST['email'],$_POST['password'], $_POST['birthDate'],
             $_POST['gender'], $_POST['membershipType'], $_POST['admin']))
@@ -266,8 +262,6 @@ class AdminController extends Controller
         $db = new DB();
 
         $result = $db->addUser($_POST, $_FILES['picture']);
-        d($_POST);
-        d($result);
         if($result) {
             $newUser = $db->getUserByEmail($_POST['email']);
             $result = $db->addInstructor($newUser['id'], $_POST['specialty']);
