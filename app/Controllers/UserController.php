@@ -260,7 +260,7 @@ class UserController extends Controller
     public function pay()
     {
         $product = 'DEREE Gym Subscription Fee';
-        $price = (float)10;
+        $price = (float)0;
         $shipping = 0.00;
         $total = $price + $shipping;
 
