@@ -8,11 +8,22 @@
 
 namespace Nourhan\Controllers;
 
+
+
 use Nourhan\Database\DB;
+use PayPal\Api\Payer;
+use PayPal\Api\Item;
+use PayPal\Api\ItemList;
+use PayPal\Api\Details;
+use PayPal\Api\Amount;
+use PayPal\Api\Transaction;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\Payment;
 
 
 class UserController extends Controller
 {
+
 
 /** Signin **/
     public function signin() {
@@ -189,11 +200,6 @@ class UserController extends Controller
     }
 
 
-
-
-
-
-
     /** Android **/
 
     public function androidLogin()
@@ -245,4 +251,61 @@ class UserController extends Controller
         return $date;
     }
 
+    /**
+     * Pay with PayPal
+     */
+
+    public function pay()
+    {
+
+        $paypal = new \PayPal\Rest\ApiContext(
+            new \PayPal\Auth\OAuthTokenCredential(
+                'AZ7z5y3rt0tTnl8ToZtYRo9AJsbPcbrQuV01fm0hAXC53BDBLtCrNAwpV4FSBH2ect6pH8OPTdJD56qH',
+                'ELBq1gvnUzzcmeS59_veLBzXZuwVv0_b-jY5sAeMPSJME17B5KcTYDWOhyKA0E1Mwv23fP7FstKCBro6'
+            )
+        );
+
+        $payer = new Payer();
+        $payer->setPaymentMethod('paypal');
+
+        $item = new Item();
+        $item->setName('DEREE Gym');
+        $item->setCurrency('EUR');
+        $item->setQuantity(1);
+        $item->setPrice(100);
+
+        $itemList = new ItemList();
+        $itemList->setItems([$item]);
+
+        $details = new Details();
+//        $details->setGiftWrap("yes");
+
+        $amount = new Amount();
+        $amount->setCurrency('EUR');
+        $amount->setTotal(100);
+
+        $transaction = new Transaction();
+        $transaction->setAmount($amount);
+        $transaction->setItemList($itemList);
+        $transaction->setDescription("DEREE Gym Monthly Fee");
+        $transaction->setInvoiceNumber(uniqid());
+
+        $redirect = new RedirectUrls();
+        $redirect->setReturnUrl("http://athletics-deree.app/profile?success=true");
+        $redirect->setCancelUrl("http://athletics-deree.app/profile?success=false");
+
+        $payment = new Payment();
+        $payment->setIntent('subscription');
+        $payment->setPayer($payer);
+        $payment->setRedirectUrls($redirect);
+        $payment->setTransactions([$transaction]);
+
+        try{
+            $payment->create($paypal);
+        }catch (Exception $e){
+            ddd($e->getMessage());
+        }
+
+        echo $payment->getApprovalLink();
+    }
 }

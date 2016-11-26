@@ -19,6 +19,8 @@ if (file_exists($path . '/.env'))
     )->notEmpty();
 }
 
+
+
 $router = new Router\Router();
 
 
@@ -45,6 +47,7 @@ $router->get('/requestProgram', 'UserController', 'requestProgram');
 $router->post('/submitProgram', 'UserController', 'submitProgram');
 $router->get('/workoutProgramHistory', 'UserController', 'programHistory');
 $router->get('/currentProgramRequest', 'UserController', 'currentProgramRequest');
+$router->post('/pay', 'UserController', 'pay');
 
 /** Android App Web Service**/
 $router->post('/androidLogin', 'UserController', 'androidLogin');
