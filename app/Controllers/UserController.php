@@ -8,9 +8,10 @@
 
 namespace Nourhan\Controllers;
 
-
+require __DIR__ . '/../start.php';
 
 use Nourhan\Database\DB;
+
 use PayPal\Api\Payer;
 use PayPal\Api\Item;
 use PayPal\Api\ItemList;
@@ -19,6 +20,7 @@ use PayPal\Api\Amount;
 use PayPal\Api\Transaction;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Payment;
+
 
 
 class UserController extends Controller
@@ -257,55 +259,67 @@ class UserController extends Controller
 
     public function pay()
     {
+        $product = 'DEREE Gym Subscription Fee';
+        $price = (float)10;
+        $shipping = 0.00;
+        $total = $price + $shipping;
 
-        $paypal = new \PayPal\Rest\ApiContext(
-            new \PayPal\Auth\OAuthTokenCredential(
-                'AZ7z5y3rt0tTnl8ToZtYRo9AJsbPcbrQuV01fm0hAXC53BDBLtCrNAwpV4FSBH2ect6pH8OPTdJD56qH',
-                'ELBq1gvnUzzcmeS59_veLBzXZuwVv0_b-jY5sAeMPSJME17B5KcTYDWOhyKA0E1Mwv23fP7FstKCBro6'
-            )
-        );
+//        d($price);
+//        d($shipping);
+//        d($total);
 
         $payer = new Payer();
         $payer->setPaymentMethod('paypal');
 
         $item = new Item();
-        $item->setName('DEREE Gym');
-        $item->setCurrency('EUR');
-        $item->setQuantity(1);
-        $item->setPrice(100);
+        $item->setName($product)
+            ->setCurrency('EUR')
+            ->setQuantity(1)
+            ->setPrice($price);
 
         $itemList = new ItemList();
         $itemList->setItems([$item]);
 
         $details = new Details();
-//        $details->setGiftWrap("yes");
+        $details->setShipping($shipping)
+                ->setSubtotal($price);
 
         $amount = new Amount();
-        $amount->setCurrency('EUR');
-        $amount->setTotal(100);
+        $amount->setCurrency('EUR')
+            ->setTotal($total)
+            ->setDetails($details);
 
         $transaction = new Transaction();
-        $transaction->setAmount($amount);
-        $transaction->setItemList($itemList);
-        $transaction->setDescription("DEREE Gym Monthly Fee");
-        $transaction->setInvoiceNumber(uniqid());
+        $transaction->setAmount($amount)
+            ->setItemList($itemList)
+            ->setDescription("DEREE Gym Monthly Fee")
+            ->setInvoiceNumber(uniqid());
 
-        $redirect = new RedirectUrls();
-        $redirect->setReturnUrl("http://athletics-deree.app/profile?success=true");
-        $redirect->setCancelUrl("http://athletics-deree.app/profile?success=false");
+        $redirectUrls = new RedirectUrls();
+        $redirectUrls->setReturnUrl("http://athletics-deree.app/profile?success=true")
+            ->setCancelUrl("http://athletics-deree.app/profile?success=false");
 
         $payment = new Payment();
-        $payment->setIntent('subscription');
-        $payment->setPayer($payer);
-        $payment->setRedirectUrls($redirect);
-        $payment->setTransactions([$transaction]);
+        $payment->setIntent('sale')
+            ->setPayer($payer)
+            ->setRedirectUrls($redirectUrls)
+            ->setTransactions([$transaction]);
 
         try{
-            $payment->create($paypal);
+            $payment->create(
+                new \PayPal\Rest\ApiContext(
+                    new \PayPal\Auth\OAuthTokenCredential(
+                        'AZ7z5y3rt0tTnl8ToZtYRo9AJsbPcbrQuV01fm0hAXC53BDBLtCrNAwpV4FSBH2ect6pH8OPTdJD56qH',
+                        'ELBq1gvnUzzcmeS59_veLBzXZuwVv0_b-jY5sAeMPSJME17B5KcTYDWOhyKA0E1Mwv23fP7FstKCBro6'
+                    )
+                )
+            );
         }catch (Exception $e){
-            ddd($e->getMessage());
+//            d($e);
+//            ddd($e->getMessage());
         }
 
-        echo $payment->getApprovalLink();
+        redirect($payment->getApprovalLink());
+//        redirect('/testing');
     }
 }
