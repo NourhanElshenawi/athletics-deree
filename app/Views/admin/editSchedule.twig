@@ -98,7 +98,7 @@
                                     <select name="instructorID" id="" style="width: 100%;" name="instructor" required>
 
                                         {% for instructor in allInstructors %}
-                                            <option value="{{ instructor.id }}">{{ instructor.name }}</option>
+                                            <option value="{{ instructor.id }}">{{ instructor.name|capitalize|capitalize }}</option>
                                         {% endfor %}
 
                                     </select>
@@ -181,7 +181,7 @@
                                         <div class="split" style="width: 32%; margin: 0;">
                                             <a>{{ class.className }}</a>
                                             <br />
-                                            <small>Instructor Name: {{ class.instructorName }}
+                                            <small>Instructor Name: {{ class.instructorName|capitalize }}
                                             </small>
                                         </div>
 
@@ -272,7 +272,7 @@
                                                     <ul>
                                                         {% for key, value in class.days %}
                                                             {% if value == 1 %}
-                                                                <li>{{ key }}</li>
+                                                                <li>{{ key|capitalize }}</li>
                                                             {% endif %}
                                                         {% endfor %}
                                                     </ul>
@@ -289,10 +289,10 @@
                                                         <select name="instructor" id="" style="width: 100%;">
                                                             {% for instructor in allInstructors %}
                                                                 {% if instructor.id == class.instructorID %}
-                                                                    <option value="{{ instructor.id }}" selected>{{ instructor.name }} </option>
+                                                                    <option value="{{ instructor.id }}" selected>{{ instructor.name|capitalize }} </option>
                                                                 {% else %}
 
-                                                                    <option value="{{ instructor.id }}">{{ instructor.name }}</option>
+                                                                    <option value="{{ instructor.id }}">{{ instructor.name|capitalize }}</option>
                                                                 {% endif %}
                                                             {% endfor %}
                                                         </select>

@@ -80,7 +80,9 @@
                         var content = '<h3>'+data.title+'       </h3>' +
                                 '<p><b>Start:</b> '+data.time+'<br />' +
                                 '<p><b>Duration:</b> '+data.duration+' Min<br /></p>'+
-                                '<p><b>Location:</b> '+data.location+'<br /></p>';
+                                '<p><b>Location:</b> '+data.location+'<br /></p>'+
+                                '<p><b>Instructor:</b> '+data.instructor+'<br /></p>'
+                                ;
 
                         tooltip.set({
                             'content.text': content
@@ -116,14 +118,15 @@
                                     var parseTime = time.split(":");
                                     console.log(parseTime[0]);
                                     events.push({
-                                        title: '{{ class.name }}',
+                                        title: '{{ class.className }}',
                                         start: new Date(column_date.setHours(parseTime[0], parseTime[1])),
                                         end: new Date(column_date.setMinutes({{ class.duration }})),
 //                                        end: new Date(column_date.setMinutes(90)),
                                         allDay: false,
                                         location: "{{ class.location }}",
                                         time: "{{ class.startTime }}",
-                                        duration: "{{ class.duration }}"
+                                        duration: "{{ class.duration }}",
+                                        instructor: "{{ class.instructorName }}",
                                     });
                                 }
                             } // for loop

@@ -5,6 +5,8 @@
  * Retrieve part of string
  *
  **/
+use Nourhan\Database\DB;
+
 function after ($this, $inthat)
 {
 	if (!is_bool(strpos($inthat, $this)))
@@ -126,4 +128,15 @@ function convertGoalsList($programRequests){
         $programRequests[$key]['goals'] = $goal;
     }
     return $programRequests;
+}
+
+function convertJoinDBReturns($array){
+    $arrayReturn = array();
+    foreach ($array as $arr){
+        foreach ($arr as $r){
+            $array[]= $r;
+        }
+    }
+
+    return $arrayReturn;
 }

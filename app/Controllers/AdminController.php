@@ -174,20 +174,15 @@ class AdminController extends Controller
 
     }
 
-//    public function searchRegistrations()
-//    {
-//        $db = new DB();
-//        $classes = $db->getClasses();
-//
-//        $users = $db->searchClassRegistrations($_GET['classID'], $_GET['keyword']);
-//        $class = $db->getClass($_GET['classID']);
-//        if (empty($users)){
-//            $users = array();
-//        }
-//        echo $this->twig->render('admin/registrations.twig', array('classes'=>$classes, 'users'=>$users, 'class'=>$class));
-//    }
 
-    ////////EDIT USERS
+    /**
+     * Edit Users
+     */
+
+    /**
+     * @param $users
+     * @return mixed -> all the registrations of the given users
+     */
     public function getUsersWithRegistrations($users)
     {
         $db = new DB();
@@ -203,33 +198,83 @@ class AdminController extends Controller
     public function editUsers()
     {
         $db = new DB();
+
+        $classes = $db->getClasses();
+
         if(isset($_GET['keyword'])){
 
             $users = $db->searchUsers($_GET['keyword']);
-            $users = $this->getUsersWithRegistrations($users);
-            $classes = $db->getClasses();
         }
         else{
             $users = $db->getUsers();
-            $users = $this->getUsersWithRegistrations($users);
-            $classes = $db->getClasses();
         }
+
+        $users = $this->getUsersWithRegistrations($users);
 
         echo $this->twig->render('admin/editUsers.twig', array('users'=> $users, 'classes'=> $classes));
 
     }
 
-//    public function searchUsers()
-//    {
-//        $db = new DB();
-//
-//        $users = $db->searchUsers($_GET['keyword']);
-//        $users = $this->getUsersWithRegistrations($users);
-//        $classes = $db->getClasses();
-//
-//        echo $this->twig->render('admin/editUsers.twig', array('users'=> $users, 'classes'=> $classes));
-//
-//    }
+    /**
+     * Edit Instructors
+     */
+    public function editInstructors()
+    {
+        $db = new DB();
+        $classes = $db->getClasses();
+
+        if(isset($_GET['keyword'])){
+
+            $instructors = $db->searchUsers($_GET['keyword']);
+
+            foreach ($instructors as $key=>$instructor){
+                $instructors[$key]['classes'] = $db->getInstructorsClasses($instructor['id']);
+            }
+        }
+        else{
+            $instructors = $db->getInstructors();
+
+            foreach ($instructors as $key=>$instructor){
+                $instructors[$key]['classes'] = $db->getInstructorsClasses($instructor['id']);
+            }
+
+        }
+
+        d($instructors);
+
+        echo $this->twig->render('admin/editInstructors.twig', array('instructors'=> $instructors, 'classes'=> $classes));
+
+    }
+
+    public function updateInstructor()
+    {
+        $DB = new DB();
+
+        var_dump($_POST);
+
+
+        if($DB->updateUser($_POST['id'],$_POST['name'],$_POST['email'],$_POST['password'], $_POST['birthDate'],
+            $_POST['gender'], $_POST['membershipType'], $_POST['admin']))
+        {
+            header('Location: /editusers');
+        }
+
+    }
+
+    public function addInstructor()
+    {
+        $db = new DB();
+
+        $result = $db->addUser($_POST, $_FILES['picture']);
+        d($_POST);
+        d($result);
+        if($result) {
+            $newUser = $db->getUserByEmail($_POST['email']);
+            $result = $db->addInstructor($newUser['id'], $_POST['specialty']);
+        }
+
+        echo $this->twig->render('admin/editInstructors.twig', ['result'=>$result]);
+    }
 
 
     public function updateUser()
@@ -413,7 +458,6 @@ class AdminController extends Controller
     public function getHourLogs()
     {
         $db = new DB();
-//        $logs = $db->getUsersLogs();
         $hourLogs = $db->getUsersLogsHours();
         $hours = array();
         //create an array with days as string values
@@ -422,14 +466,12 @@ class AdminController extends Controller
                 $hours[]= $r;
             }
         }
-
         return $hours;
     }
 
     public function getYearsLogsFilter()
     {
         $db = new DB();
-
         $yearsDB = $db->getUsersLogsYearsFilter();
         $years = array();
         //create an array with months as string values

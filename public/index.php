@@ -68,11 +68,14 @@ $router->get('/searchregistrations', 'AdminController', 'searchRegistrations');
 //Users
 $router->get('/editusers', 'AdminController', 'editUsers');
 //$router->get('/adminsearchusers', 'AdminController', 'searchUsers');
-$router->post('/updateuser', 'AdminController', 'updateUser');
+$router->post('/updateUser', 'AdminController', 'updateUser');
 $router->post('/deleteuser', 'AdminController', 'deleteUser');
 $router->post('/add_multiple_users', 'AdminController', 'addMultipleUsers');
 $router->post('/add_user', 'AdminController', 'addUser');
 
+//Instructors
+$router->get('/editInstructors', 'AdminController', 'editInstructors');
+$router->post('/addInstructor', 'AdminController', 'addInstructor');
 
 //STATS
 $router->get('/adminvisitstats', 'AdminController', 'stats');

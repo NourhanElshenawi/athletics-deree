@@ -71,11 +71,15 @@ class DB
     public function getClasses()
     {
         //joining the classes and instructors tables to get the information on the classes plus the instructor giving the class
-        $stmt = $this->conn->prepare("select *, classes.name AS className, instructors.name AS instructorName,
+        $stmt = $this->conn->prepare("select *, classes.name AS className, users.name AS instructorName,
                                       classes.id AS classID, instructors.id AS instructorID
                                       from {$this->dbname}.classes
                                       join {$this->dbname}.instructors
-                                      on classes.instructorID = instructors.id");
+                                      on classes.instructorID = instructors.id
+                                      join {$this->dbname}.users
+                                      on instructors.userID = users.id");
+
+
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -87,11 +91,14 @@ class DB
     //get a specific class offered by the gym using its id as well as the information for the instructor giving the class
     public function getClass($id)
     {
-        $stmt = $this->conn->prepare("select *, classes.name AS className, instructors.name AS instructorName,
-                                      classes.id AS classID, instructors.id AS instructorID
+        $stmt = $this->conn->prepare("select *, classes.name AS className, 
+                                      classes.id AS classID, instructors.id AS instructorID,
+                                      users.name as instructorName
                                       from {$this->dbname}.classes
                                       join {$this->dbname}.instructors
                                       on classes.instructorID = instructors.id
+                                      join {$this->dbname}.users
+                                      on instructors.userID = users.id
                                       WHERE classes.id =:classID");
         $stmt->bindParam(':classID',$id);
         $stmt->execute();
@@ -105,7 +112,11 @@ class DB
     //get all the instructors at the gym
     public function getInstructors()
     {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.instructors");
+        $stmt = $this->conn->prepare("select *, instructors.id as id, 
+                                      users.id as userID, users.name as name
+                                      from {$this->dbname}.instructors
+                                      join {$this->dbname}.users
+                                      on instructors.userID = users.id");
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -127,6 +138,37 @@ class DB
         return $result;
     }
 
+
+
+    public function addInstructor($userID, $specialty)
+    {
+        $stmt = $this->conn->prepare("
+                    insert into {$this->dbname}.instructors
+                    (userID, specialty)
+                    VALUES  (:userID, :specialty);"
+        );
+        $stmt->bindParam(':userID', $userID);
+        $stmt->bindParam(':specialty', $specialty);
+
+        try
+        {
+            $success = $stmt->execute();
+
+            if ($success) {
+                $result['success'] = true;
+                $result['message'] = "Success! Instructor added.";
+            }
+            return $result;
+        }
+        catch (PDOException $e)
+        {
+            die($e->getMessage());
+        }
+
+        return $result;
+    }
+
+
     public function getUser($email, $password)
     {
         try {
@@ -141,6 +183,24 @@ class DB
         } catch (PDOException $e) {
             $result["success"] = 0;
             $result["message"] = "Database Error1. Please Try Again!";
+        }
+
+        return $result;
+    }
+
+    public function getUserByEmail($email)
+    {
+        try {
+            $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE email=:email");
+            $stmt->bindParam(":email", $email);
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetch();
+
+        } catch (PDOException $e) {
+            $result["success"] = 0;
+            $result["message"] = "Database Error1. Please Try Again!".$e;
         }
 
         return $result;
@@ -345,7 +405,7 @@ class DB
         } catch (PDOException $e){
 
             $result['success'] = false;
-            $result['msg'] = "Could not execute query! \n Error: " + $e;
+            $result['msg'] = "Could not execute query! \n Error: ". $e;
             return $result;
         }
     }
@@ -368,7 +428,7 @@ class DB
             return $result;
         } catch (PDOException $e){
             $result['success'] = false;
-            $result['msg'] = "Request could not be deleted! \n Error: " + $e;
+            $result['msg'] = "Request could not be deleted! \n Error: " . $e;
             return $result;
         }
     }
@@ -413,12 +473,15 @@ class DB
 
     public function searchClasses($keyword)
     {
-        $stmt = $this->conn->prepare("select *, classes.name AS className, instructors.name AS instructorName,
+        $stmt = $this->conn->prepare("select *, classes.name AS className, users.name AS instructorName,
                                       classes.id AS classID, instructors.id AS instructorID
                                       from {$this->dbname}.classes
                                       join {$this->dbname}.instructors
                                       on classes.instructorID = instructors.id
-                                      WHERE instructors.name LIKE :keyword or classes.name LIKE :keyword");
+                                      join {$this->dbname}.users
+                                      on instructors.userID = users.id
+                                      WHERE users.name LIKE :keyword or classes.name LIKE :keyword");
+
             $stmt->bindParam(':keyword', $keyword);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -466,7 +529,13 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     }
 
 
-    ///////Nurse
+    /**
+     * Nurse
+     */
+
+    /**
+     * @return mixed
+     */
     public function getUserCertificates()
     {
         $stmt = $this->conn->prepare("
@@ -551,7 +620,51 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
-    ///////USERS
+    /**
+     * Edit Users
+    */
+
+    public function getUsers()
+    {
+        $stmt = $this->conn->prepare("select *
+                                      from {$this->dbname}.users");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+        return $result;
+    }
+
+    public function userExists($email)
+    {
+        $stmt = $this->conn->prepare("
+ 				Select * FROM {$this->dbname}.users
+ 				WHERE email=:email;"
+        );
+        $stmt->bindParam(':email', $email);
+
+        try {
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $row = $stmt->fetch();
+
+            return $row;
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function getUsersByID($id)
+    {
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE id = ?");
+        $stmt->bindValue(1, $id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
+
+        return $result;
+    }
 
     public function searchUsers($keyword)
     {
@@ -567,6 +680,22 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
 
 
+    }
+
+    public function searchUsersByID($id, $keyword)
+    {
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE id = ? AND (name LIKE ? or 
+    email like ? or gender like ? or birthDate like ?) ");
+        $stmt->bindValue(1, $id);
+        $stmt->bindValue(2, $keyword);
+        $stmt->bindValue(3, $keyword);
+        $stmt->bindValue(4, $keyword);
+        $stmt->bindValue(5, $keyword);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
     }
 
     public function updateUser($id, $name, $email, $password, $birthDate, $gender, $membershipType, $admin)
@@ -590,59 +719,26 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
     }
 
-    public function getUsers()
-    {
-        $stmt = $this->conn->prepare("select *
-                                      from {$this->dbname}.users");
-        $stmt->execute();
-        // set the resulting array to associative
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetchAll();
-        return $result;
-    }
-
-    public function getUsersByID($id)
-    {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE id = ?");
-        $stmt->bindValue(1, $id);
-        $stmt->execute();
-        // set the resulting array to associative
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetch();
-
-        return $result;
-    }
-
-    public function searchUsersByID($id, $keyword)
-    {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE id = ? AND (name LIKE ? or 
-    email like ? or gender like ? or birthDate like ?) ");
-        $stmt->bindValue(1, $id);
-        $stmt->bindValue(2, $keyword);
-        $stmt->bindValue(3, $keyword);
-        $stmt->bindValue(4, $keyword);
-        $stmt->bindValue(5, $keyword);
-        $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetchAll();
-
-        return $result;
-    }
-
     public function getUserRegistrations($id)
     {
-        $stmt = $this->conn->prepare("select *
+        try{
+            $stmt = $this->conn->prepare("select *
                                       from {$this->dbname}.registrations
                                       join {$this->dbname}.classes
                                       on registrations.classID = classes.id
                                       WHERE registrations.userID =:id ORDER BY registrations.id");
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        // set the resulting array to associative
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetchAll();
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
 
-        return $result;
+            return $result;
+        } catch (PDOException $e){
+            $result['success'] = false;
+            $result['msg'] = "Error: " . $e;
+            return $result;
+        }
     }
 
     public function getUserRegistrationsForClass($id, $classID)
@@ -702,25 +798,6 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         $result = $stmt->fetchAll();
 
         return $result;
-    }
-
-    public function userExists($email)
-    {
-        $stmt = $this->conn->prepare("
- 				Select * FROM {$this->dbname}.users
- 				WHERE email=:email;"
-        );
-        $stmt->bindParam(':email', $email);
-
-        try {
-            $stmt->execute();
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $row = $stmt->fetch();
-
-            return $row;
-        } catch (PDOException $e) {
-            die($e->getMessage());
-        }
     }
 
     public function addUser($user, $userImage)
@@ -909,9 +986,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     }
 
 
-    /*******GET USER LOGS FOR USER STATS*********/
-
-
+    /** GET USER LOGS FOR USER STATS **/
 
     /** Logs **/
 
@@ -1415,7 +1490,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
     }
 
 
-    /******RECORDING USER LOGS WITH NFC********/
+    /** RECORDING USER LOGS WITH NFC **/
 
     public function signout($id, $date)
     {
@@ -1447,6 +1522,34 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         } catch (Exception $e) {
             //redirect error!
             return false;
+        }
+    }
+
+    /**
+     * Edit Instructors
+     */
+
+    public function getInstructorsClasses($id)
+    {
+        try{
+            $stmt = $this->conn->prepare("select *, instructors.id as id, classes.id as classID, 
+                                      classes.name as className
+                                      from {$this->dbname}.classes
+                                      join {$this->dbname}.instructors
+                                      on instructors.id = classes .instructorID
+                                      where classes.instructorID =:id");
+
+            d($id);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (PDOException $e){
+            $result['success'] = false;
+            $result['msg'] = "Error: ".$e;
+            return $result;
         }
     }
 
