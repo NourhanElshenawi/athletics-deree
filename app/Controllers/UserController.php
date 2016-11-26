@@ -188,6 +188,12 @@ class UserController extends Controller
         echo $this->twig->render('customer/currentProgramRequest.twig', array('requests'=>$allRequests));
     }
 
+    public function deleteProgramRequest()
+    {
+        $db = new DB();
+        echo json_encode($db->deleteProgramRequest($_POST['id']));
+    }
+
 
 
 

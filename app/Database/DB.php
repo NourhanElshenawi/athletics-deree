@@ -304,7 +304,7 @@ class DB
     public function getUserProgramRequests($id)
     {
         try {
-            $stmt = $this->conn->prepare("select *
+            $stmt = $this->conn->prepare("select *, instructors.id as instructorID, program_requests.id as id
                                       from {$this->dbname}.program_requests
                                       join {$this->dbname}.instructors
                                       on program_requests.instructorID = instructors.id
@@ -327,7 +327,7 @@ class DB
     public function getUserCurrentProgram($id)
     {
         try {
-            $stmt = $this->conn->prepare("select *
+            $stmt = $this->conn->prepare("select *, instructors.id as instructorID, program_requests.id as id
                                       from {$this->dbname}.program_requests
                                       join {$this->dbname}.instructors
                                       on program_requests.instructorID = instructors.id
@@ -340,11 +340,36 @@ class DB
             // set the resulting array to associative
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
-            d($id);
-            d($result);
+
             return $result;
         } catch (PDOException $e){
-            ddd($e);
+
+            $result['success'] = false;
+            $result['msg'] = "Could not execute query! \n Error: " + $e;
+            return $result;
+        }
+    }
+
+
+    public function deleteProgramRequest($id)
+    {
+        try {
+            $stmt = $this->conn->prepare("DELETE
+                                      from {$this->dbname}.program_requests
+                                      WHERE program_requests.id =:id;");
+
+            $stmt->bindParam(':id', $id);
+            $success = $stmt->execute();
+
+            if ($success) {
+                $result['success'] = true;
+                $result['message'] = "Request Deleted!";
+            }
+            return $result;
+        } catch (PDOException $e){
+            $result['success'] = false;
+            $result['msg'] = "Request could not be deleted! \n Error: " + $e;
+            return $result;
         }
     }
 
