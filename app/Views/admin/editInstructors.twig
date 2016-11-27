@@ -61,7 +61,7 @@
 
                 <button class="fa fa-plus add" style="margin-top: 1%; border-radius: 25px;"></button>
 
-                <button class="fa fa-users add-multiple" style="margin-top: 1%; border-radius: 25px;"></button>
+                <button class="fa fa-users add-existing" style="margin-top: 1%; border-radius: 25px; font-weight: bold;">Add from Existing Users</button>
 
                 <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/editInstructors">
                     <label style="display: inline-block;">
@@ -93,7 +93,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <form action="/addInstructor" method="post" enctype="multipart/form-data">
+                        <form action="/addInstructor" method="post" enctype="multipart/form-data">
                         <tr>
                             <td>
                                 <input type="text" style="width: 100%;" name="name" required>
@@ -148,19 +148,45 @@
 
                         <tr colspan="8">
                             <td>
-                                <button type="submit"> Add User </button>
+                                <button type="submit" style="font-weight: bold;"> Add User </button>
                             </td>
                         </tr>
                     </form>
+                    </tbody>
+                </table>
+                <table class="addExisting">
+                    <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Specialty</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <form action="/addInstructorByEmail" method="post" enctype="multipart/form-data">
+                        <tr>
+                            <td>
+                                <input type="email" style="width: 100%;" name="email" placeholder="Enter Email.." required>
+                            </td>
+
+                            <td>
+                                <input type="text" name="specialty" placeholder="Specialty">
+                            </td>
+                        </tr>
 
 
+                        <tr colspan="8">
+                            <td>
+                                <button type="submit" style="font-weight: bold;"> Add User </button>
+                            </td>
+                        </tr>
+                    </form>
                     </tbody>
                 </table>
 
                 <table class="table table-striped projects">
                     <thead>
                     <tr>
-
                         <th>#</th>
                         <th>Name</th>
                         <th>Email</th>
@@ -170,266 +196,254 @@
                         <th>Birth Date</th>
                         <th>Gender</th>
                         <th></th>
-
                     </tr>
                     </thead>
                     <tbody>
+                        {% for instructor in instructors %}
+                            <tr style="padding: 0;">
 
-                    {% for instructor in instructors %}
-                        <tr style="padding: 0;">
+                                <td colspan="9" style="border: none; padding: 0;">
 
-                            <td colspan="9" style="border: none; padding: 0;">
+                                    <div class="x_panel" style="padding: 0;">
 
-                                <div class="x_panel" style="padding: 0;">
+                                        <div class="x_title" style="padding: 4px; border-bottom: none;">
+                                            <div class="split" style="width: 4%">
+                                                {{ loop.index }}
+                                            </div>
 
-                                    <div class="x_title" style="padding: 4px; border-bottom: none;">
-                                        <div class="split" style="width: 4%">
-                                            {{ loop.index }}
+                                            <div class="split" style="width: 8%">
+                                                <p>{{ instructor.name|capitalize }}</p>
+                                            </div>
+
+                                            <div class="split" style="width: 12%">
+                                                <p>{{ instructor.email }}</p>
+                                            </div>
+
+                                            <div class="split" style="width: 15%">
+                                                <p>{{ instructor.password }}</p>
+                                            </div>
+
+                                            <div class="split" style="width: 16%">
+                                                <p>{{ instructor.specialty|capitalize }}</p>
+                                            </div>
+
+                                            <div class="split" style="width: 10%">
+                                                <p>
+                                                    {% if instructor.phone is defined %}
+                                                        {{ instructor.phone }}
+                                                    {% else %}
+                                                        "Not Available"
+                                                    {% endif %}
+                                                </p>
+                                            </div>
+
+                                            <div class="split" style="width: 18%">
+                                                <p>{{ instructor.birthDate }}</p>
+                                            </div>
+
+                                            <div class="split" style="width: 7%">
+                                                <p>{{ instructor.gender|capitalize }}</p>
+                                            </div>
+
+
+                                            <ul class="nav navbar-right panel_toolbox">
+                                                <li>
+                                                    <a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
+                                                </li>
+                                                <li class="dropdown">
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                        <i class="fa fa-wrench"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu" role="menu">
+
+                                                        <li>
+
+                                                            <input type="hidden" id="edit" name="edit" value="{{ instructor.id }}">
+                                                            <a href="#" class="edit" value="{{ instructor.id }}">Edit User</a>
+
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a class="close-link delete" value="{{ instructor.id }}">
+                                                        <i class="fa fa-close"></i></a>
+
+                                                </li>
+                                            </ul>
+                                            <div class="clearfix"></div>
                                         </div>
 
-                                        <div class="split" style="width: 8%">
-                                            <p>{{ instructor.name|capitalize }}</p>
-                                        </div>
+                                        <div class="x_content update" style="padding: 0; display: none;">
 
-                                        <div class="split" style="width: 12%">
-                                            <p>{{ instructor.email }}</p>
-                                        </div>
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Password</th>
+                                                    <th>Age</th>
+                                                    <th>Gender</th>
+                                                    <th>Assigned Classes</th>
+                                                    <th>Classification</th>
+                                                    <th>Specialty</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
 
-                                        <div class="split" style="width: 15%">
-                                            <p>{{ instructor.password }}</p>
-                                        </div>
+                                                        <td>
+                                                            {{ instructor.name|capitalize }}
+                                                        </td>
+                                                        <td>{{ instructor.email }}</td>
+                                                        <td>{{ instructor.password }}</td>
+                                                        <td>{{ instructor.birthDate }}</td>
+                                                        <td>{{ instructor.gender|capitalize }}</td>
+                                                        <td>
+                                                            <div>
 
-                                        <div class="split" style="width: 16%">
-                                            <p>{{ instructor.specialty|capitalize }}</p>
-                                        </div>
+                                                                {% if instructor.classes is empty %}
+                                                                    <p style="padding: 0; font-size: medium;">"Not assigned to any classes"</p>
 
-                                        <div class="split" style="width: 10%">
-                                            <p>
-                                                {% if instructor.phone is defined %}
-                                                    {{ instructor.phone }}
-                                                {% else %}
-                                                    "Not Available"
-                                                {% endif %}
-                                            </p>
-                                        </div>
-
-                                        <div class="split" style="width: 18%">
-                                            <p>{{ instructor.birthDate }}</p>
-                                        </div>
-
-                                        <div class="split" style="width: 7%">
-                                            <p>{{ instructor.gender|capitalize }}</p>
-                                        </div>
-
-
-                                        <ul class="nav navbar-right panel_toolbox">
-                                            <li>
-                                                <a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
-                                            </li>
-                                            <li class="dropdown">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                                    <i class="fa fa-wrench"></i>
-                                                </a>
-                                                <ul class="dropdown-menu" role="menu">
-
-                                                    <li>
-
-                                                        <input type="hidden" id="edit" name="edit" value="{{ instructor.id }}">
-                                                        <a href="#" class="edit" value="{{ instructor.id }}">Edit User</a>
-
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                <a class="close-link delete" value="{{ instructor.id }}">
-                                                    <i class="fa fa-close"></i></a>
-
-                                            </li>
-                                        </ul>
-                                        <div class="clearfix"></div>
-                                    </div>
-
-                                    <div class="x_content update" style="padding: 0; display: none;">
-
-                                        <table class="table table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Password</th>
-                                                <th>Age</th>
-                                                <th>Gender</th>
-                                                <th>Assigned Classes</th>
-                                                <th>Classification</th>
-                                                <th>Specialty</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-
-                                                <td>
-                                                    {{ instructor.name|capitalize }}
-                                                </td>
-                                                <td>{{ instructor.email }}</td>
-                                                <td>{{ instructor.password }}</td>
-                                                <td>{{ instructor.birthDate }}</td>
-                                                <td>{{ instructor.gender|capitalize }}</td>
-                                                <td>
-                                                    <div>
-
-                                                        {% if instructor.classes is empty %}
-                                                            <p style="padding: 0; font-size: medium;">"Not assigned to any classes"</p>
-
-                                                            {% else %}
-                                                                {% for class in instructor.classes %}
-                                                                    <p style="padding: 0; font-size: medium;">{{ class.name|capitalize }}</p>
-                                                                {% endfor %}
-                                                            {% endif %}
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        {% if instructor.admin == 0 and instructor.student == 0 and instructor.faculty == 0 and instructor.staff == 0 and instructor.alumni == 0 and instructor.external == 0 %}
-                                                            {{ "N/A" }}
-                                                        {% endif %}
-                                                        {% if instructor.admin == 1 %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Administrator" }}</p>
-                                                        {% endif %}
-                                                        {% if instructor.student == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Student" }}</p>
-                                                        {% endif %}
-                                                        {% if instructor.faculty == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
-                                                        {% endif %}
-                                                        {% if instructor.staff == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Staff" }}</p>
-                                                        {% endif %}
-                                                        {% if instructor.alumni == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Alumni" }}</p>
-                                                        {% endif %}
-                                                        {% if instructor.external == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "External Paying" }}</p>
-                                                        {% endif %}
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    {{ instructor.specialty|capitalize }}
-                                                </td>
-                                            </tr>
-                                            <tr style="display: none;" class="updateInfo">
-                                                <form action="/updateUser" method="post">
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="text" id="name" name="name" value="{{ instructor.name }}">
-                                                    </td>
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="email" id="email" name="email" value="{{ instructor.email }}">
-                                                    </td>
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="text" id="password" name="password" value="{{ instructor.password }}">
-                                                    </td>
-
-                                                    <td>
-                                                        <input style="width: 100%;" type="date" id="birthDate" name="birthDate" value="{{ instructor.birthDate }}">
-                                                    </td>
-
-                                                    <td>
-                                                        <select name="gender" id="gender" style="width: 100%;">
-                                                            {% if instructor.gender == "f" %}
-
-                                                                <option value="F" selected>F</option>
-                                                                <option value="M">M</option>
-                                                            {% else %}
-                                                                <option value="F">F</option>
-                                                                <option value="M" selected>M</option>
-                                                            {% endif %}
-                                                        </select>
-                                                    </td>
-
-                                                    <td>
-
-                                                        <select name="" id="" multiple disabled>
-                                                            {% for class in classes %}
-                                                                <option value="{{ class.classID }}"
-                                                                {% for assignedClass in instructor.classes %}
-                                                                    {% if class.classID == assignedClass.classID %}
-                                                                         selected
+                                                                    {% else %}
+                                                                        {% for class in instructor.classes %}
+                                                                            <p style="padding: 0; font-size: medium;">{{ class.name|capitalize }}</p>
+                                                                        {% endfor %}
                                                                     {% endif %}
-                                                                {% endfor %}
-                                                                > {{ class.className }}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </td>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                {% if instructor.admin == 0 and instructor.student == 0 and instructor.faculty == 0 and instructor.staff == 0 and instructor.alumni == 0 and instructor.external == 0 %}
+                                                                    {{ "N/A" }}
+                                                                {% endif %}
+                                                                {% if instructor.admin == 1 %}
+                                                                    <p style="padding: 0; font-size: medium;">{{ "Administrator" }}</p>
+                                                                {% endif %}
+                                                                {% if instructor.student == 1  %}
+                                                                    <p style="padding: 0; font-size: medium;">{{ "Student" }}</p>
+                                                                {% endif %}
+                                                                {% if instructor.faculty == 1  %}
+                                                                    <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
+                                                                {% endif %}
+                                                                {% if instructor.staff == 1  %}
+                                                                    <p style="padding: 0; font-size: medium;">{{ "Staff" }}</p>
+                                                                {% endif %}
+                                                                {% if instructor.alumni == 1  %}
+                                                                    <p style="padding: 0; font-size: medium;">{{ "Alumni" }}</p>
+                                                                {% endif %}
+                                                                {% if instructor.external == 1  %}
+                                                                    <p style="padding: 0; font-size: medium;">{{ "External Paying" }}</p>
+                                                                {% endif %}
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            {{ instructor.specialty|capitalize }}
+                                                        </td>
+                                                    </tr>
+                                                    <tr style="display: none;" class="updateInfo">
+                                                        <form action="/updateUser" method="post">
 
-                                                    <td>
-                                                        <select name="classification" id="classification" style="width: 100%;" multiple>
-                                                            {% if instructor.admin == 1 %}
-                                                                <option value="1" selected>{{ "Administrator" }}</option>
-                                                            {% else %}
-                                                                <option value="0">{{ "Administrator" }}</option>
-                                                            {% endif %}
-                                                            {% if instructor.student == 1 %}
-                                                                <option value="1" selected>{{ "Student" }}</option>
-                                                            {% else %}
-                                                                <option value="0">{{ "Student" }}</option>
-                                                            {% endif %}
-                                                            {% if instructor.faculty == 1 %}
-                                                                <option value="1" selected>{{ "Faculty" }}</option>
-                                                            {% else %}
-                                                                <option value="0">{{ "Faculty" }}</option>
-                                                            {% endif %}
-                                                            {% if instructor.staff == 1 %}
-                                                                <option value="1" selected>{{ "Staff" }}</option>
-                                                            {% else %}
-                                                                <option value="0">{{ "Staff" }}</option>
-                                                            {% endif %}
-                                                            {% if instructor.alumni == 1 %}
-                                                                <option value="1" selected>{{ "Alumni" }}</option>
-                                                            {% else %}
-                                                                <option value="0">{{ "Alumni" }}</option>
-                                                            {% endif %}
-                                                            {% if instructor.external == 1 %}
-                                                                <option value="1" selected>{{ "External Paying" }}</option>
-                                                            {% else %}
-                                                                <option value="0">{{ "External Paying" }}</option>
-                                                            {% endif %}
-                                                        </select>
+                                                            <td>
+                                                                <input style="width: 100%;" type="text" id="name" name="name" value="{{ instructor.name }}">
+                                                            </td>
 
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" value="{{ instructor.specialty|capitalize }}">
-                                                    </td>
+                                                            <td>
+                                                                <input style="width: 100%;" type="email" id="email" name="email" value="{{ instructor.email }}">
+                                                            </td>
 
-                                                    <td>
-                                                        <input style="width: 100%;" type="hidden" name="id" value="{{ instructor.id }}">
+                                                            <td>
+                                                                <input style="width: 100%;" type="text" id="password" name="password" value="{{ instructor.password }}">
+                                                            </td>
 
-                                                        {#remove unnecessary attributes#}
-                                                        <button type="submit" value="{{ instructor.id }}">Update</button>
-                                                    </td>
+                                                            <td>
+                                                                <input style="width: 100%;" type="date" id="birthDate" name="birthDate" value="{{ instructor.birthDate }}">
+                                                            </td>
 
+                                                            <td>
+                                                                <select name="gender" id="gender" style="width: 100%;">
+                                                                    {% if instructor.gender == "f" %}
 
-                                                </form>
+                                                                        <option value="F" selected>F</option>
+                                                                        <option value="M">M</option>
+                                                                    {% else %}
+                                                                        <option value="F">F</option>
+                                                                        <option value="M" selected>M</option>
+                                                                    {% endif %}
+                                                                </select>
+                                                            </td>
 
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                                            <td>
 
+                                                                <select name="" id="" multiple disabled>
+                                                                    {% for class in classes %}
+                                                                        <option value="{{ class.classID }}"
+                                                                        {% for assignedClass in instructor.classes %}
+                                                                            {% if class.classID == assignedClass.classID %}
+                                                                                 selected
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                        > {{ class.className }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </td>
+
+                                                            <td>
+                                                                <select name="classification" id="classification" style="width: 100%;" multiple>
+                                                                    {% if instructor.admin == 1 %}
+                                                                        <option value="1" selected>{{ "Administrator" }}</option>
+                                                                    {% else %}
+                                                                        <option value="0">{{ "Administrator" }}</option>
+                                                                    {% endif %}
+                                                                    {% if instructor.student == 1 %}
+                                                                        <option value="1" selected>{{ "Student" }}</option>
+                                                                    {% else %}
+                                                                        <option value="0">{{ "Student" }}</option>
+                                                                    {% endif %}
+                                                                    {% if instructor.faculty == 1 %}
+                                                                        <option value="1" selected>{{ "Faculty" }}</option>
+                                                                    {% else %}
+                                                                        <option value="0">{{ "Faculty" }}</option>
+                                                                    {% endif %}
+                                                                    {% if instructor.staff == 1 %}
+                                                                        <option value="1" selected>{{ "Staff" }}</option>
+                                                                    {% else %}
+                                                                        <option value="0">{{ "Staff" }}</option>
+                                                                    {% endif %}
+                                                                    {% if instructor.alumni == 1 %}
+                                                                        <option value="1" selected>{{ "Alumni" }}</option>
+                                                                    {% else %}
+                                                                        <option value="0">{{ "Alumni" }}</option>
+                                                                    {% endif %}
+                                                                    {% if instructor.external == 1 %}
+                                                                        <option value="1" selected>{{ "External Paying" }}</option>
+                                                                    {% else %}
+                                                                        <option value="0">{{ "External Paying" }}</option>
+                                                                    {% endif %}
+                                                                </select>
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" value="{{ instructor.specialty|capitalize }}">
+                                                            </td>
+
+                                                            <td>
+                                                                <input style="width: 100%;" type="hidden" name="id" value="{{ instructor.id }}">
+
+                                                                {#remove unnecessary attributes#}
+                                                                <button type="submit" value="{{ instructor.id }}">Update</button>
+                                                            </td>
+                                                        </form>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                    {% endfor %}
-
-
-
-
+                                </td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
                 <!-- end project list -->
-
             </div>
         </div>
     </div>
@@ -445,15 +459,9 @@
 
             })  ;
 
-
             jQuery('.close-link').click(function () {
                 var $BOX_PANEL = jQuery(this).closest('.x_panel');
             });
-
-
-
-
-
 
         });
         jQuery('.addInstructor').toggle();
@@ -463,10 +471,10 @@
 
         });
 
-        jQuery('.addClass-multiple').toggle();
-        jQuery('.add-multiple').click(function() {
+        jQuery('.addExisting').toggle();
+        jQuery('.add-existing').click(function() {
 
-            jQuery('.addClass-multiple').toggle();
+            jQuery('.addExisting').toggle();
 
         });
 

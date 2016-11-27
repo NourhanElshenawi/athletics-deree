@@ -2,7 +2,7 @@
 
 
 {% block head %}
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
     <!-- Font Awesome -->
     {#<link href="css/font-awesome.min.css" rel="stylesheet">#}
     <!-- NProgress -->
@@ -150,11 +150,8 @@
 
 {% block content %}
 
-    <form action="/pay" method="post">
-        <button type="submit">PayPal</button>
-    </form>
 
-    <div>
+    <div style="display: inline-block;">
         {#
         User's Profile Picture
         #}
@@ -162,13 +159,26 @@
         {#
         User's Name
         #}
-        <p style="font-weight: bold; font-size: large; padding: 0;">Name: {{ session.user.name }}</p>
+        <p style="font-weight: bold; font-size: large; padding: 0;">Name: {{ session.user.name|title }}</p>
         {#
         User's ID
         #}
         <p style="font-weight: bold; font-size: large; padding: 0;">ID: {{ session.user.id }}</p>
 
     </div>
+
+
+    <form action="/pay" method="post" style="display: inline-block;">
+        <button type="submit" style="font-weight: bold; display: inline-block;"
+                {% if needToPay == true %}
+                class="btn btn-danger">
+        Click to Pay the Gym Fee!
+            {% else %}
+                class="btn btn-success" disabled>
+                Gym Fee Paid!
+            {% endif %}
+        </button>
+    </form>
 
     {#
         User's Monthly Stast

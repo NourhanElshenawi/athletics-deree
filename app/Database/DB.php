@@ -138,55 +138,6 @@ class DB
         return $result;
     }
 
-    public function addInstructor($userID, $specialty)
-    {
-        $stmt = $this->conn->prepare("
-                    insert into {$this->dbname}.instructors
-                    (userID, specialty)
-                    VALUES  (:userID, :specialty);"
-        );
-        $stmt->bindParam(':userID', $userID);
-        $stmt->bindParam(':specialty', $specialty);
-
-        try
-        {
-            $success = $stmt->execute();
-
-            if ($success) {
-                $result['success'] = true;
-                $result['message'] = "Success! Instructor added.";
-            }
-            return $result;
-        }
-        catch (PDOException $e)
-        {
-            die($e->getMessage());
-        }
-
-        return $result;
-    }
-
-    public function searchInstructors($keyword)
-    {
-        $stmt = $this->conn->prepare("select *, instructors.id as id, 
-                                      users.id as userID, users.name as name
-                                      from {$this->dbname}.instructors
-                                      join {$this->dbname}.users
-                                      on instructors.userID = users.id
-                                      WHERE users.name LIKE :keyword OR instructors.id LIKE :keyword OR users.email LIKE :keyword or
-                                      instructors.userID LIKE :keyword ");
-
-        $stmt->bindParam(':keyword', $keyword);
-        $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetchAll();
-
-        return $result;
-
-
-    }
-
-
     public function getUser($email, $password)
     {
         try {
@@ -223,8 +174,6 @@ class DB
 
         return $result;
     }
-
-
 
     public function androidLogin($email, $password)
     {
@@ -1569,6 +1518,54 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         }
     }
 
+    public function addInstructor($userID, $specialty)
+    {
+        $stmt = $this->conn->prepare("
+                    insert into {$this->dbname}.instructors
+                    (userID, specialty)
+                    VALUES  (:userID, :specialty);"
+        );
+        $stmt->bindParam(':userID', $userID);
+        $stmt->bindParam(':specialty', $specialty);
+
+        try
+        {
+            $success = $stmt->execute();
+
+            if ($success) {
+                $result['success'] = true;
+                $result['message'] = "Success! Instructor added.";
+            }
+            return $result;
+        }
+        catch (PDOException $e)
+        {
+            die($e->getMessage());
+        }
+
+        return $result;
+    }
+
+    public function searchInstructors($keyword)
+    {
+        $stmt = $this->conn->prepare("select *, instructors.id as id, 
+                                      users.id as userID, users.name as name
+                                      from {$this->dbname}.instructors
+                                      join {$this->dbname}.users
+                                      on instructors.userID = users.id
+                                      WHERE users.name LIKE :keyword OR instructors.id LIKE :keyword OR users.email LIKE :keyword or
+                                      instructors.userID LIKE :keyword ");
+
+        $stmt->bindParam(':keyword', $keyword);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+
+    }
+
     /** Trainer **/
     public function getPendingProgramRequests()
     {
@@ -1604,6 +1601,51 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
             $result['success'] = false;
             $result['message'] = $exception->getMessage();
         }
+        return $result;
+    }
+
+    /**
+     * Addinf payment transaction
+     */
+
+    public function addPayment($paymentID, $token, $payerID, $id )
+    {
+        $stmt = $this->conn->prepare("
+                    insert into {$this->dbname}.payments
+                    (userID, paymentID, token, payerID)
+                    VALUES  (:userID, :paymentID, :token, :payerID);"
+        );
+        $stmt->bindParam(':userID', $id);
+        $stmt->bindParam(':paymentID', $paymentID);
+        $stmt->bindParam(':token', $token);
+        $stmt->bindParam(':payerID', $payerID);
+
+        try
+        {
+            $result = $stmt->execute();
+
+            return $result;
+        }
+        catch (PDOException $e)
+        {
+            die($e->getMessage());
+        }
+
+        return $result;
+    }
+
+    public function getLastPaymentByUser($id)
+    {
+        $stmt = $this->conn->prepare("select *
+          from {$this->dbname}.payments
+          WHERE payments.userID =:id ORDER by payments.date DESC LIMIT 1;");
+
+        $stmt->BindParam(':id', $id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
+
         return $result;
     }
 

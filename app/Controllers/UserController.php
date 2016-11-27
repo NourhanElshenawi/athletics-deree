@@ -110,7 +110,28 @@ class UserController extends Controller
         $classes = $this->getUserClasses($_SESSION['user']['id']);
         $classes = beautifyClassesForCalendar($classes);
 
-        echo $this->twig->render('customer/profile.twig', array('logs'=>$logs, 'classes'=>$classes));
+        $dateOfPayment = explode(" ", $db->getLastPaymentByUser($_SESSION['user']['id'])['date'])[0];
+        $periodCoveredByPayment = daysDateDifference(date("Y-m-d"),$dateOfPayment);
+
+        if($periodCoveredByPayment>= 31){
+            $needToPay = true;
+        }else {
+            $needToPay = false;
+        }
+
+
+        $paymentSuccess = $db->getLastPaymentByUser($_SESSION['user']['id']);
+        if(isset($_GET['success'])){
+            if($db->addPayment($_GET['paymentId'], $_GET['token'], $_GET['PayerID'], $_SESSION['user']['id'])){
+                $paymentSuccess = true;
+            } else{
+                $paymentSuccess = "Please contact support regarding your last Payment!";
+            }
+        } else if (!isset($_GET['success'])){
+            $paymentSuccess = false;
+        }
+
+        echo $this->twig->render('customer/profile.twig', array('logs'=>$logs, 'classes'=>$classes, 'needToPay'=>$needToPay, 'paymentSuccess'=>$paymentSuccess));
     }
 
     public function getUserClasses($id) {
@@ -260,8 +281,8 @@ class UserController extends Controller
     public function pay()
     {
         $product = 'DEREE Gym Subscription Fee';
-        $price = (float)0;
-        $shipping = 0.00;
+        $price = (float)10;
+        $shipping = 2.00;
         $total = $price + $shipping;
 
 //        d($price);
@@ -296,8 +317,8 @@ class UserController extends Controller
             ->setInvoiceNumber(uniqid());
 
         $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl("http://athletics-deree.app/profile?success=true")
-            ->setCancelUrl("http://athletics-deree.app/profile?success=false");
+        $redirectUrls->setReturnUrl("http://athletics-deree.app/profile?paymentSuccess=true")
+            ->setCancelUrl("http://athletics-deree.app/profile?paymentSuccess=false");
 
         $payment = new Payment();
         $payment->setIntent('sale')
@@ -309,8 +330,8 @@ class UserController extends Controller
             $payment->create(
                 new \PayPal\Rest\ApiContext(
                     new \PayPal\Auth\OAuthTokenCredential(
-                        'AZ7z5y3rt0tTnl8ToZtYRo9AJsbPcbrQuV01fm0hAXC53BDBLtCrNAwpV4FSBH2ect6pH8OPTdJD56qH',
-                        'ELBq1gvnUzzcmeS59_veLBzXZuwVv0_b-jY5sAeMPSJME17B5KcTYDWOhyKA0E1Mwv23fP7FstKCBro6'
+                        'Ad6QnpfuKV6qbAKPj0Uy7OykghBAQCBN5_MO8l2_Croc7PfI9pubbrbzqOmx5oerciLLXeFHUvN2RdPk',
+                        'EGyc8_npQKix-febAo1c1eDl1y-21hO1n2hzhW5AZI_ZIFrPiBccz-Cd9PaqG2YOqIosh0Zi1Qguqusb'
                     )
                 )
             );
@@ -319,7 +340,9 @@ class UserController extends Controller
 //            ddd($e->getMessage());
         }
 
-        redirect($payment->getApprovalLink());
+        $paymentURL = $payment->getApprovalLink();
+
+//        redirect($payment->getApprovalLink());
 //        redirect('/testing');
     }
 }

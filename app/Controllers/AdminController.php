@@ -270,6 +270,18 @@ class AdminController extends Controller
         echo $this->twig->render('admin/editInstructors.twig', ['result'=>$result]);
     }
 
+    public function addInstructorByEmail()
+    {
+        $db = new DB();
+
+        $user = $db->getUserByEmail($_POST['email']);
+        if(!empty($user)) {
+            $db->addInstructor($user['id'], $_POST['specialty']);
+        }
+
+        redirect('/editInstructors');
+    }
+
 
     public function updateUser()
     {

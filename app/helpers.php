@@ -140,3 +140,9 @@ function convertJoinDBReturns($array){
 
     return $arrayReturn;
 }
+
+function daysDateDifference($date1, $date2){
+    $days = date_diff(date_create($date1), date_create($date2))->days;
+
+    return $days;
+}

@@ -78,6 +78,7 @@ $router->post('/add_user', 'AdminController', 'addUser');
 //Instructors
 $router->get('/editInstructors', 'AdminController', 'editInstructors');
 $router->post('/addInstructor', 'AdminController', 'addInstructor');
+$router->post('/addInstructorByEmail', 'AdminController', 'addInstructorByEmail');
 
 //STATS
 $router->get('/adminvisitstats', 'AdminController', 'stats');
