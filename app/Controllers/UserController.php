@@ -156,20 +156,6 @@ class UserController extends Controller
     }
 
 
-/** Requesting workout programs **/
-    public function requestProgram ()
-    {
-        echo $this->twig->render('customer/requestProgram.twig');
-    }
-
-    public function submitProgram ()
-    {
-        $db = new DB();
-
-        $db->createProgramRequest($_POST);
-    }
-
-
 /** Registration for classes **/
     public function register()
     {
@@ -201,8 +187,64 @@ class UserController extends Controller
 
     }
 
+    /**
+     * Personal Stas
+     */
 
-/** Workout Program **/
+    public function personalStats()
+    {
+        $this->averageTimeSpentPerVisit();
+    }
+    public function totalHoursSpent()
+    {
+
+    }
+    public function averageTimeSpentPerVisit()
+    {
+        $db = new DB();
+        $logTimes = $db->getUserLogsTime($_SESSION['user']['id']);
+        d($logTimes);
+        $hours = array();
+        $minutes = array();
+        $seconds = array();
+
+        foreach ($logTimes as $log){
+            $date1 = date("Y-m-d")." ". $log['TIME (logout)'];
+            $date2 = date("Y-m-d")." ". $log['TIME (login)'];
+            $diff = minutesTimeDifference($date1, $date2);
+            $hours[] = $diff->h;
+            $minutes[] = $diff->m;
+            $seconds[] = $diff->s;
+        }
+        $totalHours = array_sum($hours);
+        $avgHours = $totalHours/count($hours);
+        d($avgHours);
+        $totalMins = array_sum($minutes);
+        $avgMins = $totalMins/count($minutes);
+        d($avgMins);
+
+        $totalSecs = array_sum($seconds);
+        $avgSecs = $totalSecs/count($seconds);
+        d($avgSecs);
+
+
+    }
+
+    /** Requesting workout programs **/
+    public function requestProgram ()
+    {
+        echo $this->twig->render('customer/requestProgram.twig');
+    }
+
+    public function submitProgram ()
+    {
+        $db = new DB();
+
+        $db->createProgramRequest($_POST);
+    }
+
+
+/** View Workout Program **/
 
     public function programHistory()
     {
@@ -284,10 +326,6 @@ class UserController extends Controller
         $price = (float)10;
         $shipping = 2.00;
         $total = $price + $shipping;
-
-//        d($price);
-//        d($shipping);
-//        d($total);
 
         $payer = new Payer();
         $payer->setPaymentMethod('paypal');

@@ -376,8 +376,7 @@ class DB
             return $result;
         }
     }
-
-
+    
     public function deleteProgramRequest($id)
     {
         try {
@@ -398,6 +397,19 @@ class DB
             $result['msg'] = "Request could not be deleted! \n Error: " . $e;
             return $result;
         }
+    }
+
+    public function getUserLogsTime($id)
+    {
+        $stmt = $this->conn->prepare("select TIME (login), TIME (logout) from {$this->dbname}.logs 
+                                      WHERE userID =:id and logout is not NULL ");
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
     }
 
 
@@ -1640,7 +1652,7 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
           from {$this->dbname}.payments
           WHERE payments.userID =:id ORDER by payments.date DESC LIMIT 1;");
 
-        $stmt->BindParam(':id', $id);
+        $stmt->bindParam(':id', $id);
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);

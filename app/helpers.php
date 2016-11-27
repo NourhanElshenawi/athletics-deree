@@ -146,3 +146,8 @@ function daysDateDifference($date1, $date2){
 
     return $days;
 }
+function minutesTimeDifference($date1, $date2){
+    $diff = date_diff(date_create($date1), date_create($date2));
+
+    return $diff;
+}
