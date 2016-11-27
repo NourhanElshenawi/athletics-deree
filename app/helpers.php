@@ -151,3 +151,35 @@ function minutesTimeDifference($date1, $date2){
 
     return $diff;
 }
+
+function avgLogTime($logTimes){
+
+    $hours = array();
+    $minutes = array();
+    $seconds = array();
+
+    foreach ($logTimes as $log){
+        $date1 = date("Y-m-d")." ". $log['TIME (logout)'];
+        $date2 = date("Y-m-d")." ". $log['TIME (login)'];
+        $diff = minutesTimeDifference($date1, $date2);
+        $hours[] = $diff->h;
+        $minutes[] = $diff->m;
+        $seconds[] = $diff->s;
+    }
+    $totalHours = array_sum($hours);
+    $avgHours = $totalHours/count($hours);
+
+    $totalMins = array_sum($minutes);
+    $avgMins = $totalMins/count($minutes);
+
+    $totalSecs = array_sum($seconds);
+    $avgSecs = $totalSecs/count($seconds);
+
+    $avg = array(
+        'hours' => $avgHours,
+        'mins' => $avgMins,
+        'secs' => $avgSecs
+    );
+
+    return $avg;
+}

@@ -203,31 +203,9 @@ class UserController extends Controller
     {
         $db = new DB();
         $logTimes = $db->getUserLogsTime($_SESSION['user']['id']);
-        d($logTimes);
-        $hours = array();
-        $minutes = array();
-        $seconds = array();
-
-        foreach ($logTimes as $log){
-            $date1 = date("Y-m-d")." ". $log['TIME (logout)'];
-            $date2 = date("Y-m-d")." ". $log['TIME (login)'];
-            $diff = minutesTimeDifference($date1, $date2);
-            $hours[] = $diff->h;
-            $minutes[] = $diff->m;
-            $seconds[] = $diff->s;
-        }
-        $totalHours = array_sum($hours);
-        $avgHours = $totalHours/count($hours);
-        d($avgHours);
-        $totalMins = array_sum($minutes);
-        $avgMins = $totalMins/count($minutes);
-        d($avgMins);
-
-        $totalSecs = array_sum($seconds);
-        $avgSecs = $totalSecs/count($seconds);
-        d($avgSecs);
-
-
+        $avgLogTimes = avgLogTime($logTimes);
+        d($avgLogTimes);
+        
     }
 
     /** Requesting workout programs **/
