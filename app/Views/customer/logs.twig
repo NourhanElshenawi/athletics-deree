@@ -48,16 +48,17 @@
 
 {% block content %}
 
-    <div class="clearfix"></div>
 
     <div class="row">
         {#<div class="col-md-12">#}
         <div class="x_panel2">
             <div class="x_title">
-                <h1 style="width: auto; margin-right: 3%; color: lightcoral; font-weight: normal; margin-bottom: 0; display: inline-block;">
-                    Gym Logs</h1>
+                <h2 style="width: auto; margin-right: 3%;">{{ session.user.name|title }}'s Logs</h2>
 
-                <form style="margin: 0; border-left: 1px solid #5F656A; display: inline-block;" role="search" method="get" class="search-form" action="/logs">
+
+                {#NEEDS IMPLEMENTATION!!!!!#}
+
+                <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/mylogs">
                     <label style="display: inline-block;">
                         <span class="screen-reader-text">Search for:</span>
                         <input style="margin: 0;" type="search" class="search-field" placeholder="Search …" value="" name="keyword">
@@ -75,7 +76,7 @@
                     <thead>
                     <tr>
 
-                        <th>ID #</th>
+                        <th>#</th>
                         <th>Name</th>
                         <th>User ID</th>
                         <th>Login</th>
@@ -91,12 +92,6 @@
 
                     {% for log in logs %}
 
-                        {#{% set currentUser = '' %}#}
-                        {#{% for user in users %}#}
-                            {#{% if user.id == log.userID %}#}
-                                {#{% set currentUser = user %}#}
-                            {#{% endif %}#}
-                        {#{% endfor %}#}
                         <tr style="padding: 0;">
 
                             <td colspan="6" style="border: none; padding: 0;">
@@ -105,22 +100,18 @@
 
                                     <div class="x_title" style="padding: 4px; border-bottom: none;">
 
-                                        <div class="split" style="width: 5%; margin-right: 7.5%;">
+                                        <div class="split" style="width: 5%; margin-right: 3%;">
                                             {{ loop.index }}
                                         </div>
 
                                         <div class="split" style="width: 15%; margin-right: 4%;">
                                             <p>
-                                                {#{% for user in users %}#}
-                                                    {#{% if user.id == log.userID %}#}
-                                                    {{ log.name|capitalize }}
-                                                {#{% endif %}#}
-                                                {#{% endfor %}#}
+                                                {{ session.user.name|title }}
                                             </p>
 
                                         </div>
 
-                                        <div class="split" style="width: 16%; margin-right: 2%;">
+                                        <div class="split" style="width: 16%; margin-right: 5%;">
                                             <p>{{ log.userID }}</p>
                                         </div>
 
@@ -132,78 +123,9 @@
                                             <p>{{ log.logout }}</p>
                                         </div>
 
-                                        <div class="split">
-                                            <a href="/editusers?keyword={{ log.userID }}">
-                                                <button>More Info</button>
-                                            </a>
-                                        </div>
-
-
-                                        <ul class="nav navbar-right panel_toolbox">
-                                            <li>
-                                                <a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
-                                            </li>
-                                        </ul>
                                         <div class="clearfix"></div>
                                     </div>
 
-                                    <div class="x_content update" style="padding: 0; display: none;">
-
-                                        <table class="table table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Age</th>
-                                                <th>Gender</th>
-                                                <th>Membership Type</th>
-                                                <th>Classification</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-
-                                                <td>
-                                                    {{ log.name|capitalize }}
-                                                </td>
-                                                <td>{{ log.email }}</td>
-                                                <td>{{ log.birthDate }}</td>
-                                                <td>{{ log.gender|capitalize }}</td>
-                                                <td>
-                                                    <ul>
-                                                        {% if log.membershipType == 1 %}
-                                                            <li>Paid</li>
-                                                        {% else %}
-                                                            <li>Non-Paid</li>
-                                                        {% endif %}
-                                                    </ul>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        {% if log.admin == 1 %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Administrator" }}</p>
-                                                        {% endif %}
-                                                        {% if log.student == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Student" }}</p>
-                                                        {% endif %}
-                                                        {% if log.faculty == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
-                                                        {% endif %}
-                                                        {% if log.staff == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "Faculty" }}</p>
-                                                        {% endif %}
-                                                        {% if log.external == 1  %}
-                                                            <p style="padding: 0; font-size: medium;">{{ "External Paying" }}</p>
-                                                        {% endif %}
-                                                    </div>
-                                                </td>
-                                                <td></td>
-                                            </tr>
-
-                                            </tbody>
-                                        </table>
-
-                                    </div>
                                 </div>
                             </td>
 
@@ -231,6 +153,57 @@
                 toggle(this);
 
             })  ;
+
+
+            jQuery('.close-link').click(function () {
+                var $BOX_PANEL = jQuery(this).closest('.x_panel');
+            });
+
+
+
+
+
+
+        });
+        jQuery('.addClass').toggle();
+        jQuery('.add').click(function() {
+
+            jQuery('.addClass').toggle();
+
+        });
+
+        jQuery('.edit').click(function() {
+
+            toggleOnce(this);
+            jQuery(this).toggleClass('fa-chevron-down');
+            jQuery(this).find('i').toggleClass('fa-chevron-up');
+            jQuery('.updateInfo').toggle();
+
+        });
+
+        jQuery('.delete').click(function() {
+
+
+            if (confirm("Are you sure you want to delete this user?")) {
+
+
+                jQuery(this).closest('.x_panel').remove();
+
+                jQuery.ajax(
+                        {
+                            type: 'POST',
+                            url: '/deleteuser',
+                            data: {
+                                id: jQuery(this).attr('value')
+                            },
+                            success: function (msg) {
+
+                                console.log("SUCCESS AJAX!");
+
+                            }
+                        }
+                );
+            }
 
         });
 
@@ -294,6 +267,17 @@
 
     </script>
 
+    <script>
+        jQuery('.edit').click(function() {
+
+            var $id = jQuery(this).attr('value');
+
+            jQuery(this).closest('.x_content').css('display','block');
+            jQuery(this).closest('.x_content').css('style','');
+
+        });
+
+    </script>
 
 
     <!-- jQuery -->

@@ -327,6 +327,27 @@ class UserController extends Controller
         echo $this->twig->render('customer/currentProgramRequest.twig', array('requests'=>$allRequests));
     }
 
+    /**
+     * Logs
+     */
+
+    public function userLogs(){
+
+        $db = new DB();
+        if(isset($_GET['keyword'])){
+            if(convertDayToNum($_GET['keyword']) != false){
+                $logs = $db->getUserLogsByKeyword(convertDayToNum($_GET['keyword']));
+            } else{
+                $logs = $db->getUserLogsByKeyword($_GET['keyword']);
+            }
+        }
+        else {
+            $logs = $db->getUserLogs($_SESSION['user']['id']);
+        }
+        echo $this->twig->render('customer/logs.twig', array('logs'=>$logs));
+    }
+
+
 
     /** Android **/
 

@@ -538,7 +538,11 @@ class AdminController extends Controller
 
         $db = new DB();
         if(isset($_GET['keyword'])){
-            $logs = $db->getLogsByKeyword($_GET['keyword']);
+            if(convertDayToNum($_GET['keyword']) != false){
+                $logs = $db->getLogsByKeyword(convertDayToNum($_GET['keyword']));
+            } else{
+                $logs = $db->getLogsByKeyword($_GET['keyword']);
+            }
         }
         else {
             $logs = $db->getUsersLogs();

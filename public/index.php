@@ -38,17 +38,29 @@ $router->post('/deleteProgramRequest', 'MainController', 'deleteProgramRequest')
 $router->get('/profile', 'UserController', 'profile');
 $router->post('/login', 'UserController', 'userLogin');
 $router->get('/logout', 'UserController', 'logout');
+$router->get('/signin', 'UserController', 'signin');
+
+//Class Registration
 $router->get('/register', 'UserController', 'register');
 $router->post('/registerclass', 'UserController', 'registerClass');
 $router->post('/unregisterclass', 'UserController', 'unregisterClass');
-$router->get('/signin', 'UserController', 'signin');
+
+//Workout Program
 $router->get('/requestProgram', 'UserController', 'requestProgram');
 $router->post('/submitProgram', 'UserController', 'submitProgram');
 $router->get('/workoutProgramHistory', 'UserController', 'programHistory');
 $router->get('/currentProgramRequest', 'UserController', 'currentProgramRequest');
+
+//Payment
 $router->post('/pay', 'UserController', 'pay');
+
+//Stats
 $router->get('/generalStats', 'UserController', 'generalStats');
 $router->get('/personalStats', 'UserController', 'personalStats');
+
+//Logs
+$router->get('/mylogs', 'UserController', 'userLogs');
+
 
 /** Android App Web Service**/
 $router->post('/androidLogin', 'UserController', 'androidLogin');

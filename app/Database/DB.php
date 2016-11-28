@@ -244,15 +244,43 @@ class DB
         return $result;
     }
 
-    public function getUserLogs ($id) {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs WHERE userID = ? AND MONTH(login) = 10 AND YEAR(login) = 2016");
-        $stmt->bindValue(1, $id);
+    public function getUserLogs($id) {
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs WHERE userID=:id");
+        $stmt->bindParam(':id', $id);
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
 
         return $result;
+    }
+
+    public function getUserLogsByKeyword($keyword){
+
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs
+                                      WHERE DATE (login) like :date or 
+                                      TIME (login) like :time or
+                                      HOUR (login) =:hour or
+                                      MONTH (login) like :month or
+                                      DAYOFWEEK (login) like :day or
+                                      YEAR (login) like :year or
+                                      MONTHNAME (login) like :monthName");
+
+        $stmt->bindParam(':date', $keyword);
+        $stmt->bindParam(':time', $keyword);
+        $stmt->bindParam(':hour', $keyword);
+        $stmt->bindParam(':month', $keyword);
+        $stmt->bindParam(':day', $keyword);
+        $stmt->bindParam(':month', $keyword);
+        $stmt->bindParam(':monthName', $keyword);
+        $stmt->bindParam(':year', $keyword);
+
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+        return $result;
+
     }
 
     public function createProgramRequest ($data)
