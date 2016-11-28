@@ -436,11 +436,7 @@ class AdminController extends Controller
         $monthsDB = $db->getUsersLogsMonths();
 
         //create an array with months as string values
-        foreach ($monthsDB as $mon){
-            foreach ($mon as $r){
-                $months[]= $r;
-            }
-        }
+        $months = convertJoinDBReturns($monthsDB);
 
         return $months;
     }

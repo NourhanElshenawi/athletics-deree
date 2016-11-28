@@ -35,7 +35,7 @@ $router->get('/realtimelogs', 'MainController', 'realtimeLogs');
 $router->post('/deleteProgramRequest', 'MainController', 'deleteProgramRequest');
 
 /** USER **/
-$router->get('/profile', 'UserController', 'profileStats');
+$router->get('/profile', 'UserController', 'profile');
 $router->post('/login', 'UserController', 'userLogin');
 $router->get('/logout', 'UserController', 'logout');
 $router->get('/register', 'UserController', 'register');
@@ -47,6 +47,7 @@ $router->post('/submitProgram', 'UserController', 'submitProgram');
 $router->get('/workoutProgramHistory', 'UserController', 'programHistory');
 $router->get('/currentProgramRequest', 'UserController', 'currentProgramRequest');
 $router->post('/pay', 'UserController', 'pay');
+$router->get('/generalStats', 'UserController', 'generalStats');
 $router->get('/personalStats', 'UserController', 'personalStats');
 
 /** Android App Web Service**/

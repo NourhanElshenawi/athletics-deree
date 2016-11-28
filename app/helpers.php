@@ -134,7 +134,7 @@ function convertJoinDBReturns($array){
     $arrayReturn = array();
     foreach ($array as $arr){
         foreach ($arr as $r){
-            $array[]= $r;
+            $arrayReturn[]= $r;
         }
     }
 
@@ -146,13 +146,13 @@ function daysDateDifference($date1, $date2){
 
     return $days;
 }
-function minutesTimeDifference($date1, $date2){
+function TimeDifference($date1, $date2){
     $diff = date_diff(date_create($date1), date_create($date2));
 
     return $diff;
 }
 
-function avgLogTime($logTimes){
+function LogTimeAnalysis($logTimes){
 
     $hours = array();
     $minutes = array();
@@ -161,11 +161,12 @@ function avgLogTime($logTimes){
     foreach ($logTimes as $log){
         $date1 = date("Y-m-d")." ". $log['TIME (logout)'];
         $date2 = date("Y-m-d")." ". $log['TIME (login)'];
-        $diff = minutesTimeDifference($date1, $date2);
+        $diff = TimeDifference($date1, $date2);
         $hours[] = $diff->h;
-        $minutes[] = $diff->m;
+        $minutes[] = $diff->i;
         $seconds[] = $diff->s;
     }
+
     $totalHours = array_sum($hours);
     $avgHours = $totalHours/count($hours);
 
@@ -175,11 +176,58 @@ function avgLogTime($logTimes){
     $totalSecs = array_sum($seconds);
     $avgSecs = $totalSecs/count($seconds);
 
+    $min = array(
+        'hours' => min($hours),
+        'mins' => min($minutes),
+        'secs' => min($seconds)
+    );
     $avg = array(
         'hours' => $avgHours,
         'mins' => $avgMins,
         'secs' => $avgSecs
     );
+    $max = array(
+        'hours' => max($hours),
+        'mins' => max($minutes),
+        'secs' => max($seconds)
+    );
 
-    return $avg;
+    $analysis = array(
+        'min'=> $min,
+        'avg'=>$avg,
+        'max'=> $max
+    );
+
+    return $analysis;
 }
+
+
+function LogMonthAnalysis($logMonths){
+
+    $logMonths = convertJoinDBReturns($logMonths);
+    $logMonths = array_count_values($logMonths);
+
+    $analysis = array(
+        'min'=> min($logMonths),
+        'avg'=> array_sum($logMonths)/count($logMonths),
+        'max'=> max($logMonths)
+    );
+
+    return $analysis;
+}
+
+function convertMonths($months)
+{
+    foreach ($months as $monthNum=>$value){
+
+        //convert month number to name
+        $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
+        //use name of the month as the new key of the array
+        $months[$dateObj->format('F')] = $months[$monthNum]; // March
+        //unset old array key
+        unset($months[$monthNum]);
+
+    }
+    return $months;
+}
+

@@ -95,17 +95,10 @@ class UserController extends Controller
 
 
 /** Profile**/
-    public function profileStats()
+    public function profile()
     {
 
         $db = new DB();
-        $logs = $db->getUserMonthlyVisits($_SESSION['user']['id']);
-
-        $logs = $this->convertDateToString($logs);
-
-        $logs = array_count_values($logs);
-        $logs = $this->convertMonths($logs);
-
 
         $classes = $this->getUserClasses($_SESSION['user']['id']);
         $classes = beautifyClassesForCalendar($classes);
@@ -131,7 +124,7 @@ class UserController extends Controller
             $paymentSuccess = false;
         }
 
-        echo $this->twig->render('customer/profile.twig', array('logs'=>$logs, 'classes'=>$classes, 'needToPay'=>$needToPay, 'paymentSuccess'=>$paymentSuccess));
+        echo $this->twig->render('customer/profile.twig', array('classes'=>$classes, 'needToPay'=>$needToPay, 'paymentSuccess'=>$paymentSuccess));
     }
 
     public function getUserClasses($id) {
@@ -150,10 +143,6 @@ class UserController extends Controller
         return $classes;
     }
 
-    public function profile()
-    {
-        echo $this->twig->render('customer/profile.twig');
-    }
 
 
 /** Registration for classes **/
@@ -193,19 +182,51 @@ class UserController extends Controller
 
     public function personalStats()
     {
-        $this->averageTimeSpentPerVisit();
+        $visitAnalysis = $this->TimeSpentPerVisitAnalysis();
+        $monthVisitationAnalysis = $this->numberOfVisitsMonth();
+        $graphValues = $this->monthVisitsGraph();
+
+        echo $this->twig->render('customer/personalStats.twig', array('visitAnalysis'=>$visitAnalysis, 'monthVisitationAnalysis'=>$monthVisitationAnalysis,
+            'graphValues'=>$graphValues));
+
     }
-    public function totalHoursSpent()
+
+    public function monthVisitsGraph()
+    {
+        $db = new DB();
+
+        $logs = $db->getUserMonthlyVisits($_SESSION['user']['id']);
+
+        $logs = convertJoinDBReturns($logs);
+
+        $logs = array_count_values($logs);
+        $logs = convertMonths($logs);
+
+        return $logs;
+    }
+
+    public function numberOfVisitsMonth()
+    {
+
+        $db = new DB();
+        $monthlyLogs = $db->getUserLogsMonths($_SESSION['user']['id']);
+        $logMonthAnalysis = LogMonthAnalysis($monthlyLogs);
+
+        return $logMonthAnalysis;
+    }
+
+    public function numberOfVisitsWeek()
     {
 
     }
-    public function averageTimeSpentPerVisit()
+    public function TimeSpentPerVisitAnalysis()
     {
         $db = new DB();
         $logTimes = $db->getUserLogsTime($_SESSION['user']['id']);
-        $avgLogTimes = avgLogTime($logTimes);
-        d($avgLogTimes);
-        
+        $LogTimeAnalysis = LogTimeAnalysis($logTimes);
+
+        return $LogTimeAnalysis;
+
     }
 
     /** Requesting workout programs **/

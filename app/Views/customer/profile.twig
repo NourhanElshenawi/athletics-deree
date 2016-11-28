@@ -180,19 +180,11 @@
         </button>
     </form>
 
-    {#
-        User's Monthly Stast
-        #}
-    <div style="width: 50%; height: 50%;">
-        <h2 style="color: lightcoral; opacity: 0.8; font-size: large; font-weight: bold;">Your Monthly Visitation Statistics</h2>
-        <canvas id="mybarChart">
-        </canvas>
-    </div>
 
     {#
         User's Schedule of registered classes
         #}
-    <h2 style="color: lightcoral; opacity: 0.8; font-size: large; font-weight: bold;">Your Schedule of Classes You're Registered For: </h2>
+    <h2 style="color: lightcoral; font-size: large; font-weight: bold;">Your Schedule of Classes You Registered For: </h2>
     <div id="fullcalendar"></div>
 
     <!-- jQuery -->
@@ -209,54 +201,5 @@
     <!-- Custom Theme Scripts -->
     <script src="js/custom.min.js"></script>
 
-    <script>
-        Chart.defaults.global.legend = {
-            enabled: false
-        };
-
-        var ctx = document.getElementById("mybarChart");
-        var mybarChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [
-                        //get the months to act as labels for the chart. they are the keys of the array.
-                    {% for key,value in logs %}
-                        {% if loop.last %}
-                            "{{ key }}"
-                            {% else %}
-                                "{{ key }}",
-                        {% endif %}
-                    {% endfor %}
-                ],
-
-                datasets: [{
-                    label: '# of Visits',
-                    backgroundColor: "#26B99A",
-                    data: [
-                        //get the number of visits to act as the dataset for the chart. they are the values of the array.
-                        {% for key,value in logs %}
-                            {% if loop.last %}
-                                {{ value }}
-                            {% else %}
-                                {{ value }},
-                            {% endif %}
-                        {% endfor %}
-                    ]
-                }
-
-                ]
-            },
-
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
 {% endblock content %}
 

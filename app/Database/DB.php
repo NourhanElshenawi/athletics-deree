@@ -1086,6 +1086,23 @@ capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?,
         return $result;
     }
 
+    public function getUserLogsMonths($id){
+
+        $stmt = $this->conn->prepare("
+            SELECT MONTH(login)
+            FROM {$this->dbname}.logs
+            WHERE userID=:id;"
+        );
+
+        $stmt->bindParam(':id',$id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     public function getUsersLogsDays(){
 
         $stmt = $this->conn->prepare("select DAYOFWEEK (login) from {$this->dbname}.logs");
