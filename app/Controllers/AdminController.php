@@ -357,16 +357,11 @@ class AdminController extends Controller
         //sort the array by year
         ksort($years);
         //sort the array by month number
-        d($months);
         ksort($months);
-        d($months);
-        $months = $this->convertMonths($months);
-        d($months);
+        $months = convertMonths($months);
         //sort the array by day number
         ksort($days);
-        $days = $this->convertDays($days);
-        //sort the array by hour
-        ksort($hours);
+        $days = convertDays($days);
 
         echo $this->twig->render('admin/logStatistics.twig', array('years'=>$years,'months'=>$months, 'days'=>$days, 'hours'=>$hours));
     }
@@ -446,13 +441,7 @@ class AdminController extends Controller
         $db = new DB();
 //        $logs = $db->getUsersLogs();
         $dayLogs = $db->getUsersLogsDays();
-        $days = array();
-        //create an array with days as string values
-        foreach ($dayLogs as $day){
-            foreach ($day as $r){
-                $days[]= $r;
-            }
-        }
+        $days =convertJoinDBReturns($dayLogs);
 
         return $days;
     }
@@ -461,13 +450,12 @@ class AdminController extends Controller
     {
         $db = new DB();
         $hourLogs = $db->getUsersLogsHours();
-        $hours = array();
-        //create an array with days as string values
-        foreach ($hourLogs as $hour){
-            foreach ($hour as $r){
-                $hours[]= $r;
-            }
-        }
+        $hours = convertJoinDBReturns($hourLogs);
+        //sort to start array with earliest hour
+        asort($hours);
+        //add :00 next to hour to produce make it more natural looking
+        $hours = convertHours($hours);
+
         return $hours;
     }
 
@@ -519,13 +507,14 @@ class AdminController extends Controller
         $db = new DB();
 
         $hoursDB = $db->getUsersLogsHoursFilter();
-        $hours = array();
-        //create an array with months as string values
-        foreach ($hoursDB as $hour){
-            foreach ($hour as $r){
-                $hours[]= $r;
-            }
-        }
+        $hours = convertJoinDBReturns($hoursDB);
+
+
+        //sort to start array with earliest hour
+        asort($hours);
+        //add :00 next to hour to produce make it more natural looking
+        $hours = convertHours($hours);
+
         return $hours;
     }
 
@@ -542,29 +531,6 @@ class AdminController extends Controller
 
         }
         return $months;
-    }
-
-    public function convertDays($days)
-    {
-        $dayConverter = array(
-            1 => 'Sunday',
-            2 => 'Monday',
-            3 => 'Tuesday',
-            4 => 'Wednesday',
-            5 => 'Thursday',
-            6 => 'Friday',
-            7 => 'Saturday'
-        );
-
-        foreach ($days as $dayNum=>$value){
-            //convert day number to name
-            //use name of the month as the new key of the array
-            $days[$dayConverter[$dayNum]] = $days[$dayNum];
-            //unset old array key
-            unset($days[$dayNum]);
-
-        }
-        return $days;
     }
 
     //Logs

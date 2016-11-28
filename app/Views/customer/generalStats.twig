@@ -23,53 +23,13 @@
 
     <div>
         <ul class="nav nav-tabs">
-            <li id="years" role="presentation" class="active"><a style="font-weight: bold; font-size: large;">Years</a></li>
-            <li id="months" role="presentation"><a style="font-weight: bold; font-size: large;">Months</a></li>
+            <li id="months" role="presentation" class="active"><a style="font-weight: bold; font-size: large;">Months</a></li>
             <li id="days" role="presentation"><a style="font-weight: bold; font-size: large;">Days</a></li>
             <li id="hours" role="presentation"><a style="font-weight: bold; font-size: large;">Hours</a></li>
         </ul>
 
-        <div style="margin: auto;">
-            <h2>Filter The Statistics Using The Filters Below</h2>
-            <label for="gender">Choose gender: </label>
-            <select name="gender" id="gender" style="display: block;" required>
-                <option value="m">Male</option>
-                <option value="f">Female</option>
-                <option value="b">Both</option>
-            </select>
-            <label for="allAge" style="display: inline-block;">All Ages: </label>
-            <input type="checkbox" name="allAge" id="allAge" checked onclick="if(jQuery('#allAge').is(':checked')){
-                jQuery('#ageUpper').attr('disabled', 'disabled');
-                jQuery('#ageLower').attr('disabled', 'disabled');
-            } else {
-                jQuery('#ageUpper').removeAttr('disabled');
-                jQuery('#ageLower').removeAttr('disabled');
-            }
-            ; ">
-            <label for="age" style="display: inline-block;"> OR Select Age Range: </label>
-            <p style="display: inline-block;">From:</p>
-            <input type="number" min="16" name="age" id="ageUpper" value="16" disabled>
-            <p style="display: inline-block;">To:</p>
-            <input type="number" min="16" name="age" id="ageLower" value="80" disabled>
-            <br>
-            <input type="checkbox" name="staff" id="staff" value="staff"> Staff
-            <input type="checkbox" name="student" id="student" value="student"> Student
-            <input type="checkbox" name="faculty" id="faculty" value="faculty"> Faculty
-            <input type="checkbox" name="external" id="external" value="external"> External Paying Customer
-            <input type="checkbox" name="alumni" id="alumni" value="alumni"> Alumni
-            <input type="checkbox" name="admin" id="admin" value="admin"> Admin
 
-            <input type="submit" id="filter">
-        </div>
-
-        <div id="yearDiv" style="width: 80%; height: 50%; margin: 0;">
-            <br>
-            <h2>Visitation Ranking by Busiest Year</h2>
-            <canvas id="yearChart"></canvas>
-        </div>
-
-
-        <div id="monthsDiv" style="width: 80%; height: 50%; margin: 0; display: none;">
+        <div id="monthsDiv" style="width: 80%; height: 50%; margin: 0;">
             <br>
             <h2>Visitation Ranking by Busiest Month</h2>
             <canvas id="monthChart"></canvas>
@@ -107,76 +67,34 @@
     <script>
         jQuery('#months').click(function() {
             jQuery(this).toggleClass('active');
-            jQuery('#years').removeClass('active');
             jQuery('#days').removeClass('active');
             jQuery('#hours').removeClass('active');
             jQuery('#monthsDiv').css('display','');
-            jQuery('#yearDiv').css('display','none');
             jQuery('#daysDiv').css('display','none');
             jQuery('#hoursDiv').css('display','none');
         });
-        jQuery('#years').click(function() {
-            jQuery(this).toggleClass('active');
-            jQuery('#months').removeClass('active');
-            jQuery('#days').removeClass('active');
-            jQuery('#hours').removeClass('active');
-            jQuery('#yearDiv').css('display','');
-            jQuery('#hoursDiv').css('display','none');
-            jQuery('#monthsDiv').css('display','none');
-            jQuery('#daysDiv').css('display','none');
-        });
+
         jQuery('#days').click(function() {
             jQuery(this).toggleClass('active');
-            jQuery('#years').removeClass('active');
             jQuery('#months').removeClass('active');
             jQuery('#hours').removeClass('active');
             jQuery('#daysDiv').css('display','');
             jQuery('#hoursDiv').css('display','none');
             jQuery('#monthsDiv').css('display','none');
-            jQuery('#yearDiv').css('display','none');
         });
 
         jQuery('#hours').click(function() {
             jQuery(this).toggleClass('active');
-            jQuery('#years').removeClass('active');
             jQuery('#months').removeClass('active');
             jQuery('#days').removeClass('active');
             jQuery('#hoursDiv').css('display','');
             jQuery('#daysDiv').css('display','none');
             jQuery('#monthsDiv').css('display','none');
-            jQuery('#yearDiv').css('display','none');
         });
 
     </script>
 
     <script>
-        yearsvals = '{{ years|json_encode|raw }}';
-        var yearsvalsEncoded = jQuery.parseJSON(yearsvals);
-        var ctx = document.getElementById("yearChart");
-        var yearChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: Object.keys(yearsvalsEncoded),
-                datasets: [
-                    {
-                        label: '# of Visits',
-                        backgroundColor: "#26B99A",
-                        data: Object.values(yearsvalsEncoded)
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-
-
         vals = '{{ months|json_encode|raw }}';
         var valsEncoded = jQuery.parseJSON(vals);
         var ctx = document.getElementById("monthChart");
@@ -196,7 +114,13 @@
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            fontColor:  'white'
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontColor:  'white'
                         }
                     }]
                 }
@@ -222,7 +146,13 @@
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            fontColor:  'white'
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontColor:  'white'
                         }
                     }]
                 }
@@ -248,7 +178,13 @@
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            fontColor:  'white'
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontColor:  'white'
                         }
                     }]
                 }

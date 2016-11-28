@@ -177,7 +177,70 @@ class UserController extends Controller
     }
 
     /**
-     * Personal Stas
+     * General Stats
+     */
+
+    public function generalStats()
+    {
+
+        //get how many times a day was repeated aka the number of visits per day by users
+        $hours = array_count_values($this->getHourLogs());
+
+        //get how many times a day was repeated aka the number of visits per day by users
+        $days = array_count_values($this->getDayLogs());
+
+        //get how many times a month was repeated aka the number of visits per month by users
+        $months = array_count_values($this->getMonthsLogs());
+
+        //sort the array by month number
+        ksort($months);
+        $months = convertMonths($months);
+        //sort the array by day number
+        ksort($days);
+        $days = convertDays($days);
+
+        echo $this->twig->render('customer/generalStats.twig', array('months'=>$months, 'days'=>$days, 'hours'=>$hours));
+    }
+
+    public function getMonthsLogs()
+    {
+        $db = new DB();
+
+        $monthsDB = $db->getUsersLogsMonths();
+
+        //create an array with months as string values
+        $months = convertJoinDBReturns($monthsDB);
+
+        return $months;
+    }
+
+    public function getHourLogs()
+    {
+        $db = new DB();
+        $hourLogs = $db->getUsersLogsHours();
+        $hours = convertJoinDBReturns($hourLogs);
+
+        //sort to start array with earliest hour
+        asort($hours);
+        //add :00 next to hour to produce make it more natural looking
+        $hours = convertHours($hours);
+
+        return $hours;
+    }
+
+    public function getDayLogs()
+    {
+        $db = new DB();
+//        $logs = $db->getUsersLogs();
+        $dayLogs = $db->getUsersLogsDays();
+        $days = convertJoinDBReturns($dayLogs);
+
+
+        return $days;
+    }
+
+    /**
+     * Personal Stats
      */
 
     public function personalStats()
@@ -219,6 +282,7 @@ class UserController extends Controller
     {
 
     }
+
     public function TimeSpentPerVisitAnalysis()
     {
         $db = new DB();

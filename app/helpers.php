@@ -231,3 +231,35 @@ function convertMonths($months)
     return $months;
 }
 
+function convertDays($days)
+{
+    $dayConverter = array(
+        1 => 'Sunday',
+        2 => 'Monday',
+        3 => 'Tuesday',
+        4 => 'Wednesday',
+        5 => 'Thursday',
+        6 => 'Friday',
+        7 => 'Saturday'
+    );
+
+    foreach ($days as $dayNum=>$value){
+        //convert day number to name
+        //use name of the month as the new key of the array
+        $days[$dayConverter[$dayNum]] = $days[$dayNum];
+        //unset old array key
+        unset($days[$dayNum]);
+
+    }
+    return $days;
+}
+
+function convertHours($hours){
+
+    foreach ($hours as $key=>$hour){
+        $hours[$key] = $hour.':00';
+    }
+
+    return $hours;
+}
+
