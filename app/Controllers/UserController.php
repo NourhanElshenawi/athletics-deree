@@ -157,7 +157,6 @@ class UserController extends Controller
         $classes = beautifyClasses($classes);
         $userClasses = beautifyClasses($userClasses);
         $calendarClasses = beautifyClassesForCalendar($calendarClasses);
-        d($userClasses);
 
         echo $this->twig->render('customer/register.twig', array('calendarClasses'=>$calendarClasses, 'classes'=>$classes,'userClasses'=>$userClasses));
     }
@@ -363,7 +362,42 @@ class UserController extends Controller
         echo $this->twig->render('customer/logs.twig', array('logs'=>$logs));
     }
 
+    /**
+     * Friends
+     */
+    public function userFriends(){
 
+        $db = new DB();
+        if(isset($_GET['keyword'])){
+            $friends = $db->searchUserFriends($_SESSION['user']['id'], $_GET['keyword']);
+            foreach ($friends as $key=>$friend){
+                $friends[$key]['classes'] = $db->getUserRegistrations($friend['friendID']);
+            }
+        } else {
+            $friends = $db->getUserFriends($_SESSION['user']['id']);
+            foreach ($friends as $key=>$friend){
+                $friends[$key]['classes'] = $db->getUserRegistrations($friend['friendID']);
+            }
+        }
+
+        echo $this->twig->render('customer/friends.twig', array('friends'=>$friends));
+    }
+
+    public function addFriend()
+    {
+        $db = new DB();
+        $friend = $db->getUserByEmail($_POST['email']);
+        $db->addUserFriend($_SESSION['user']['id'], $friend['id']);
+
+        redirect('/myfriends');
+    }
+
+    public function removeFriend()
+    {
+        $db = new DB();
+        $friend = $db->removeUserFriend($_SESSION['user']['id'], $_POST['followsID']);
+        echo json_encode($friend);
+    }
 
     /** Android **/
 

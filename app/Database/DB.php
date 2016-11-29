@@ -451,6 +451,86 @@ class DB
         return $result;
     }
 
+    public function getUserFriends($id)
+    {
+        //joining the classes and instructors tables to get the information on the classes plus the instructor giving the class
+        $stmt = $this->conn->prepare("select *, users.id AS friendID
+                                      from {$this->dbname}.users
+                                      join {$this->dbname}.friends
+                                      on friends.followsID = users.id
+                                      WHERE friends.userID =:id ");
+
+
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function searchUserFriends($id, $keyword)
+    {
+        //joining the classes and instructors tables to get the information on the classes plus the instructor giving the class
+        $stmt = $this->conn->prepare("select *, users.id AS friendID
+                                      from {$this->dbname}.users
+                                      join {$this->dbname}.friends
+                                      on friends.followsID = users.id
+                                      WHERE friends.userID =:id AND 
+                                      users.email =:keyword or users.name =:keyword or birthDate=:keyword");
+
+
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':keyword', $keyword);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+
+    public function addUserFriend($id, $followID)
+    {
+        $stmt = $this->conn->prepare("insert into {$this->dbname}.friends 
+                                    (userID, followsID) 
+                                    VALUES  (:id,:followID)");
+
+        try{
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':followID', $followID);
+
+            $stmt->execute();
+
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+
+    }
+
+
+    public function removeUserFriend($id, $followsID)
+    {
+        $stmt = $this->conn->prepare("delete from {$this->dbname}.friends WHERE userID=:id and followsID=:followsID");
+        $stmt->bindParam(":id",$id);
+        $stmt->bindParam(":followsID",$followsID);
+        try{
+            $stmt->execute();
+
+            $result['success']= true;
+            $result['msg']= "Removed!";
+            return $result;
+        } catch (PDOException $e){
+            $result['success']= false;
+            $result['msg']= "Could not remove friend";
+            return $result;
+        }
+    }
+
+
 
     /*********USER VERIFICATION************/
 
@@ -1048,8 +1128,6 @@ class DB
                                              $monday, $tuesday, $wednesday, $thursday, $friday)
     {
         $stmt = $this->conn->prepare("select *
-
-
                                       from {$this->dbname}.registrations
                                       JOIN {$this->dbname}.classes
                                       ON classes.id = registrations.classID
@@ -1080,7 +1158,6 @@ class DB
         return $result;
 
     }
-
 
 
     /** GET USER LOGS FOR USER STATS **/

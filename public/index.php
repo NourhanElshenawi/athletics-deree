@@ -61,6 +61,11 @@ $router->get('/personalStats', 'UserController', 'personalStats');
 //Logs
 $router->get('/mylogs', 'UserController', 'userLogs');
 
+//Friends
+$router->get('/myfriends', 'UserController', 'userFriends');
+$router->post('/addFriend', 'UserController', 'addFriend');
+$router->post('/removeFriend', 'UserController', 'removeFriend');
+
 
 /** Android App Web Service**/
 $router->post('/androidLogin', 'UserController', 'androidLogin');
