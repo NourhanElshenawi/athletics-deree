@@ -16,6 +16,17 @@ class DB
     protected $conn;
 
     /**
+     * select *
+    from heroku_c4df5ab8bcadabc.classes
+    WHERE endTime >= '12:40:00' AND
+    startTime <='12:00:00' AND classes.period = 'spring' AND
+    location = 'studio 1' AND monday = '1' AND
+    tuesday ='1' AND wednesday ='1' AND
+    thursday ='1' AND friday ='1';
+    SELECT * FROM heroku_c4df5ab8bcadabc.classes;
+     */
+
+    /**
      * DB constructor. By default connect to Homestead virtual DB server and to the 'kourtis' database schema.
      * @param string $servername
      * @param string $port
@@ -459,17 +470,18 @@ class DB
  /*************ADMIN***************/
 
  ////// EDIT CLASSES
-    public function updateClass($id, $duration, $startTime, $capacity,$instructorID)
+    public function updateClass($period,$id, $endTime, $startTime, $capacity,$instructorID)
     {
-        $stmt = $this->conn->prepare("update {$this->dbname}.classes set duration = ?, startTime = ?, capacity = ?,
- instructorID = ?  WHERE id = ? ");
+        $stmt = $this->conn->prepare("update {$this->dbname}.classes set endTime = ?, startTime = ?, capacity = ?,
+ instructorID = ?, period = ?  WHERE id = ? ");
 
         try{
-            $stmt->bindValue(1, $duration);
+            $stmt->bindValue(1, $endTime);
             $stmt->bindValue(2, $startTime);
             $stmt->bindValue(3, $capacity);
             $stmt->bindValue(4, $instructorID);
-            $stmt->bindValue(5, $id);
+            $stmt->bindValue(5, $period);
+            $stmt->bindValue(6, $id);
             $stmt->execute();
             return true;
         } catch (Exception $e) {
@@ -497,25 +509,65 @@ class DB
         return $result;
 
     }
-
-    public function addClass($name, $duration, $instructorID, $startTime, $period, $capacity, $location, $monday, $tuesday, $wednesday, $thursday, $friday)
+    public function searchClassesForConflict($instructorID,$startTime, $endTime, $period, $location,
+                                             $monday, $tuesday, $wednesday, $thursday, $friday)
     {
-        $stmt = $this->conn->prepare("insert into {$this->dbname}.classes (name, duration, instructorID, startTime, period, 
-capacity, location, monday, tuesday, wednesday, thursday, friday) VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $this->conn->prepare("select *
+                                      from {$this->dbname}.classes
+                                      WHERE :startTime <= classes.endTime AND 
+                                      :endTime >= classes.startTime AND classes.period =:period AND 
+                                      (
+                                      (classes.location =:location AND 
+                                      (classes.monday =:monday OR 
+                                      classes.tuesday =:tuesday OR classes.wednesday =:wednesday or 
+                                      classes.thursday =:thursday or classes.friday =:friday)
+                                      ) OR
+                                      (classes.instructorID=:instructorID)
+                                      )");
+
+
+
+        $stmt->bindValue(':instructorID', $instructorID);
+        $stmt->bindValue(':startTime', $startTime);
+        $stmt->bindValue(':endTime', $endTime);
+        $stmt->bindValue(':period', $period);
+        $stmt->bindValue(':location', $location);
+        $stmt->bindValue(':monday', $monday);
+        $stmt->bindValue(':tuesday', $tuesday);
+        $stmt->bindValue(':wednesday', $wednesday);
+        $stmt->bindValue(':thursday', $thursday);
+        $stmt->bindValue(':friday', $friday);
+
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+    }
+
+    public function addClass($name, $instructorID, $startTime, $endTime, $period, $capacity, $location,
+                             $monday, $tuesday, $wednesday, $thursday, $friday)
+    {
+        $stmt = $this->conn->prepare("insert into {$this->dbname}.classes 
+                                    (name, instructorID, startTime, endTime, period, 
+                                    capacity, location, monday, tuesday, wednesday, thursday, friday) 
+                                    VALUES  (:name,:instructorID, :startTime, :endTime, :period, :capacity,
+                                    :location, :monday, :tuesday, :wednesday, :thursday, :friday)");
 
         try{
-            $stmt->bindValue(1, $name);
-            $stmt->bindValue(2, $duration);
-            $stmt->bindValue(3, $instructorID);
-            $stmt->bindValue(4, $startTime);
-            $stmt->bindValue(5, $period);
-            $stmt->bindValue(6, $capacity);
-            $stmt->bindValue(7, $location);
-            $stmt->bindValue(8, $monday);
-            $stmt->bindValue(9, $tuesday);
-            $stmt->bindValue(10, $wednesday);
-            $stmt->bindValue(11, $thursday);
-            $stmt->bindValue(12, $friday);
+            $stmt->bindValue(':name', $name);
+            $stmt->bindValue(':instructorID', $instructorID);
+            $stmt->bindValue(':startTime', $startTime);
+            $stmt->bindValue(':endTime', $endTime);
+            $stmt->bindValue(':period', $period);
+            $stmt->bindValue(':capacity', $capacity);
+            $stmt->bindValue(':location', $location);
+            $stmt->bindValue(':monday', $monday);
+            $stmt->bindValue(':tuesday', $tuesday);
+            $stmt->bindValue(':wednesday', $wednesday);
+            $stmt->bindValue(':thursday', $thursday);
+            $stmt->bindValue(':friday', $friday);
 
             $stmt->execute();
 

@@ -37,7 +37,7 @@
 
 {% block content %}
 
-    {#{{ dump(classes) }}#}
+    {#{{ dump(allInstructors) }}#}
 
     {% set classExample = classes|first %}
     <div class="clearfix"></div>
@@ -48,7 +48,8 @@
             <div class="x_title">
                 <h2 style="width: auto; margin-right: 3%;">Classes</h2>
 
-                <button class="fa fa-plus add" style="margin-top: 1%; border-radius: 25px;"></button>
+                <button class="fa fa-plus add" style="display:inline-block; margin-top: 1%; border-radius: 25px;"></button>
+                <p style="display: inline-block; color: red; font-size: large; opacity: 0.85;">{{ result }}</p>
 
                 <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/adminsearchclasses">
                     <label style="display: inline-block;">
@@ -69,9 +70,9 @@
                         <tr>
 
                             <th>Name</th>
-                            <th>Duration</th>
                             <th>Instructor</th>
                             <th>Start Time</th>
+                            <th>End Time</th>
                             <th>Period</th>
                             <th>Capacity</th>
                             <th>Location</th>
@@ -80,52 +81,45 @@
                         </tr>
                     </thead>
                         <tbody>
-                        <form action="/addclass" method="post">
+                        <form method="post" action="/addclass">
                             <tr>
-
-                                {#<form action="/addclass" method="post">#}
-
                                 <td>
-                                    <input type="text" style="width: 100%;" name="name" required>
+                                    <input type="text" style="width: 100%;" name="name" id="name" required>
                                 </td>
 
                                 <td>
-                                    <input type="number" min="1" style="width: 100%;" name="duration" required>
-                                </td>
-
-                                <td>
-
-                                    <select name="instructorID" id="" style="width: 100%;" name="instructor" required>
-
+                                    <select name="instructorID" id="instructor" style="width: 100%;" name="instructor" required>
                                         {% for instructor in allInstructors %}
                                             <option value="{{ instructor.id }}">{{ instructor.name|capitalize|capitalize }}</option>
                                         {% endfor %}
-
                                     </select>
-
                                 </td>
 
                                 <td>
-                                    <input type="time"style="width: 100%;" name="startTime" required>
+                                    <input type="time" id="startTime" min="07:00:00" max="23:00:00" style="width: 100%;" name="startTime" required>
                                 </td>
 
                                 <td>
-                                    <select name="period" id="" style="width: 100%;" name="period" required>
+                                    <input type="time" id="endTime" min="07:00:00" max="23:00:00" style="width: 100%;" name="endTime" required>
+                                </td>
+
+                                <td>
+                                    <select name="period" id="period" style="width: 100%;" name="period" required>
                                         <option value="fall">Fall Semester</option>
                                         <option value="spring">Spring Semester</option>
                                     </select>
                                 </td>
 
                                 <td>
-                                    <input type="number" min="1" style="width: 100%;" name="capacity" required>
+                                    <input type="number" id="capacity" min="1" style="width: 100%;" name="capacity" required>
                                 </td>
 
                                 <td>
-                                    <input type="text" style="width: 100%;" name="location" required>
+                                    <input type="text" id="location" style="width: 100%;" name="location" required>
                                 </td>
 
                                 <td>
-                                    <select name="days[]" id="" multiple style="width: 120%;"required>
+                                    <select name="days[]" id="days" multiple style="width: 120%;"required>
                                         {{ classExample.name }}
                                         {% for key, value in classExample.days %}
                                             <option value="{{ key }}"> {{ key|capitalize}}</option>
@@ -138,7 +132,7 @@
 
                             <tr colspan="8">
                                 <td>
-                                    <button type="submit"> Add Class</button>
+                                    <button type="submit" id="addClass"> Add Class</button>
                                 </td>
                             </tr>
 
@@ -248,11 +242,12 @@
                                             <thead>
                                             <tr>
                                                 <th>Instructor</th>
-                                                <th>Duration/Min</th>
                                                 <th>Start Time/24:00</th>
+                                                <th>End Time/24:00</th>
                                                 <th>Max. Capacity</th>
                                                 <th>Current Capacity</th>
                                                 <th>Location</th>
+                                                <th>Period</th>
                                                 <th>Days</th>
                                                 <th>  </th>
                                             </tr>
@@ -263,11 +258,12 @@
                                                 <td>
                                                     {{ class.instructorName|capitalize }}
                                                 </td>
-                                                <td>{{ class.duration }}</td>
                                                 <td>{{ class.startTime }}</td>
+                                                <td>{{ class.endTime }}</td>
                                                 <td>{{ class.capacity }}</td>
                                                 <td>{{ class.currentCapacity }}</td>
                                                 <td>{{ class.location }}</td>
+                                                <td>{{ class.period }}</td>
                                                 <td>
                                                     <ul>
                                                         {% for key, value in class.days %}
@@ -299,11 +295,11 @@
                                                     </td>
 
                                                     <td>
-                                                        <input style="width: 100%;" type="number" id="duration" name="duration" min="1" max="100" value="{{ class.duration }}">
+                                                        <input style="width: 100%;" type="time" id="startTime" name="startTime" min="08:00" max="21:00" value="{{ class.startTime }}">
                                                     </td>
 
                                                     <td>
-                                                        <input style="width: 100%;" type="time" id="startTime" name="startTime" min="08:00" max="21:00" value="{{ class.startTime }}">
+                                                        <input style="width: 100%;" type="time" id="endTime" name="endTime" min="08:00" max="21:00" value="{{ class.endTime }}">
                                                     </td>
 
                                                     <td>
@@ -319,11 +315,20 @@
                                                     </td>
 
                                                     <td>
+                                                        <select name="period" id="period" style="width: 100%;" name="period" required>
 
+                                                            {% if class.period == "fall" %}
+                                                                <option value="fall" selected>Fall Semester</option>
+                                                                <option value="spring">Spring Semester</option>
+                                                            {% else %}
+                                                                <option value="fall">Fall Semester</option>
+                                                                <option value="spring" selected>Spring Semester</option>
+                                                            {% endif %}
+                                                        </select>
+                                                    </td>
+
+                                                    <td>
                                                         <select name="" id="" multiple>
-
-
-
                                                             {% for key, value in class.days %}
                                                                 {% if value == 1 %}
 
@@ -333,7 +338,6 @@
                                                                     <option value="{{ key }}"> {{ key|capitalize }}</option>
                                                                 {% endif %}
                                                             {% endfor %}
-
                                                         </select>
                                                     </td>
 
@@ -480,6 +484,110 @@
             jQuery(this).closest('.x_content').css('style','');
 
         });
+
+        $("#addClass").on("submit", function (event) {
+            event.preventDefault();
+            // your code...
+
+
+//        jQuery('#addClass').submit(function() {
+
+            var name = jQuery('#name').val();
+            var instructor = jQuery('#instructor').val();
+            var startTime = jQuery('#startTime').val();
+            var endTime = jQuery('#endTime').val();
+            var period = jQuery('#period').val();
+            var capacity = jQuery('#capacity').val();
+            var location = jQuery('#location').val();
+            var days = jQuery('#days').val();
+            var monday;
+            if(jQuery.inArray('monday',jQuery('#days').val())>-1){
+                monday =1;
+                    } else {
+                        monday =0;
+            }
+
+            var tuesday;
+            if(jQuery.inArray('tuesday',jQuery('#days').val())>-1){
+                tuesday =1;
+            } else {
+                tuesday=0;
+            }
+
+            var wednesday;
+            if(jQuery.inArray('wednesday',jQuery('#days').val())>-1){
+                wednesday=1;
+            } else {
+                wednesday=0;
+            }
+            var thursday;
+            if(jQuery.inArray('thursday',jQuery('#days').val())>-1){
+                thursday=1;
+            } else {
+                thursday=0;
+            }
+            var friday;
+            if(jQuery.inArray('friday',jQuery('#days').val())>-1){
+                friday=1;
+            }else {
+                friday=0;
+            }
+
+            console.log(jQuery.inArray('friday',jQuery('#days').val()));
+
+            console.log(name);
+            console.log(instructor);
+            console.log(startTime);
+            console.log(endTime);
+            console.log(period);
+            console.log(capacity);
+            console.log(location);
+            console.log(monday);
+            console.log(tuesday);
+            console.log(wednesday);
+            console.log(thursday);
+            console.log(friday);
+            console.log(jQuery('#days').val());
+
+            jQuery.ajax({
+                type: "POST",
+                url: '/addclass',
+                data: {
+                    name: name,
+                    instructorID: instructor,
+                    startTime: startTime,
+                    endTime: endTime,
+                    period: period,
+                    capacity: capacity,
+                    location: location,
+//                    monday: monday,
+//                    tuesday: tuesday,
+//                    wednesday: wednesday,
+//                    tuesday: tuesday,
+//                    wednesday: wednesday,
+//                    thursday: thursday,
+//                    friday: friday
+                    days: days
+                },
+                success: function (msg) {
+
+                    console.log('Success Message: ' + msg);
+                    if(isArray(msg)){
+                        alert("There is a conflict with the following class(es):\n"+
+                                jQuery.parseJSON(msg)['name']);
+                    }
+                    alert(jQuery.parseJSON(msg));
+
+                }
+            });
+
+//        });
+
+
+        });
+
+
+
 
     </script>
 

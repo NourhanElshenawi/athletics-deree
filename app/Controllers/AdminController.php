@@ -19,11 +19,18 @@ class AdminController extends Controller
 
         foreach ($classes as $key=>$class ){
 
+            if ($class['capacity'] != 0){
+
+
             $temp = ($class['currentCapacity']*100)/$class['capacity'];
             $temp2 = $class['currentCapacity'];
 
             $classes[$key]['currentCapacityPercentage'] = $temp;
             $classes[$key]['currentCapacity'] = $temp2;
+            } else {
+                $classes[$key]['currentCapacity'] = 0;
+                $classes[$key]['currentCapacityPercentage'] = 0;
+            }
 
             $classes[$key]['users'] = $db->getRegisteredUsers($class['id']);
 
@@ -104,7 +111,6 @@ class AdminController extends Controller
     {
         $db = new DB();
         $classes = $db->getClasses();
-//        $allInstructor = $db->getInstructors();
         $classes = $this->beautifyClasses($classes);
         $allInstructors = $db->getInstructors();
 //        $instructors = array();
@@ -119,16 +125,43 @@ class AdminController extends Controller
     {
 
         $db = new DB();
-        $test = $db->addClass($_POST['name'], $_POST['duration'], $_POST['instructorID'], $_POST['startTime'],
-            $_POST['period'],
-            $_POST['capacity'],$_POST['location'],(int)in_array('monday',$_POST['days']),
+
+        $classes = $db->getClasses();
+        $classes = $this->beautifyClasses($classes);
+        $allInstructors = $db->getInstructors();
+
+        $testingConflict = $db->searchClassesForConflict($_POST['instructorID'],$_POST['startTime'], $_POST['endTime'],
+            $_POST['period'],$_POST['location'],(int)in_array('monday',$_POST['days']),
             (int)in_array('tuesday',$_POST['days']), (int)in_array('wednesday',$_POST['days']),
             (int)in_array('thursday',$_POST['days']), (int)in_array('friday',$_POST['days']));
-        if($test){
-            header('Location: /editschedule');
+
+        if ($testingConflict == false){
+
+            $testInsert = $db->addClass($_POST['name'], $_POST['instructorID'], $_POST['startTime'], $_POST['endTime'],
+                $_POST['period'],
+                $_POST['capacity'],$_POST['location'],(int)in_array('monday',$_POST['days']),
+                (int)in_array('tuesday',$_POST['days']), (int)in_array('wednesday',$_POST['days']),
+                (int)in_array('thursday',$_POST['days']), (int)in_array('friday',$_POST['days']));
+            if($testInsert){
+                $result = "Class Successfully Added!";
+            } else{
+                $result = "There was an issue adding the class. please contact support!";
+            }
         } else{
-            //ERROR
+            $result = "Could not add class! There is a conflict witht the folowing class(es): ";
+                foreach ($testingConflict as $conflict){
+                    if($conflict === end($testingConflict)){
+                        $result = $result . $conflict['name'] . ".";
+                    } else {
+                        $result = $result . $conflict['name'] . ", ";
+                    }
+                }
         }
+
+        d($result);
+        echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'allInstructors'=> $allInstructors, 'result'=>$result));
+
+
     }
 
     public function searchClasses(){
@@ -144,7 +177,7 @@ class AdminController extends Controller
     public function updateClass()
     {
         $DB = new DB();
-        if($DB->updateClass($_POST['id'],$_POST['duration'],$_POST['startTime'],$_POST['capacity'], $_POST['instructor']))
+        if($DB->updateClass($_POST['period'],$_POST['id'],$_POST['endTime'],$_POST['startTime'],$_POST['capacity'], $_POST['instructor']))
         {
             header('Location: /editschedule');
         }
