@@ -93,7 +93,7 @@
                                             {{ loop.index }}
                                         </div>
 
-                                        <div class="split" style="width: 32%; margin: 0;">
+                                        <div class="split" style="width: 25%; margin: 0;">
                                             <p style="padding: 0;">{{ class.className|capitalize }}</p>
                                             <small>Instructor: {{ class.instructorName|capitalize }}
                                             </small>
@@ -104,18 +104,13 @@
                                         #}
                                         <div class="split" style="width: 25%; margin: 0;">
                                             <ul class="list-inline">
+                                                {% for friend in class.registeredFriends %}
+                                                    <li>
+                                                        <img title="{{ friend.name|title }}" src="images/{{ friend.picture }}" class="avatar" alt="Avatar">
+                                                    </li>
+                                                {% endfor %}
+
                                                 <li>
-                                                    <img src="images/user.png" class="avatar" alt="Avatar">
-                                                </li>
-                                                <li>
-                                                    <img src="images/user.png" class="avatar" alt="Avatar">
-                                                </li>
-                                                <li>
-                                                    <img src="images/user.png" class="avatar" alt="Avatar">
-                                                </li>
-                                                <li>
-                                                    <img src="images/user.png" class="avatar" alt="Avatar">
-                                                </li>
                                             </ul>
                                         </div>
                                         {#
@@ -263,7 +258,7 @@
                             success: function (msg) {
 
                                 console.log(msg);
-                                confirm("msg");
+                                confirm(JSON.parse(msg)['msg']);
 
                             }
                         }

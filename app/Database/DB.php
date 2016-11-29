@@ -120,6 +120,29 @@ class DB
         return $result;
     }
 
+    //get a specific class offered by the gym using its id as well as the information for the instructor giving the class
+    public function getFriendsRegisteredForClass($id, $classID)
+    {
+        $stmt = $this->conn->prepare("select *, friends.followsID AS friendID, registrations.id as registrationID
+                                      from {$this->dbname}.users
+                                      join {$this->dbname}.friends
+                                      on users.id = friends.followsID
+                                      join {$this->dbname}.registrations
+                                      on registrations.userID = friends.followsID
+                                      WHERE friends.userID=:id AND registrations.classID =:classID
+                                      ");
+        $stmt->bindParam(':id',$id);
+        $stmt->bindParam(':classID',$classID);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+
+
     //get all the instructors at the gym
     public function getInstructors()
     {
@@ -658,7 +681,6 @@ class DB
 
 
     }
-
 
     public function deleteClass($id)
     {

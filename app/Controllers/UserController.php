@@ -152,13 +152,31 @@ class UserController extends Controller
 
         $calendarClasses = $db->getClasses();
         $classes = $db->getClasses();
+        //get user's friends who are also registered for available classes
+        $classes = $this->getFriendsRegisteredForClasses($classes);
+
         $userClasses = $this->getUserClasses($_SESSION['user']['id']);
+        $userClasses = $this->getFriendsRegisteredForClasses($userClasses);
 
         $classes = beautifyClasses($classes);
         $userClasses = beautifyClasses($userClasses);
         $calendarClasses = beautifyClassesForCalendar($calendarClasses);
 
+        d($classes);
+        d($userClasses);
+
         echo $this->twig->render('customer/register.twig', array('calendarClasses'=>$calendarClasses, 'classes'=>$classes,'userClasses'=>$userClasses));
+    }
+
+    public function getFriendsRegisteredForClasses($classes)
+    {
+        $db = new DB();
+
+        foreach ($classes as $key=>$class){
+            $classes[$key]['registeredFriends'] = $db->getFriendsRegisteredForClass($_SESSION['user']['id'], $class['classID']);
+        }
+
+        return $classes;
     }
 
     public function unregisterClass()
@@ -176,9 +194,10 @@ class UserController extends Controller
             $class['period'], $class['monday'], $class['tuesday'], $class['wednesday'], $class['thursday'], $class['friday']);
         if($testConflict == false){
 
-            echo json_encode($db->registerClass($_POST['userID'], $_POST['classID']));
+            $db->registerClass($_POST['userID'], $_POST['classID']);
+            echo json_encode("You're Now Registered for ". ucwords($class['className'])." Class!");
         } else {
-        $result = "Could not register for ". $class['name']." class." . " There was a conflict in your schedule with ";
+        $result = "Could not register for ". ucwords($class['className']) ." class." . " There was a conflict in your schedule with ";
 
         foreach ($testConflict as $conflict){
             if($conflict === end($testConflict)){
