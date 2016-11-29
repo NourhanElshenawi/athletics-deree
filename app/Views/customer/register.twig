@@ -295,8 +295,8 @@
                                             <thead>
                                             <tr>
                                                 <th>Instructor</th>
-                                                <th>Duration/Min</th>
                                                 <th>Start Time/24:00</th>
+                                                <th>End Time/24:00</th>
                                                 <th>Max. Capacity</th>
                                                 <th>Current Capacity</th>
                                                 <th>Location</th>
@@ -309,8 +309,8 @@
                                                 <td>
                                                     {{ class.instructorName|capitalize }}
                                                 </td>
-                                                <td>{{ class.duration }}</td>
                                                 <td>{{ class.startTime }}</td>
+                                                <td>{{ class.endTime }}</td>
                                                 <td>{{ class.capacity }}</td>
                                                 <td>{{ class.currentCapacity }}</td>
                                                 <td>{{ class.location }}</td>
@@ -383,6 +383,7 @@
                             success: function (msg) {
 
                                 console.log(msg);
+                                confirm("msg");
 
                             }
                         }
@@ -411,6 +412,7 @@
                             },
                             success: function (msg) {
                                 console.log(msg);
+                                alert(JSON.parse(msg))
                             }
                         }
                 );

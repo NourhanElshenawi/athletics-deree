@@ -1044,6 +1044,44 @@ class DB
         }
     }
 
+    public function searchUserClassesForConflict($id,$startTime, $endTime, $period,
+                                             $monday, $tuesday, $wednesday, $thursday, $friday)
+    {
+        $stmt = $this->conn->prepare("select *
+
+
+                                      from {$this->dbname}.registrations
+                                      JOIN {$this->dbname}.classes
+                                      ON classes.id = registrations.classID
+                                      WHERE registrations.userID=:id AND 
+                                      :startTime <= classes.endTime AND 
+                                      :endTime >= classes.startTime AND classes.period =:period AND  
+                                      (classes.monday =:monday OR 
+                                      classes.tuesday =:tuesday OR classes.wednesday =:wednesday or 
+                                      classes.thursday =:thursday or classes.friday =:friday)
+                                      ");
+
+
+
+        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':startTime', $startTime);
+        $stmt->bindValue(':endTime', $endTime);
+        $stmt->bindValue(':period', $period);
+        $stmt->bindValue(':monday', $monday);
+        $stmt->bindValue(':tuesday', $tuesday);
+        $stmt->bindValue(':wednesday', $wednesday);
+        $stmt->bindValue(':thursday', $thursday);
+        $stmt->bindValue(':friday', $friday);
+
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+    }
+
+
 
     /** GET USER LOGS FOR USER STATS **/
 

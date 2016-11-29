@@ -148,7 +148,7 @@ class AdminController extends Controller
                 $result = "There was an issue adding the class. please contact support!";
             }
         } else{
-            $result = "Could not add class! There is a conflict witht the folowing class(es): ";
+            $result = "Could not add class! There is a conflict with the following class(es): ";
                 foreach ($testingConflict as $conflict){
                     if($conflict === end($testingConflict)){
                         $result = $result . $conflict['name'] . ".";

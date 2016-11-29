@@ -172,8 +172,24 @@ class UserController extends Controller
     public function registerClass()
     {
         $db = new DB();
-        echo json_encode($db->registerClass($_POST['userID'], $_POST['classID']));
+        $class = $db->getClass($_POST['classID']);
+        $testConflict = $db->searchUserClassesForConflict($_SESSION['user']['id'], $class['startTime'], $class['endTime'],
+            $class['period'], $class['monday'], $class['tuesday'], $class['wednesday'], $class['thursday'], $class['friday']);
+        if($testConflict == false){
 
+            echo json_encode($db->registerClass($_POST['userID'], $_POST['classID']));
+        } else {
+        $result = "Could not register for ". $class['name']." class." . " There was a conflict in your schedule with ";
+
+        foreach ($testConflict as $conflict){
+            if($conflict === end($testConflict)){
+                $result = $result . $conflict['name'] . ".";
+            } else {
+                $result = $result . $conflict['name'] . ", ";
+            }
+        }
+        echo json_encode($result);
+        }
     }
 
     /**
