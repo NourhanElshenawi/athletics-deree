@@ -65,13 +65,15 @@ function beautifyClasses($classes){
 
     foreach ($classes as $key=>$class ){
 
-        $temp = ($class['currentCapacity']*100)/$class['capacity'];
-        $temp2 = $class['currentCapacity'];
+        $currentCapacity = count($db->getClassCapacity($class['classID']));
+        $temp = ($currentCapacity*100/$class['capacity']);
+
+        d($currentCapacity);
 
         $classes[$key]['currentCapacityPercentage'] = $temp;
-        $classes[$key]['currentCapacity'] = $temp2;
+        $classes[$key]['currentCapacity'] = $currentCapacity;
 
-        $classes[$key]['users'] = $db->getRegisteredUsers($class['id']);
+        $classes[$key]['users'] = $db->getRegisteredUsers($class['classID']);
 
         $class['days']=array();
 

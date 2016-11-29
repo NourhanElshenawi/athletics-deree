@@ -1098,6 +1098,15 @@ class DB
         $stmt->execute();
     }
 
+    /**
+     * Registrations
+     */
+
+    /**
+     * @param $id
+     * @param $classID
+     * @return mixed
+     */
     public function unregisterClass($id, $classID)
     {
         if($this->getUserRegistrationsForClass($id,$classID)) {
@@ -1172,6 +1181,23 @@ class DB
         $stmt->bindValue(':wednesday', $wednesday);
         $stmt->bindValue(':thursday', $thursday);
         $stmt->bindValue(':friday', $friday);
+
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+    }
+
+    public function getClassCapacity($id)
+    {
+        $stmt = $this->conn->prepare("select *
+                                      from {$this->dbname}.registrations
+                                      WHERE registrations.classID=:id
+                                      ");
+
+        $stmt->bindValue(':id', $id);
 
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
