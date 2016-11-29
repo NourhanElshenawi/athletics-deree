@@ -141,9 +141,7 @@
                                             #}
                                             {% if class in userClasses %}
                                                 <li>
-                                                    <a class="dropdown-toggle unregisterClass" data-toggle="dropdown" role="button" aria-expanded="false" value="{{ class.classID }}">
-                                                        <i class="fa fa-check-circle"></i>
-                                                    </a>
+                                                    <i class=" dropdown-toggle unregisterClass fa fa-check-circle" data-toggle="dropdown" role="button" aria-expanded="false" value="{{ class.classID }}"></i>
                                                 </li>
                                                 {#
                                                 if user is not registered display a plus so knows he is not registered to it.
@@ -152,9 +150,14 @@
                                                 {% else %}
 
                                                     <li>
-                                                        <a class="dropdown-toggle registerClass" data-toggle="dropdown" role="button" aria-expanded="false" value="{{ class.classID }}">
-                                                            <i class="fa fa-plus"></i>
-                                                        </a>
+                                                        <i class="dropdown-toggle
+                                                        {% if class.currentCapacityPercentage != 100 %}
+                                                            {{ "registerClass" }}
+                                                            {% else %}
+                                                            {{ "full" }}
+                                                        {% endif %}
+
+                                                        fa fa-plus" data-toggle="dropdown" role="button" aria-expanded="false" value="{{ class.classID }}"></i>
                                                     </li>
 
                                             {% endif %}
@@ -360,10 +363,8 @@
     </script>
 
     <script>
-        jQuery('.edit').click(function() {
-            var $id = jQuery(this).attr('value');
-            jQuery(this).closest('.x_content').css('display','block');
-            jQuery(this).closest('.x_content').css('style','');
+        jQuery('.full').click(function() {
+            alert("The Class is Full! You cannot register.");
 
         });
 

@@ -201,9 +201,9 @@ class UserController extends Controller
 
         foreach ($testConflict as $conflict){
             if($conflict === end($testConflict)){
-                $result = $result . $conflict['name'] . ".";
+                $result = $result . ucwords($conflict['name']) . ".";
             } else {
-                $result = $result . $conflict['name'] . ", ";
+                $result = $result . ucwords($conflict['name']) . ", ";
             }
         }
         echo json_encode($result);
