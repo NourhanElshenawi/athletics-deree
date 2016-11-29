@@ -68,7 +68,6 @@ function beautifyClasses($classes){
         $currentCapacity = count($db->getClassCapacity($class['classID']));
         $temp = ($currentCapacity*100/$class['capacity']);
 
-        d($currentCapacity);
 
         $classes[$key]['currentCapacityPercentage'] = $temp;
         $classes[$key]['currentCapacity'] = $currentCapacity;
@@ -79,32 +78,26 @@ function beautifyClasses($classes){
 
         if($class['monday']){
             $classes[$key]['days']['monday']="1";
-//                $classes[$key]['days'][]="monday";
-//                echo $class['monday'];
         } else {
             $classes[$key]['days']['monday']="0";
         }
         if($class['tuesday']){
             $classes[$key]['days']['tuesday']="1";
-//                $classes[$key]['days'][]="tuesday";
         }else {
             $classes[$key]['days']['tuesday']="0";
         }
         if($class['wednesday']){
             $classes[$key]['days']['wednesday']="1";
-//                $classes[$key]['days'][]="wednesday";
         }else {
             $classes[$key]['days']['wednesday']="0";
         }
         if($class['thursday']){
             $classes[$key]['days']['thursday']="1";
-//                $classes[$key]['days'][]="thursday";
         }else {
             $classes[$key]['days']['thursday']="0";
         }
         if($class['friday']){
             $classes[$key]['days']['friday']="1";
-//                $classes[$key]['days'][]="friday";
         }else {
             $classes[$key]['days']['friday']="0";
         }
