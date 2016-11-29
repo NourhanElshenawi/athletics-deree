@@ -69,8 +69,8 @@
 
                     eventClick: function(data, event, view) {
                         var content = '<h3>'+data.title+'       </h3>' +
-                                '<p><b>Start:</b> '+data.time+'<br />' +
-                                '<p><b>Duration:</b> '+data.duration+' Min<br /></p>'+
+                                '<p><b>Start:</b> '+data.startTime+' /24hr<br />' +
+                                '<p><b>End:</b> '+data.endTime+' /24hr<br/></p>'+
                                 '<p><b>Location:</b> '+data.location+'<br /></p>' +
                                 '<p><b>Instructor:</b> '+data.instructorName +'<br /></p>' ;
 
@@ -106,18 +106,20 @@
                                 //get the current day (value) in the calendar
                                 if (column_date.getDay() == {{ value }}) {
                                     // example: we're in Monday, create the event
-                                    var time = "{{ class.startTime }}";
-                                    var parseTime = time.split(":");
-                                    console.log(parseTime[0]);
+                                    var startTime = "{{ class.startTime }}";
+                                    var endTime = "{{ class.endTime }}";
+                                    var parseStartTime = startTime.split(":");
+                                    var parseEndTime = endTime.split(":");
+                                    console.log(parseStartTime[0]);
                                     //create the event for that day
                                     events.push({
                                         title: '{{ class.className|capitalize }}',
-                                        start: new Date(column_date.setHours(parseTime[0], parseTime[1])),
-                                        end: new Date(column_date.setMinutes({{ class.duration }})),
+                                        start: new Date(column_date.setHours(parseStartTime[0], parseStartTime[1])),
+                                        end: new Date(column_date.setHours(parseEndTime[0], parseEndTime[1])),
                                         allDay: false,
                                         location: "{{ class.location }}",
-                                        time: "{{ class.startTime }}",
-                                        duration: "{{ class.duration }}",
+                                        startTime: "{{ class.startTime }}",
+                                        endTime: "{{ class.endTime }}",
                                         instructorName: "{{ class.instructorName|capitalize}}"
                                     });
                                 }

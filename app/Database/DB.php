@@ -843,22 +843,6 @@ class DB
 
     }
 
-    public function searchUsersByID($id, $keyword)
-    {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE id = ? AND (name LIKE ? or 
-    email like ? or gender like ? or birthDate like ?) ");
-        $stmt->bindValue(1, $id);
-        $stmt->bindValue(2, $keyword);
-        $stmt->bindValue(3, $keyword);
-        $stmt->bindValue(4, $keyword);
-        $stmt->bindValue(5, $keyword);
-        $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetchAll();
-
-        return $result;
-    }
-
     public function updateUser($id, $name, $email, $password, $birthDate, $gender, $membershipType, $admin)
     {
         $stmt = $this->conn->prepare("update {$this->dbname}.users set name = ?, email = ?, password = ?, birthDate = ?,
@@ -1271,7 +1255,10 @@ class DB
 
     public function getRealtimeLogs(){
 
-        $stmt = $this->conn->prepare("select DISTINCT (userID) from {$this->dbname}.logs WHERE logout is NULL");
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.users
+                                      JOIN {$this->dbname}.logs
+                                      ON users.id = logs.userID
+                                      WHERE logs.logout is NULL GROUP BY logs.userID");
 
         $stmt->execute();
         // set the resulting array to associative
@@ -1280,6 +1267,67 @@ class DB
 
         return $result;
 
+    }
+
+    public function searchRealTimeUsers($keyword)
+    {
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.users
+                                      JOIN {$this->dbname}.logs
+                                      ON users.id = logs.userID
+                                      WHERE logs.logout is NULL 
+                                      AND (users.id LIKE :id OR users.name LIKE :name or 
+                                      users.email like :email or users.gender like :gender or users.birthDate like :birthDate) GROUP BY logs.userID ");
+        $stmt->bindParam(':id', $keyword);
+        $stmt->bindParam(':name', $keyword);
+        $stmt->bindParam(':email', $keyword);
+        $stmt->bindParam(':gender', $keyword);
+        $stmt->bindParam(':birthDate', $keyword);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function getFriendsRealtimeLogs($id, $keyword){
+
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs 
+                                      JOIN {$this->dbname}.users
+                                      ON users.id = logs.userID
+                                      JOIN {$this->dbname}.friends
+                                      ON friends.followsID = users.id
+                                      WHERE friends.userID=:id and logs.logout is NULL GROUP BY logs.userID");
+
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+    }
+
+    public function searchFriendsRealTime($keyword)
+    {
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.logs 
+                                      JOIN {$this->dbname}.users
+                                      ON users.id = logs.userID
+                                      JOIN {$this->dbname}.friends
+                                      ON friends.followsID = users.id
+                                      WHERE friends.userID=:id and logs.logout is NULL
+                                      AND (users.id LIKE :id OR users.name LIKE :name or 
+                                      users.email like :email or users.gender like :gender or users.birthDate like :birthDate) GROUP BY logs.userID ");
+        $stmt->bindParam(':id', $keyword);
+        $stmt->bindParam(':name', $keyword);
+        $stmt->bindParam(':email', $keyword);
+        $stmt->bindParam(':gender', $keyword);
+        $stmt->bindParam(':birthDate', $keyword);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
     }
 
     public function userInGym($id){

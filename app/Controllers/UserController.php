@@ -355,10 +355,11 @@ class UserController extends Controller
     public function currentProgramRequest()
     {
         $db = new DB();
-        $allRequests = $db->getUserCurrentProgram($_SESSION['user']['id']);
-        $allRequests = convertGoalsList($allRequests);
+        $program = $db->getUserCurrentProgram($_SESSION['user']['id']);
+        $program = convertGoalsList($program);
+        d($program);
 
-        echo $this->twig->render('customer/currentProgramRequest.twig', array('requests'=>$allRequests));
+        echo $this->twig->render('customer/currentProgramRequest.twig', array('requests'=>$program));
     }
 
     /**
@@ -416,6 +417,17 @@ class UserController extends Controller
         $db = new DB();
         $friend = $db->removeUserFriend($_SESSION['user']['id'], $_POST['followsID']);
         echo json_encode($friend);
+    }
+
+    public function friendsRealTime(){
+        $db = new DB();
+        if(isset($_GET['keyword'])){
+            $users = $db->searchFriendsRealTime($_SESSION['user']['id'], $_GET['keyword']);
+        } else {
+            $users = $db->getFriendsRealtimeLogs($_SESSION['user']['id']);
+        }
+
+        echo $this->twig->render('customer/friendsRealTime.twig', array('users'=>$users));
     }
 
     /** Android **/

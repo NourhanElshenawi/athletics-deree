@@ -101,43 +101,16 @@ class MainController extends Controller
 
     public function realtimeLogs(){
         $db = new DB();
-        $logs = $db->getRealtimeLogs();
-        $usersID = array();
-        foreach ($logs as $log) {
-            foreach ($log as $r) {
-                $usersID[] = $r;
-            }
-        }
-        $users = array();
 
-        foreach ($usersID as $key=>$id){
-            $users[] = $db->getUsersByID($id);
+        if (isset($_GET['keyword'])){
+            $users = $db->searchRealTimeUsers($_GET['keyword']);
+        } else{
+            $users = $db->getRealtimeLogs();
         }
+
         echo $this->twig->render('realtimeLogs.twig', array('users'=>$users));
     }
 
-    public function searchRealtimeLogs(){
-
-        $db = new DB();
-        $logs = $db->getRealtimeLogs();
-        $usersID = array();
-        foreach ($logs as $log) {
-            foreach ($log as $r) {
-                $usersID[] = $r;
-            }
-        }
-        $users = array();
-        foreach ($usersID as $key=>$id){
-//            d($id);
-            $test = $db->searchUsersByID($id, $_GET['keyword']);
-            if(!empty($test)) {
-                foreach ($test as $one){
-                    $users[] = $one;
-                }
-            }
-        }
-        echo $this->twig->render('realtimeLogs.twig', array('users'=>$users));
-    }
 
 
 }
