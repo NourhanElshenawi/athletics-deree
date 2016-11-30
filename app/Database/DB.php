@@ -384,7 +384,7 @@ class DB
         {
             $result = [];
 
-            $userID = $data['userID'] ?? 7;
+//            $userID = $data['userID'] ?? 7;
             $monday = $data['monday'] ?? 0;
             $tuesday = $data['tuesday'] ?? 0;
             $wednesday = $data['wednesday'] ?? 0;
@@ -399,7 +399,7 @@ class DB
                 (`userID`, `height`, `weight`, `pastExercise`, `currentlyExercising`, `currentExercisingIntensity`, `activities`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`, `comments`) 
                 VALUES (:userID, :height, :weight, :pastExercise, :currentlyExercising, :currentExercisingIntensity, :activities, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :comments );
             ");
-            $stmt->bindParam(':userID', (int) $userID);
+            $stmt->bindParam(':userID', 1);
             $stmt->bindValue(':height', $data['height'] ?? 0);
             $stmt->bindValue(':weight', $data['weight'] ?? 0);
             $stmt->bindParam(':pastExercise', $data['pastExercise']);
