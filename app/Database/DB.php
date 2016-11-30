@@ -393,7 +393,6 @@ class DB
             $saturday = $data['saturday'] ?? 0;
             $sunday = $data['sunday'] ?? 0;
 
-
             $stmt = $this->conn->prepare("
                 INSERT INTO {$this->dbname}.program_requests 
                 (`userID`, `height`, `weight`, `pastExercise`, `currentlyExercising`, `currentExercisingIntensity`, `activities`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`, `comments`) 
