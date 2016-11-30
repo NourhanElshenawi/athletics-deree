@@ -378,6 +378,62 @@ class DB
         return $result;
     }
 
+    public function createProgramRequestFromAndroid ($data)
+    {
+        try
+        {
+            $result = [];
+
+            $userID = $_SESSION['user']['id'];
+            $monday = $data['monday'] ?? 0;
+            $tuesday = $data['tuesday'] ?? 0;
+            $wednesday = $data['wednesday'] ?? 0;
+            $thursday = $data['thursday'] ?? 0;
+            $friday = $data['friday'] ?? 0;
+            $saturday = $data['saturday'] ?? 0;
+            $sunday = $data['sunday'] ?? 0;
+
+            
+            $stmt = $this->conn->prepare("
+                INSERT INTO {$this->dbname}.program_requests 
+                (`userID`, `height`, `weight`, `pastExercise`, `currentlyExercising`, `currentExercisingIntensity`, `activities`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`,
+                 `developMuscleStrength`, `rehabilitateInjury`, `overallFitness`, `loseBodyFat`, `startExerciseProgram`, `designAdvanceProgram`, `increaseFlexibility`, `sportsSpecificTraining`,
+                 `increaseMuscleSize`, `cardioExercise`,`comments`) 
+                VALUES (:userID, :height, :weight, :pastExercise, :currentlyExercising, :currentExercisingIntensity, :activities, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday,
+                 :developMuscleStrength, :rehabilitateInjury, :overallFitness, :loseBodyFat,:startExerciseProgram, :designAdvanceProgram, :increaseFlexibility, :sportsSpecificTraining,
+                 :increaseMuscleSize, :cardioExercise, :comments );
+            ");
+            $stmt->bindParam(':userID', $userID);
+            $stmt->bindValue(':height', $data['height'] ?? 0);
+            $stmt->bindValue(':weight', $data['weight'] ?? 0);
+            $stmt->bindParam(':pastExercise', $data['pastExercise']);
+            $stmt->bindParam(':currentlyExercising', $data['currentlyExercising']);
+            $stmt->bindValue(':currentExercisingIntensity', $data['currentExercisingIntensity']??0);
+            $stmt->bindValue(':activities', $data['activities'] ?? "");
+            $stmt->bindValue(':monday', (int) $monday ?? 0);
+            $stmt->bindValue(':tuesday', (int) $tuesday ?? 0);
+            $stmt->bindValue(':wednesday', (int) $wednesday ?? 0);
+            $stmt->bindValue(':thursday', (int) $thursday ?? 0);
+            $stmt->bindValue(':friday', (int) $friday ?? 0);
+            $stmt->bindValue(':saturday', (int) $saturday ?? 0);
+            $stmt->bindValue(':sunday', (int) $sunday ?? 0);
+            $stmt->bindValue(':comments', $data['comments'] ?? "");
+
+            $stmt->execute();
+
+            $result['success'] = 1;
+            $result['message'] = "Request Successfully Submitted!";
+        }
+        catch (PDOException $exception)
+        {
+            ddd($exception->getMessage());
+            $result['success'] = 0;
+            $result['message'] = $exception->getMessage();
+        }
+
+        return $result;
+    }
+
     public function getUserMonthlyVisits($id)
     {
         $stmt = $this->conn->prepare("select MONTH(login) from {$this->dbname}.logs WHERE userID = ?");

@@ -71,6 +71,7 @@ $router->get('/friendsRealTime', 'UserController', 'friendsRealTime');
 /** Android App Web Service**/
 $router->post('/androidLogin', 'UserController', 'androidLogin');
 $router->post('/androidViewProgram', 'UserController', 'androidViewProgram');
+$router->post('/submitProgramAndroid', 'UserController', 'androidSubmitProgram');
 
 
 
