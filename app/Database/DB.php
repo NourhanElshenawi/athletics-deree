@@ -219,9 +219,8 @@ class DB
             // set the resulting array to associative
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $user = $stmt->fetch();
-            $numberOfRows = $stmt->fetchColumn();
 
-            if($numberOfRows>0) {
+            if(isset($user) && !empty($user) && $user!=false ) {
                 $result["success"] = 1;
                 $result["message"] = "Welcome";
                 $result['user'] = $user;
