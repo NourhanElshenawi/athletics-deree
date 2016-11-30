@@ -384,7 +384,7 @@ class DB
         {
             $result = [];
 
-            $userID = $_SESSION['user']['id'];
+            $userID = 1;
             $monday = $data['monday'] ?? 0;
             $tuesday = $data['tuesday'] ?? 0;
             $wednesday = $data['wednesday'] ?? 0;
@@ -393,15 +393,11 @@ class DB
             $saturday = $data['saturday'] ?? 0;
             $sunday = $data['sunday'] ?? 0;
 
-            
+
             $stmt = $this->conn->prepare("
                 INSERT INTO {$this->dbname}.program_requests 
-                (`userID`, `height`, `weight`, `pastExercise`, `currentlyExercising`, `currentExercisingIntensity`, `activities`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`,
-                 `developMuscleStrength`, `rehabilitateInjury`, `overallFitness`, `loseBodyFat`, `startExerciseProgram`, `designAdvanceProgram`, `increaseFlexibility`, `sportsSpecificTraining`,
-                 `increaseMuscleSize`, `cardioExercise`,`comments`) 
-                VALUES (:userID, :height, :weight, :pastExercise, :currentlyExercising, :currentExercisingIntensity, :activities, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday,
-                 :developMuscleStrength, :rehabilitateInjury, :overallFitness, :loseBodyFat,:startExerciseProgram, :designAdvanceProgram, :increaseFlexibility, :sportsSpecificTraining,
-                 :increaseMuscleSize, :cardioExercise, :comments );
+                (`userID`, `height`, `weight`, `pastExercise`, `currentlyExercising`, `currentExercisingIntensity`, `activities`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`, `comments`) 
+                VALUES (:userID, :height, :weight, :pastExercise, :currentlyExercising, :currentExercisingIntensity, :activities, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :comments );
             ");
             $stmt->bindParam(':userID', $userID);
             $stmt->bindValue(':height', $data['height'] ?? 0);
