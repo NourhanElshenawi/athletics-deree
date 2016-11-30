@@ -215,7 +215,10 @@ class DB
             $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE email = ? and password = ?");
             $stmt->bindValue(1, $email);
             $stmt->bindValue(2, $password);
-            $user = $stmt->execute();
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $user = $stmt->fetch();
             $numberOfRows = $stmt->fetchColumn();
 
             if($numberOfRows>0) {
