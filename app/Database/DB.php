@@ -215,12 +215,13 @@ class DB
             $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE email = ? and password = ?");
             $stmt->bindValue(1, $email);
             $stmt->bindValue(2, $password);
-            $stmt->execute();
+            $user = $stmt->execute();
             $numberOfRows = $stmt->fetchColumn();
 
             if($numberOfRows>0) {
                 $result["success"] = 1;
                 $result["message"] = "Welcome";
+                $result['user'] = $user;
             } else {
                 $result["success"] = 0;
                 $result["message"] = "Invalid Credentials";
