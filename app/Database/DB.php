@@ -384,7 +384,7 @@ class DB
         {
             $result = [];
 
-            $userID = $data['userID'];
+            $userID = $data['userID'] ?? 1;
             $monday = $data['monday'] ?? 0;
             $tuesday = $data['tuesday'] ?? 0;
             $wednesday = $data['wednesday'] ?? 0;
