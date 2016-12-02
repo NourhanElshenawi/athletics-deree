@@ -97,34 +97,37 @@ class UserController extends Controller
 /** Profile**/
     public function profile()
     {
+        if(isLoggedIn()) {
+            $db = new DB();
 
-        $db = new DB();
+            $classes = $this->getUserClasses($_SESSION['user']['id']);
+            $classes = beautifyClassesForCalendar($classes);
 
-        $classes = $this->getUserClasses($_SESSION['user']['id']);
-        $classes = beautifyClassesForCalendar($classes);
+            $dateOfPayment = explode(" ", $db->getLastPaymentByUser($_SESSION['user']['id'])['date'])[0];
+            $periodCoveredByPayment = daysDateDifference(date("Y-m-d"), $dateOfPayment);
 
-        $dateOfPayment = explode(" ", $db->getLastPaymentByUser($_SESSION['user']['id'])['date'])[0];
-        $periodCoveredByPayment = daysDateDifference(date("Y-m-d"),$dateOfPayment);
-
-        if($periodCoveredByPayment>= 31){
-            $needToPay = true;
-        }else {
-            $needToPay = false;
-        }
-
-
-        $paymentSuccess = $db->getLastPaymentByUser($_SESSION['user']['id']);
-        if(isset($_GET['success'])){
-            if($db->addPayment($_GET['paymentId'], $_GET['token'], $_GET['PayerID'], $_SESSION['user']['id'])){
-                $paymentSuccess = true;
-            } else{
-                $paymentSuccess = "Please contact support regarding your last Payment!";
+            if ($periodCoveredByPayment >= 31) {
+                $needToPay = true;
+            } else {
+                $needToPay = false;
             }
-        } else if (!isset($_GET['success'])){
-            $paymentSuccess = false;
-        }
 
-        echo $this->twig->render('customer/profile.twig', array('classes'=>$classes, 'needToPay'=>$needToPay, 'paymentSuccess'=>$paymentSuccess));
+
+            $paymentSuccess = $db->getLastPaymentByUser($_SESSION['user']['id']);
+            if (isset($_GET['success'])) {
+                if ($db->addPayment($_GET['paymentId'], $_GET['token'], $_GET['PayerID'], $_SESSION['user']['id'])) {
+                    $paymentSuccess = true;
+                } else {
+                    $paymentSuccess = "Please contact support regarding your last Payment!";
+                }
+            } else if (!isset($_GET['success'])) {
+                $paymentSuccess = false;
+            }
+
+            echo $this->twig->render('customer/profile.twig', array('classes' => $classes, 'needToPay' => $needToPay, 'paymentSuccess' => $paymentSuccess));
+        } else{
+            redirect('/');
+        }
     }
 
     public function getUserClasses($id) {
@@ -148,24 +151,28 @@ class UserController extends Controller
 /** Registration for classes **/
     public function register()
     {
-        $db = new DB();
+        if(isLoggedIn()) {
+            $db = new DB();
 
-        $calendarClasses = $db->getClasses();
-        $classes = $db->getClasses();
-        //get user's friends who are also registered for available classes
-        $classes = $this->getFriendsRegisteredForClasses($classes);
+            $calendarClasses = $db->getClasses();
+            $classes = $db->getClasses();
+            //get user's friends who are also registered for available classes
+            $classes = $this->getFriendsRegisteredForClasses($classes);
 
-        $userClasses = $this->getUserClasses($_SESSION['user']['id']);
-        $userClasses = $this->getFriendsRegisteredForClasses($userClasses);
+            $userClasses = $this->getUserClasses($_SESSION['user']['id']);
+            $userClasses = $this->getFriendsRegisteredForClasses($userClasses);
 
-        $classes = beautifyClasses($classes);
-        $userClasses = beautifyClasses($userClasses);
-        $calendarClasses = beautifyClassesForCalendar($calendarClasses);
+            $classes = beautifyClasses($classes);
+            $userClasses = beautifyClasses($userClasses);
+            $calendarClasses = beautifyClassesForCalendar($calendarClasses);
 
-        d($classes);
-        d($userClasses);
+            d($classes);
+            d($userClasses);
 
-        echo $this->twig->render('customer/register.twig', array('calendarClasses'=>$calendarClasses, 'classes'=>$classes,'userClasses'=>$userClasses));
+            echo $this->twig->render('customer/register.twig', array('calendarClasses' => $calendarClasses, 'classes' => $classes, 'userClasses' => $userClasses));
+        } else {
+            redirect('/');
+        }
     }
 
     public function getFriendsRegisteredForClasses($classes)
@@ -181,32 +188,41 @@ class UserController extends Controller
 
     public function unregisterClass()
     {
-        $db = new DB();
-        echo  json_encode($db->unregisterClass($_POST['userID'], $_POST['classID']));
+        if(isLoggedIn()) {
+            $db = new DB();
+            echo json_encode($db->unregisterClass($_POST['userID'], $_POST['classID']));
+        } else{
+            redirect('/');
+        }
 
     }
 
     public function registerClass()
     {
-        $db = new DB();
-        $class = $db->getClass($_POST['classID']);
-        $testConflict = $db->searchUserClassesForConflict($_SESSION['user']['id'], $class['startTime'], $class['endTime'],
-            $class['period'], $class['monday'], $class['tuesday'], $class['wednesday'], $class['thursday'], $class['friday']);
-        if($testConflict == false){
+        if(isLoggedIn()) {
+            $db = new DB();
+            $class = $db->getClass($_POST['classID']);
+            $testConflict = $db->searchUserClassesForConflict($_SESSION['user']['id'], $class['startTime'], $class['endTime'],
+                $class['period'], $class['monday'], $class['tuesday'], $class['wednesday'], $class['thursday'], $class['friday']);
+            if ($testConflict == false) {
 
-            $db->registerClass($_POST['userID'], $_POST['classID']);
-            echo json_encode("You're Now Registered for ". ucwords($class['className'])." Class!");
-        } else {
-        $result = "Could not register for ". ucwords($class['className']) ." class." . " There was a conflict in your schedule with ";
-
-        foreach ($testConflict as $conflict){
-            if($conflict === end($testConflict)){
-                $result = $result . ucwords($conflict['name']) . ".";
+                $db->registerClass($_POST['userID'], $_POST['classID']);
+                echo json_encode("You're Now Registered for " . ucwords($class['className']) . " Class!");
             } else {
-                $result = $result . ucwords($conflict['name']) . ", ";
+                $result = "Could not register for " . ucwords($class['className']) . " class." . " There was a conflict in your schedule with ";
+
+                foreach ($testConflict as $conflict) {
+                    if ($conflict === end($testConflict)) {
+                        $result = $result . ucwords($conflict['name']) . ".";
+                    } else {
+                        $result = $result . ucwords($conflict['name']) . ", ";
+                    }
+                }
+                echo json_encode($result);
             }
         }
-        echo json_encode($result);
+        else {
+            redirect('/');
         }
     }
 
@@ -217,23 +233,27 @@ class UserController extends Controller
     public function generalStats()
     {
 
-        //get how many times a day was repeated aka the number of visits per day by users
-        $hours = array_count_values($this->getHourLogs());
+        if(isLoggedIn()) {
+            //get how many times a day was repeated aka the number of visits per day by users
+            $hours = array_count_values($this->getHourLogs());
 
-        //get how many times a day was repeated aka the number of visits per day by users
-        $days = array_count_values($this->getDayLogs());
+            //get how many times a day was repeated aka the number of visits per day by users
+            $days = array_count_values($this->getDayLogs());
 
-        //get how many times a month was repeated aka the number of visits per month by users
-        $months = array_count_values($this->getMonthsLogs());
+            //get how many times a month was repeated aka the number of visits per month by users
+            $months = array_count_values($this->getMonthsLogs());
 
-        //sort the array by month number
-        ksort($months);
-        $months = convertMonths($months);
-        //sort the array by day number
-        ksort($days);
-        $days = convertDays($days);
+            //sort the array by month number
+            ksort($months);
+            $months = convertMonths($months);
+            //sort the array by day number
+            ksort($days);
+            $days = convertDays($days);
 
-        echo $this->twig->render('customer/generalStats.twig', array('months'=>$months, 'days'=>$days, 'hours'=>$hours));
+            echo $this->twig->render('customer/generalStats.twig', array('months' => $months, 'days' => $days, 'hours' => $hours));
+        } else {
+            redirect('/');
+        }
     }
 
     public function getMonthsLogs()
@@ -279,12 +299,16 @@ class UserController extends Controller
 
     public function personalStats()
     {
-        $visitAnalysis = $this->TimeSpentPerVisitAnalysis();
-        $monthVisitationAnalysis = $this->numberOfVisitsMonth();
-        $graphValues = $this->monthVisitsGraph();
+        if(isLoggedIn()) {
+            $visitAnalysis = $this->TimeSpentPerVisitAnalysis();
+            $monthVisitationAnalysis = $this->numberOfVisitsMonth();
+            $graphValues = $this->monthVisitsGraph();
 
-        echo $this->twig->render('customer/personalStats.twig', array('visitAnalysis'=>$visitAnalysis, 'monthVisitationAnalysis'=>$monthVisitationAnalysis,
-            'graphValues'=>$graphValues));
+            echo $this->twig->render('customer/personalStats.twig', array('visitAnalysis' => $visitAnalysis, 'monthVisitationAnalysis' => $monthVisitationAnalysis,
+                'graphValues' => $graphValues));
+        } else{
+            redirect('/');
+        }
 
     }
 
@@ -330,7 +354,11 @@ class UserController extends Controller
     /** Requesting workout programs **/
     public function requestProgram ()
     {
-        echo $this->twig->render('customer/requestProgram.twig');
+        if(isLoggedIn()) {
+            echo $this->twig->render('customer/requestProgram.twig');
+        } else{
+            redirect('/');
+        }
     }
 
     public function submitProgram ()
@@ -345,21 +373,28 @@ class UserController extends Controller
 
     public function programHistory()
     {
-        $db = new DB();
-        $allRequests = $db->getUserProgramRequests($_SESSION['user']['id']);
-        $allRequests = convertGoalsList($allRequests);
+        if(isLoggedIn()) {
+            $db = new DB();
+            $allRequests = $db->getUserProgramRequests($_SESSION['user']['id']);
+            $allRequests = convertGoalsList($allRequests);
 
-        echo $this->twig->render('customer/previousProgramRequests.twig', array('requests'=>$allRequests));
+            echo $this->twig->render('customer/previousProgramRequests.twig', array('requests' => $allRequests));
+        } else{
+            redirect('/');
+        }
     }
 
     public function currentProgramRequest()
     {
-        $db = new DB();
-        $program = $db->getUserCurrentProgram($_SESSION['user']['id']);
-        $program = convertGoalsList($program);
-        d($program);
+        if(isLoggedIn()) {
+            $db = new DB();
+            $program = $db->getUserCurrentProgram($_SESSION['user']['id']);
+            $program = convertGoalsList($program);
 
-        echo $this->twig->render('customer/currentProgramRequest.twig', array('requests'=>$program));
+            echo $this->twig->render('customer/currentProgramRequest.twig', array('requests' => $program));
+        } else{
+            redirect('/');
+        }
     }
 
     /**
@@ -368,18 +403,21 @@ class UserController extends Controller
 
     public function userLogs(){
 
-        $db = new DB();
-        if(isset($_GET['keyword'])){
-            if(convertDayToNum($_GET['keyword']) != false){
-                $logs = $db->getUserLogsByKeyword(convertDayToNum($_GET['keyword']));
-            } else{
-                $logs = $db->getUserLogsByKeyword($_GET['keyword']);
+        if(isLoggedIn()) {
+            $db = new DB();
+            if (isset($_GET['keyword'])) {
+                if (convertDayToNum($_GET['keyword']) != false) {
+                    $logs = $db->getUserLogsByKeyword(convertDayToNum($_GET['keyword']));
+                } else {
+                    $logs = $db->getUserLogsByKeyword($_GET['keyword']);
+                }
+            } else {
+                $logs = $db->getUserLogs($_SESSION['user']['id']);
             }
+            echo $this->twig->render('customer/logs.twig', array('logs' => $logs));
+        } else {
+            redirect('/');
         }
-        else {
-            $logs = $db->getUserLogs($_SESSION['user']['id']);
-        }
-        echo $this->twig->render('customer/logs.twig', array('logs'=>$logs));
     }
 
     /**
@@ -387,20 +425,23 @@ class UserController extends Controller
      */
     public function userFriends(){
 
-        $db = new DB();
-        if(isset($_GET['keyword'])){
-            $friends = $db->searchUserFriends($_SESSION['user']['id'], $_GET['keyword']);
-            foreach ($friends as $key=>$friend){
-                $friends[$key]['classes'] = $db->getUserRegistrations($friend['friendID']);
+        if(isLoggedIn()) {
+            $db = new DB();
+            if (isset($_GET['keyword'])) {
+                $friends = $db->searchUserFriends($_SESSION['user']['id'], $_GET['keyword']);
+                foreach ($friends as $key => $friend) {
+                    $friends[$key]['classes'] = $db->getUserRegistrations($friend['friendID']);
+                }
+            } else {
+                $friends = $db->getUserFriends($_SESSION['user']['id']);
+                foreach ($friends as $key => $friend) {
+                    $friends[$key]['classes'] = $db->getUserRegistrations($friend['friendID']);
+                }
             }
+            echo $this->twig->render('customer/friends.twig', array('friends' => $friends));
         } else {
-            $friends = $db->getUserFriends($_SESSION['user']['id']);
-            foreach ($friends as $key=>$friend){
-                $friends[$key]['classes'] = $db->getUserRegistrations($friend['friendID']);
-            }
+            redirect('/');
         }
-
-        echo $this->twig->render('customer/friends.twig', array('friends'=>$friends));
     }
 
     public function addFriend()
@@ -420,14 +461,17 @@ class UserController extends Controller
     }
 
     public function friendsRealTime(){
-        $db = new DB();
-        if(isset($_GET['keyword'])){
-            $users = $db->searchFriendsRealTime($_SESSION['user']['id'], $_GET['keyword']);
+        if(isLoggedIn()) {
+            $db = new DB();
+            if (isset($_GET['keyword'])) {
+                $users = $db->searchFriendsRealTime($_SESSION['user']['id'], $_GET['keyword']);
+            } else {
+                $users = $db->getFriendsRealtimeLogs($_SESSION['user']['id']);
+            }
+            echo $this->twig->render('customer/friendsRealTime.twig', array('users' => $users));
         } else {
-            $users = $db->getFriendsRealtimeLogs($_SESSION['user']['id']);
+            redirect('/');
         }
-
-        echo $this->twig->render('customer/friendsRealTime.twig', array('users'=>$users));
     }
 
     /** Android **/

@@ -63,9 +63,9 @@ $router->get('/mylogs', 'UserController', 'userLogs');
 
 //Friends
 $router->get('/myfriends', 'UserController', 'userFriends');
+$router->get('/friendsRealTime', 'UserController', 'friendsRealTime');
 $router->post('/addFriend', 'UserController', 'addFriend');
 $router->post('/removeFriend', 'UserController', 'removeFriend');
-$router->get('/friendsRealTime', 'UserController', 'friendsRealTime');
 
 
 /** Android App Web Service**/
@@ -78,11 +78,10 @@ $router->post('/submitProgramAndroid', 'UserController', 'androidSubmitProgram')
 /** ADMIN **/
 //CLASSES SCHEDULE
 $router->get('/editschedule', 'AdminController', 'editSchedule');
-$router->get('/editclass', 'AdminController', 'editClass');
+$router->get('/adminsearchclasses', 'AdminController', 'searchClasses');
 $router->post('/addclass', 'AdminController', 'addClass');
 $router->post('/deleteclass', 'AdminController', 'deleteClass');
 $router->post('/updateclass', 'AdminController', 'updateClass');
-$router->get('/adminsearchclasses', 'AdminController', 'searchClasses');
 
 //CLASS REGISTRATIONS
 $router->get('/registrations', 'AdminController', 'registrations');
@@ -90,7 +89,6 @@ $router->get('/searchregistrations', 'AdminController', 'searchRegistrations');
 
 //Users
 $router->get('/editusers', 'AdminController', 'editUsers');
-//$router->get('/adminsearchusers', 'AdminController', 'searchUsers');
 $router->post('/updateUser', 'AdminController', 'updateUser');
 $router->post('/deleteuser', 'AdminController', 'deleteUser');
 $router->post('/add_multiple_users', 'AdminController', 'addMultipleUsers');

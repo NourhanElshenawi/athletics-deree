@@ -14,7 +14,7 @@ class MainController extends Controller
 /*****HOME*****/
     public function index()
     {
-        echo $this->twig->render('index.twig');
+        echo $this->twig->render('login.twig');
     }
 
     public function test()
