@@ -216,11 +216,14 @@ class DB
             $stmt->bindValue(1, $email);
             $stmt->bindValue(2, $password);
             $stmt->execute();
-            $numberOfRows = $stmt->fetchColumn();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $user = $stmt->fetch();
 
-            if($numberOfRows>0) {
+            if(isset($user) && !empty($user) && $user!=false ) {
                 $result["success"] = 1;
                 $result["message"] = "Welcome";
+                $result['user'] = $user;
             } else {
                 $result["success"] = 0;
                 $result["message"] = "Invalid Credentials";
@@ -364,6 +367,57 @@ class DB
             {
                 $stmt->bindValue(":".$value, (int)$key ?? 0);
             }
+
+            $stmt->execute();
+
+            $result['success'] = 1;
+            $result['message'] = "Request Successfully Submitted!";
+        }
+        catch (PDOException $exception)
+        {
+            ddd($exception->getMessage());
+            $result['success'] = 0;
+            $result['message'] = $exception->getMessage();
+        }
+
+        return $result;
+    }
+
+    public function createProgramRequestFromAndroid ($data)
+    {
+        try
+        {
+            $result = [];
+
+            $userID = $data['userID'] ?? 1;
+            $monday = $data['monday'] ?? 0;
+            $tuesday = $data['tuesday'] ?? 0;
+            $wednesday = $data['wednesday'] ?? 0;
+            $thursday = $data['thursday'] ?? 0;
+            $friday = $data['friday'] ?? 0;
+            $saturday = $data['saturday'] ?? 0;
+            $sunday = $data['sunday'] ?? 0;
+
+            $stmt = $this->conn->prepare("
+                INSERT INTO {$this->dbname}.program_requests 
+                (`userID`, `height`, `weight`, `pastExercise`, `currentlyExercising`, `currentExercisingIntensity`, `activities`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`, `comments`) 
+                VALUES (:userID, :height, :weight, :pastExercise, :currentlyExercising, :currentExercisingIntensity, :activities, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :comments );
+            ");
+            $stmt->bindParam(':userID', $userID);
+            $stmt->bindValue(':height', $data['height'] ?? 0);
+            $stmt->bindValue(':weight', $data['weight'] ?? 0);
+            $stmt->bindParam(':pastExercise', $data['pastExercise']);
+            $stmt->bindParam(':currentlyExercising', $data['currentlyExercising']);
+            $stmt->bindValue(':currentExercisingIntensity', $data['currentExercisingIntensity']??0);
+            $stmt->bindValue(':activities', $data['activities'] ?? "");
+            $stmt->bindValue(':monday', (int) $monday ?? 0);
+            $stmt->bindValue(':tuesday', (int) $tuesday ?? 0);
+            $stmt->bindValue(':wednesday', (int) $wednesday ?? 0);
+            $stmt->bindValue(':thursday', (int) $thursday ?? 0);
+            $stmt->bindValue(':friday', (int) $friday ?? 0);
+            $stmt->bindValue(':saturday', (int) $saturday ?? 0);
+            $stmt->bindValue(':sunday', (int) $sunday ?? 0);
+            $stmt->bindValue(':comments', $data['comments'] ?? "");
 
             $stmt->execute();
 

@@ -23,7 +23,7 @@
         "files": [
             "app/helpers.php",
             "app/setup.php"
-        ]
+           ]
     }
 
 }

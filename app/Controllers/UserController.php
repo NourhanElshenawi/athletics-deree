@@ -454,6 +454,15 @@ class UserController extends Controller
 //        $result["program"] = "Trainer comments for program go here.";
     }
 
+    public function androidSubmitProgram ()
+    {
+        $db = new DB();
+
+        $result = $db->createProgramRequestFromAndroid($_POST);
+
+        echo json_encode($result);
+    }
+
     public function convertMonths($months)
     {
         foreach ($months as $monthNum=>$value){
