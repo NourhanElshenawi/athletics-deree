@@ -357,7 +357,6 @@ class UserController extends Controller
         $db = new DB();
         $program = $db->getUserCurrentProgram($_SESSION['user']['id']);
         $program = convertGoalsList($program);
-        d($program);
 
         echo $this->twig->render('customer/currentProgramRequest.twig', array('requests'=>$program));
     }
@@ -371,9 +370,9 @@ class UserController extends Controller
         $db = new DB();
         if(isset($_GET['keyword'])){
             if(convertDayToNum($_GET['keyword']) != false){
-                $logs = $db->getUserLogsByKeyword(convertDayToNum($_GET['keyword']));
+                $logs = $db->getUserLogsByKeyword($_SESSION['user']['id'],convertDayToNum($_GET['keyword']));
             } else{
-                $logs = $db->getUserLogsByKeyword($_GET['keyword']);
+                $logs = $db->getUserLogsByKeyword($_SESSION['user']['id'],$_GET['keyword']);
             }
         }
         else {

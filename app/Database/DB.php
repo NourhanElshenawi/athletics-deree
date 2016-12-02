@@ -289,17 +289,19 @@ class DB
         return $result;
     }
 
-    public function getUserLogsByKeyword($keyword){
+    public function getUserLogsByKeyword($id, $keyword){
 
         $stmt = $this->conn->prepare("select * from {$this->dbname}.logs
-                                      WHERE DATE (login) like :date or 
+                                      WHERE userID= :id 
+                                      AND (DATE (login) like :date or 
                                       TIME (login) like :time or
                                       HOUR (login) =:hour or
                                       MONTH (login) like :month or
                                       DAYOFWEEK (login) like :day or
                                       YEAR (login) like :year or
-                                      MONTHNAME (login) like :monthName");
+                                      MONTHNAME (login) like :monthName)");
 
+        $stmt->bindParam(':id', $id);
         $stmt->bindParam(':date', $keyword);
         $stmt->bindParam(':time', $keyword);
         $stmt->bindParam(':hour', $keyword);
@@ -405,8 +407,6 @@ class DB
             // set the resulting array to associative
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
-            d($id);
-            d($result);
             return $result;
         } catch (PDOException $e){
             ddd($e);
@@ -1289,7 +1289,7 @@ class DB
         return $result;
     }
 
-    public function getFriendsRealtimeLogs($id, $keyword){
+    public function getFriendsRealtimeLogs($id){
 
         $stmt = $this->conn->prepare("select * from {$this->dbname}.logs 
                                       JOIN {$this->dbname}.users
@@ -1902,12 +1902,36 @@ class DB
         return $result;
     }
 
-    public function trainerResponse($id, $trainerComments)
+    public function searchPendingProgramRequests($keyword)
+    {
+        $stmt = $this->conn->prepare("select *
+                                      from {$this->dbname}.users
+                                      join {$this->dbname}.program_requests
+                                      on users.id = program_requests.userID
+                                      WHERE program_requests.trainerResponse = 0
+                                      AND (
+                                      users.name LIKE :keyword OR users.birthDate LIKE :keyword OR users.email LIKE :keyword
+                                      OR program_requests.date LIKE :keyword
+                                      )
+                                      ORDER by program_requests.DATE  ASC ;");
+        $stmt->bindParam(':keyword', $keyword);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function trainerResponse($id, $trainerComments, $instructorID)
     {
         try
         {
-            $stmt = $this->conn->prepare("UPDATE {$this->dbname}.program_requests SET trainerResponse = 1, trainerComments=:trainerComments WHERE id=:id");
+            $stmt = $this->conn->prepare("UPDATE {$this->dbname}.program_requests SET trainerResponse = 1,
+                                          trainerComments=:trainerComments, instructorID =:instructorID 
+                                          WHERE id=:id");
             $stmt->bindParam(':trainerComments', $trainerComments);
+            $stmt->bindParam(':instructorID', $instructorID);
             $stmt->bindParam(':id', $id);
 
             $stmt->execute();

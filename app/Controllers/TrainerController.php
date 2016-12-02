@@ -17,7 +17,11 @@ class TrainerController extends Controller
     public function programRequests()
     {
         $db = new DB();
-        $pendingRequests = $db->getPendingProgramRequests();
+        if (isset($_GET['keyword'])){
+            $pendingRequests = $db->searchPendingProgramRequests($_GET['keyword']);
+        } else{
+            $pendingRequests = $db->getPendingProgramRequests();
+        }
         $pendingRequests = convertGoalsList($pendingRequests);
 
         echo $this->twig->render('trainer/pendingRequests.twig', array('requests'=>$pendingRequests));
@@ -26,7 +30,7 @@ class TrainerController extends Controller
     public function trainerResponse()
     {
         $db = new DB();
-        echo json_encode($db-> trainerResponse($_POST['id'], $_POST['trainerComments']));
+        echo json_encode($db-> trainerResponse($_POST['id'], $_POST['trainerComments'], $_SESSION['user']['id']));
 //        $db-> trainerResponse($_POST['id'], $_POST['trainerComments']);
 
     }

@@ -141,15 +141,7 @@
                                                 {% if user.inGym == true %}
                                                     {{ "Logout" }} {% else %} {{ "Login" }} {% endif %}
                                             </button>
-
                                         </div>
-
-
-                                        <ul class="nav navbar-right panel_toolbox">
-                                            <li>
-                                                <a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
-                                            </li>
-                                        </ul>
                                         <div class="clearfix"></div>
                                     </div>
                                 </div>
@@ -169,12 +161,6 @@
 
 
     <script>
-        jQuery(document).ready(function() {
-
-            jQuery('.collapse-link').click(function() {
-                toggle(this);
-            });
-
             jQuery('.Logout').click(function() {
                 var $id = jQuery(this).attr('id');
                 console.log($id);
@@ -222,55 +208,6 @@
             });
 
         });
-
-        function toggle($this) {
-
-            var $BOX_PANEL = jQuery($this).closest('.x_panel'),
-                    $ICON = jQuery($this).find('i'),
-                    $BOX_CONTENT = $BOX_PANEL.find('.x_content');
-            if ($BOX_PANEL.attr('style')) {
-                $BOX_CONTENT.slideToggle(200, function(){
-                    $BOX_PANEL.removeAttr('style');
-
-                    $ICON.toggleClass('fa-chevron-down');
-                    $ICON.addClass('fa-chevron-up');
-                });
-            } else {
-                $BOX_CONTENT.slideToggle(200);
-                $BOX_PANEL.css('height', 'auto');
-                $ICON.toggleClass('fa-chevron-up');
-                $ICON.addClass('fa-chevron-down');
-            }
-
-            jQuery('.x_title').css('border-bottom', '2px solid');
-
-        }
-
-        function toggleOnce($this) {
-
-            var $BOX_PANEL = jQuery($this).closest('.x_panel'),
-                    $ICON = jQuery($this).closest('.collapse-link'),
-                    $BOX_CONTENT = $BOX_PANEL.find('.x_content');
-
-            if ($BOX_PANEL.attr('style')) {
-                $BOX_CONTENT.slideToggle(200, function(){
-                    $BOX_PANEL.removeAttr('style');
-
-
-                    console.log($ICON);
-                    $ICON.toggleClass('fa-chevron-down');
-                    console.log($ICON);
-                    $ICON.addClass('fa-chevron-up');
-                    console.log($ICON);
-                });
-            }
-            $ICON.toggleClass('fa-chevron-down');
-            $ICON.toggleClass('fa-chevron-up');
-
-        }
-
-
-
     </script>
     <!-- jQuery -->
     {#<script src="js/jquery.min.js"></script>#}
