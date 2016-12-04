@@ -172,7 +172,7 @@ class UserController extends Controller
         if ($result['success'] == false){
             redirect('/404Certificate');
         } else {
-            $db->uploadUserCertificate($_SESSION['user']['id'],$_FILES['users_file']['name']);
+            $db->uploadUserCertificate($_SESSION['user']['id'],$_FILES['users_file']['name'])   ;
             redirect('/profile');
         }
     }

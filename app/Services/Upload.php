@@ -105,7 +105,7 @@ class Upload
     {
         $target_dir = __DIR__ . "/../storage/certificates/";
 
-        $target_file = $target_dir . $_SESSION['user']['email']."-". date('Y')."-". basename($file["name"]);
+        $target_file = $target_dir . date("Y-m-d H:i:s"). "_".$_SESSION['user']['email']."_". basename($file["name"]);
 
         $fileType = pathinfo($target_file, PATHINFO_EXTENSION);
 

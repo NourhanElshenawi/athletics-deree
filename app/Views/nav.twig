@@ -124,19 +124,6 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Certificates</a>
-                                <ul class="sub-menu">
-                                    <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
-                                        <a href="/nurse-pending">Pending</a>
-                                    </li>
-                                    <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
-                                        <a href="/nurse-approved">Approved</a>
-                                    </li>
-                                    <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
-                                        <a href="/nurse-rejected">Rejected</a>
-                                    </li>
-                                </ul>
-                            </li>
                         {% elseif session.user.admin == 0 %}
                             <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Workout Programs</a>
                                 <ul class="sub-menu">
@@ -183,6 +170,20 @@
                                     </li>
                                 </ul>
                             </li>
+                                {% elseif session.user.nurse %}
+                                    <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Certificates</a>
+                                        <ul class="sub-menu">
+                                            <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
+                                                <a href="/nurse-pending">Pending</a>
+                                            </li>
+                                            <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
+                                                <a href="/nurse-approved">Approved</a>
+                                            </li>
+                                            <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
+                                                <a href="/nurse-rejected">Rejected</a>
+                                            </li>
+                                        </ul>
+                                    </li>
                     {% endif %}
 
 

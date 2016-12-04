@@ -65,7 +65,9 @@
                                 </td>
                                 <td>
                                     {% if user.certificate_file is not null %}
-                                        <a target="_blank" href="/certificates/{{ user.certificate_file }}">{{ user.certificate_file }}</a>
+                                        {#<a target="_blank" href="/certificates/{{ user.certificate_file }}">{{ user.certificate_file }}</a>#}
+                                        {#<a target="_blank" href="../../storage/certificates/{{ user.certificate_file }}">{{ user.certificate_file }}</a>#}
+                                        <a target="_blank" href="../../storage/certificates/arrows.png">{{ user.certificate_file }}</a>
                                     {% else %}
                                         Not uploaded yet
                                     {% endif %}

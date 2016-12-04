@@ -306,7 +306,7 @@ class DB
             return $result;
         }
     }
-    public function uploadUserCertificate($id)
+    public function uploadUserCertificate($id, $file_name)
     {
         try {
                 $stmt = $this->conn->prepare("
@@ -315,7 +315,7 @@ class DB
                 VALUES (:userID, :certificate_file);
             ");
                 $stmt->bindParam(':userID', $id);
-                $stmt->bindValue(':certificate_file', $_SESSION['user']['email']."-".date('Y'));
+                $stmt->bindValue(':certificate_file', date("Y-m-d H:i:s")."_".$_SESSION['user']['id']."_".$file_name);
                 $stmt->execute();
 
                 $result['success'] = 1;
