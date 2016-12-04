@@ -101,6 +101,40 @@ class Upload
         return $result;
     }
 
+    public function uploadCertificate($file)
+    {
+        $target_dir = __DIR__ . "/../storage/certificates/";
+
+        $target_file = $target_dir . $_SESSION['user']['email']."-". date('Y')."-". basename($file["name"]);
+
+        $fileType = pathinfo($target_file, PATHINFO_EXTENSION);
+
+        $result['success'] = true;
+        $result['message'] = "";
+
+        // Allow certain file formats
+        if ($fileType != "pdf") {
+            $result['success'] = false;
+            $result['message'] = "Sorry, only PDF files are allowed.";
+        }
+
+        // Check if $uploadOk is set to 0 by an error
+        if ($result['success'] != true) {
+
+            return $result;
+        } else { // if everything is ok, try to upload file
+            if (move_uploaded_file($file["tmp_name"], $target_file)) {
+                $result['success'] = true;
+                $result['message'] = "The file " . basename($file["name"]) . " has been uploaded.";
+            } else {
+                $result['success'] = false;
+                $result['message'] = "Sorry, there was an error uploading your file.";
+            }
+        }
+
+        return $result;
+    }
+
 }
 
 

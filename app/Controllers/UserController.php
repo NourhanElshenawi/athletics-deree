@@ -11,6 +11,7 @@ namespace Nourhan\Controllers;
 require __DIR__ . '/../start.php';
 
 use Nourhan\Database\DB;
+use Nourhan\Services\Upload;
 
 use PayPal\Api\Payer;
 use PayPal\Api\Item;
@@ -112,6 +113,7 @@ class UserController extends Controller
                 $needToPay = false;
             }
 
+            $certificate = date('Y') == $this->getLatestCertificate()['msg']['YEAR (user_certificates.uploaded_at)'];
 
             $paymentSuccess = $db->getLastPaymentByUser($_SESSION['user']['id']);
             if (isset($_GET['success'])) {
@@ -124,7 +126,7 @@ class UserController extends Controller
                 $paymentSuccess = false;
             }
 
-            echo $this->twig->render('customer/profile.twig', array('classes' => $classes, 'needToPay' => $needToPay, 'paymentSuccess' => $paymentSuccess));
+            echo $this->twig->render('customer/profile.twig', array('classes' => $classes, 'needToPay' => $needToPay,'certificate'=>$certificate, 'paymentSuccess' => $paymentSuccess));
         } else{
             redirect('/');
         }
@@ -146,7 +148,34 @@ class UserController extends Controller
         return $classes;
     }
 
+    /**
+     * Dr Certificates
+     */
 
+    public function getLatestCertificate()
+    {
+        $db = new DB();
+
+        $latestCertificate = $db->getUserLatestCertificateYear($_SESSION['user']['id']);
+
+        return $latestCertificate;
+    }
+
+    public function uploadCertificate()
+    {
+        $uploadService = new Upload();
+        $db = new DB();
+
+        $result = $uploadService->uploadCertificate($_FILES['users_file']);
+
+        //If file was NOT uploaded show message to user and exit
+        if ($result['success'] == false){
+            redirect('/404Certificate');
+        } else {
+            $db->uploadUserCertificate($_SESSION['user']['id'],$_FILES['users_file']['name']);
+            redirect('/profile');
+        }
+    }
 
 /** Registration for classes **/
     public function register()

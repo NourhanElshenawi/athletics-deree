@@ -40,6 +40,12 @@ $router->post('/login', 'UserController', 'userLogin');
 $router->get('/logout', 'UserController', 'logout');
 $router->get('/signin', 'UserController', 'signin');
 
+//Dr Certificate
+
+$router->post('/upload_dr_certificate', 'UserController', 'uploadCertificate');
+//$router->post('/add_multiple_users', 'AdminController', 'addMultipleUsers');
+
+
 //Class Registration
 $router->get('/register', 'UserController', 'register');
 $router->post('/registerclass', 'UserController', 'registerClass');

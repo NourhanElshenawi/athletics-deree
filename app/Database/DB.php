@@ -281,6 +281,54 @@ class DB
         return $result;
     }
 
+    public function getUserLatestCertificateYear($id)
+    {
+        try {
+            $stmt = $this->conn->prepare("select YEAR (user_certificates.uploaded_at)
+                                      from {$this->dbname}.user_certificates
+                                      WHERE user_certificates.userID =:id
+                                      ORDER BY user_certificates.uploaded_at DESC limit 1;");
+
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $row = $stmt->fetch();
+
+            $result['success'] = true;
+            $result['msg'] = $row;
+
+            return $result;
+        } catch (PDOException $e){
+
+            $result['success'] = false;
+            $result['msg'] = "Could not execute query! \n Error: ". $e;
+            return $result;
+        }
+    }
+    public function uploadUserCertificate($id)
+    {
+        try {
+                $stmt = $this->conn->prepare("
+                INSERT INTO {$this->dbname}.user_certificates 
+                (`userID`, `certificate_file`) 
+                VALUES (:userID, :certificate_file);
+            ");
+                $stmt->bindParam(':userID', $id);
+                $stmt->bindValue(':certificate_file', $_SESSION['user']['email']."-".date('Y'));
+                $stmt->execute();
+
+                $result['success'] = 1;
+                $result['message'] = "Request Successfully Submitted!";
+
+        } catch (PDOException $e){
+
+            $result['success'] = false;
+            $result['msg'] = "Could not execute query! \n Error: ". $e;
+            return $result;
+        }
+    }
+
     public function getUserLogs($id) {
         $stmt = $this->conn->prepare("select * from {$this->dbname}.logs WHERE userID=:id");
         $stmt->bindParam(':id', $id);
@@ -568,7 +616,6 @@ class DB
         return $result;
     }
 
-
     public function addUserFriend($id, $followID)
     {
         $stmt = $this->conn->prepare("insert into {$this->dbname}.friends 
@@ -587,7 +634,6 @@ class DB
         }
 
     }
-
 
     public function removeUserFriend($id, $followsID)
     {

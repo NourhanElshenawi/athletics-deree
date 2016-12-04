@@ -171,18 +171,54 @@
 
     </div>
 
-
-    <form action="/pay" method="post" style="display: inline-block;">
-        <button type="submit" style="font-weight: bold; display: inline-block;"
-                {#{% if needToPay == true %}#}
-                class="btn btn-danger">
-        Click to Pay the Gym Fee!
-            {#{% else %}#}
-                {#class="btn btn-success" disabled>#}
-                {#Gym Fee Paid!#}
-            {#{% endif %}#}
+    <div>
+        <form action="/pay" method="post" style="display: inline-block;">
+            <button type="submit" style="font-weight: bold; display: inline-block;"
+                    {% if needToPay == true %}
+                    class="btn btn-danger">
+            Click to Pay the Gym Fee!
+                {% else %}
+                    class="btn btn-success" disabled>
+                    Gym Fee Paid!
+                {% endif %}
+            </button>
+        </form>
+    </div>
+    <div>
+        <button
+        {% if certificate == false %}
+            class="btn btn-danger upload" style="font-weight: bold; display: inline-block;">
+            You need to upload your Dr. Certificate to be able to use the athletics facilities!
+        {% else %}
+            class="btn btn-success" disabled>
+            Certificate uploaded!
+        {% endif %}
         </button>
-    </form>
+
+        <div class="uploadDiv">
+         <form action="/upload_dr_certificate" method="post" enctype='multipart/form-data'>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">File with users <span
+                            class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <label class="btn btn-default btn-primary btn-file">
+                        <input type="file" name="users_file" id="users_file">
+
+                    </label>
+                    <span class='' id="upload-file-info"></span>
+                </div>
+            </div>
+            <div class="ln_solid"></div>
+            <div class="form-group">
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <button type="submit" class="btn btn-success" name="submit">Submit</button>
+                </div>
+            </div>
+         </form>
+        </div>
+    </div>
 
 
     {#
@@ -204,6 +240,14 @@
     <script src="js/Chart.min.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="js/custom.min.js"></script>
+
+    <script>
+        jQuery('.uploadDiv').toggle();
+        jQuery('.upload').click(function () {
+            jQuery('.uploadDiv').toggle();
+
+        });
+    </script>
 
 {% endblock content %}
 

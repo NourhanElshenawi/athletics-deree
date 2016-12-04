@@ -87,7 +87,7 @@
                     {% endif %}
                 {% endif %}
 
-                <table class="addClass">
+                <table class="addUser">
                     <thead>
                     <tr>
 
@@ -165,7 +165,7 @@
                     </tbody>
                 </table>
 
-                <div class="addClass-multiple">
+                <div class="addUser-multiple">
 
                     <form action="/add_multiple_users" method="post" enctype='multipart/form-data'>
 
@@ -500,17 +500,17 @@
 
 
         });
-        jQuery('.addClass').toggle();
+        jQuery('.addUser').toggle();
         jQuery('.add').click(function() {
 
-            jQuery('.addClass').toggle();
+            jQuery('.addUser').toggle();
 
         });
 
-        jQuery('.addClass-multiple').toggle();
+        jQuery('.addUser-multiple').toggle();
         jQuery('.add-multiple').click(function() {
 
-            jQuery('.addClass-multiple').toggle();
+            jQuery('.addUser-multiple').toggle();
 
         });
 
