@@ -278,3 +278,11 @@ function convertDayToNum($day){
     }
 }
 
+
+function isLoggedIn(){
+    return isset($_SESSION['user']);
+}
+
+function isAdmin(){
+    return isset($_SESSION['user']['admin']);
+}

@@ -109,16 +109,16 @@ class AdminController extends Controller
     ////////EDIT CLASS SCHEDULE
     public function editSchedule()
     {
-        $db = new DB();
-        $classes = $db->getClasses();
-        $classes = $this->beautifyClasses($classes);
-        $allInstructors = $db->getInstructors();
-//        $instructors = array();
-//        foreach ($classes as $class ){
-//            $id = "".$class["instructorID"]."";
-//            $instructors[]= $db->getInstructor($id);
-//        }
-        echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes,'allInstructors'=> $allInstructors));
+        if(isAdmin()) {
+            $db = new DB();
+            $classes = $db->getClasses();
+            $classes = $this->beautifyClasses($classes);
+            $allInstructors = $db->getInstructors();
+
+            echo $this->twig->render('admin/editSchedule.twig', array('classes' => $classes, 'allInstructors' => $allInstructors));
+        } else {
+            redirect('/404');
+        }
     }
 
     public function addClass()
@@ -157,21 +157,23 @@ class AdminController extends Controller
                     }
                 }
         }
-
-        d($result);
         echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'allInstructors'=> $allInstructors, 'result'=>$result));
 
 
     }
 
     public function searchClasses(){
-        $db = new DB();
+        if(isAdmin()) {
+            $db = new DB();
 
-        $classes = $db->searchClasses($_GET['keyword']);
-        $classes = $this->beautifyClasses($classes);
-        $allInstructors = $db->getInstructors();
+            $classes = $db->searchClasses($_GET['keyword']);
+            $classes = $this->beautifyClasses($classes);
+            $allInstructors = $db->getInstructors();
 
-        echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'allInstructors'=> $allInstructors));
+            echo $this->twig->render('admin/editSchedule.twig', array('classes' => $classes, 'allInstructors' => $allInstructors));
+        } else{
+            redirect('/404');
+        }
     }
 
     public function updateClass()
@@ -192,17 +194,20 @@ class AdminController extends Controller
 
     public function registrations()
     {
-        $db = new DB();
-        $classes = $db->getClasses();
+        if(isAdmin()) {
+            $db = new DB();
+            $classes = $db->getClasses();
 
-        if(!isset($_GET['class'])){
-            echo $this->twig->render('admin/registrations.twig', array('classes'=>$classes));
-        }
-        else {
-            $users = $db->getRegisteredUsers($_GET['class']);
-            $class = $db->getClass($_GET['class']);
+            if (!isset($_GET['class'])) {
+                echo $this->twig->render('admin/registrations.twig', array('classes' => $classes));
+            } else {
+                $users = $db->getRegisteredUsers($_GET['class']);
+                $class = $db->getClass($_GET['class']);
 
-            echo $this->twig->render('admin/registrations.twig', array('classes'=>$classes, 'users'=>$users, 'selectedClass'=>$class));
+                echo $this->twig->render('admin/registrations.twig', array('classes' => $classes, 'users' => $users, 'selectedClass' => $class));
+            }
+        } else{
+            redirect('/404');
         }
 
     }
@@ -230,21 +235,24 @@ class AdminController extends Controller
 
     public function editUsers()
     {
-        $db = new DB();
+        if(isAdmin()) {
+            $db = new DB();
 
-        $classes = $db->getClasses();
+            $classes = $db->getClasses();
 
-        if(isset($_GET['keyword'])){
+            if (isset($_GET['keyword'])) {
 
-            $users = $db->searchUsers($_GET['keyword']);
+                $users = $db->searchUsers($_GET['keyword']);
+            } else {
+                $users = $db->getUsers();
+            }
+
+            $users = $this->getUsersWithRegistrations($users);
+
+            echo $this->twig->render('admin/editUsers.twig', array('users' => $users, 'classes' => $classes));
+        } else{
+            redirect('/404');
         }
-        else{
-            $users = $db->getUsers();
-        }
-
-        $users = $this->getUsersWithRegistrations($users);
-
-        echo $this->twig->render('admin/editUsers.twig', array('users'=> $users, 'classes'=> $classes));
 
     }
 
@@ -253,28 +261,28 @@ class AdminController extends Controller
      */
     public function editInstructors()
     {
-        $db = new DB();
-        $classes = $db->getClasses();
+        if(isAdmin()) {
+            $db = new DB();
+            $classes = $db->getClasses();
 
-        if(isset($_GET['keyword'])){
+            if (isset($_GET['keyword'])) {
 
-            $instructors = $db->searchInstructors($_GET['keyword']);
+                $instructors = $db->searchInstructors($_GET['keyword']);
 
-            foreach ($instructors as $key=>$instructor){
-                $instructors[$key]['classes'] = $db->getInstructorsClasses($instructor['id']);
+                foreach ($instructors as $key => $instructor) {
+                    $instructors[$key]['classes'] = $db->getInstructorsClasses($instructor['id']);
+                }
+            } else {
+                $instructors = $db->getInstructors();
+
+                foreach ($instructors as $key => $instructor) {
+                    $instructors[$key]['classes'] = $db->getInstructorsClasses($instructor['id']);
+                }
             }
+            echo $this->twig->render('admin/editInstructors.twig', array('instructors' => $instructors, 'classes' => $classes));
+        } else{
+            redirect('/404');
         }
-        else{
-            $instructors = $db->getInstructors();
-
-            foreach ($instructors as $key=>$instructor){
-                $instructors[$key]['classes'] = $db->getInstructorsClasses($instructor['id']);
-            }
-
-        }
-
-
-        echo $this->twig->render('admin/editInstructors.twig', array('instructors'=> $instructors, 'classes'=> $classes));
 
     }
 
