@@ -1474,86 +1474,91 @@ class DB
 
     public function getUsersLogsYearsFilter(){
 
-        $statement = "
+        try {
+            $statement = "
             SELECT YEAR ({$this->dbname}.logs.login)
             FROM {$this->dbname}.users
             INNER JOIN {$this->dbname}.logs
-            ON {$this->dbname}.logs.userID={$this->dbname}.users.id";
+            ON {$this->dbname}.logs.userID={$this->dbname}.users.id
+            WHERE";
 
-        $gender = $_POST['gender'];
-        if($gender == 'b'){
-            $gender="";
-        }
+            $gender = $_POST['gender'];
 
-        if (!empty($gender)){
-            $statement = $statement . " AND {$this->dbname}.users.gender=:gender";
-        }
+            if (!$gender =='b') {
+                $statement = $statement . " {$this->dbname}.users.gender=:gender";
+            } else {
+                $statement = $statement . " {$this->dbname}.users.gender IS NOT NULL";
+            }
 
-        if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
-            $statement = $statement . " AND {$this->dbname}.users.birthDate BETWEEN :down AND :up";
-        }
+            if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])) {
+                $statement = $statement . " AND {$this->dbname}.users.birthDate BETWEEN :down AND :up";
+            }
 
-        if ($_POST['student']){
-            $statement = $statement . " AND {$this->dbname}.users.student=:student ";
-        }
+            if ($_POST['student']) {
+                $statement = $statement . " AND {$this->dbname}.users.student=:student ";
+            }
 
-        if ($_POST['staff']){
-            $statement = $statement . " AND {$this->dbname}.users.staff=:staff ";
-        }
+            if ($_POST['staff']) {
+                $statement = $statement . " AND {$this->dbname}.users.staff=:staff ";
+            }
 
-        if ($_POST['alumni']){
-            $statement = $statement . " AND {$this->dbname}.users.alumni=:alumni ";
-        }
+            if ($_POST['alumni']) {
+                $statement = $statement . " AND {$this->dbname}.users.alumni=:alumni ";
+            }
 
-        if ($_POST['faculty']){
-            $statement = $statement . " AND {$this->dbname}.users.faculty=:faculty ";
-        }
+            if ($_POST['faculty']) {
+                $statement = $statement . " AND {$this->dbname}.users.faculty=:faculty ";
+            }
 
-        if ($_POST['admin']){
-            $statement = $statement . " AND {$this->dbname}.users.admin=:admin ";
-        }
+            if ($_POST['admin']) {
+                $statement = $statement . " AND {$this->dbname}.users.admin=:admin ";
+            }
 
-        if ($_POST['external']){
-            $statement = $statement . " AND {$this->dbname}.users.external=:external ";
-        }
-
-
-        $stmt = $this->conn->prepare($statement);
-
-        if (!empty($gender)) {
-            $stmt->bindParam(':gender', $gender);
-        }
-        if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
-            $stmt->bindParam(':up', $_POST['ageUpper']);
-            $stmt->bindParam(':down', $_POST['ageLower']);
-        }
+            if ($_POST['external']) {
+                $statement = $statement . " AND {$this->dbname}.users.external=:external ";
+            }
 
 
-        if ($_POST['student']) {
-            $stmt->bindValue(':student', $_POST['student']);
-        }
-        if ($_POST['staff']) {
-            $stmt->bindValue(':staff', $_POST['staff']);
-        }
-        if ($_POST['alumni']) {
-            $stmt->bindValue(':alumni', $_POST['alumni']);
-        }
-        if ($_POST['faculty']) {
-            $stmt->bindValue(':faculty', $_POST['faculty']);
-        }
-        if ($_POST['admin']) {
-            $stmt->bindValue(':admin', $_POST['admin']);
-        }
-        if ($_POST['external']) {
-            $stmt->bindValue(':external', $_POST['external']);
-        }
+//            return $statement;
+            $stmt = $this->conn->prepare($statement);
 
-        $stmt->execute();
-        // set the resulting array to associative
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetchAll();
+            if (!$gender =='b') {
+                $stmt->bindParam(':gender', $gender);
+            }
+            if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])) {
+                $stmt->bindParam(':up', $_POST['ageUpper']);
+                $stmt->bindParam(':down', $_POST['ageLower']);
+            }
 
-        return $result;
+
+            if ($_POST['student']) {
+                $stmt->bindValue(':student', $_POST['student']);
+            }
+            if ($_POST['staff']) {
+                $stmt->bindValue(':staff', $_POST['staff']);
+            }
+            if ($_POST['alumni']) {
+                $stmt->bindValue(':alumni', $_POST['alumni']);
+            }
+            if ($_POST['faculty']) {
+                $stmt->bindValue(':faculty', $_POST['faculty']);
+            }
+            if ($_POST['admin']) {
+                $stmt->bindValue(':admin', $_POST['admin']);
+            }
+            if ($_POST['external']) {
+                $stmt->bindValue(':external', $_POST['external']);
+            }
+
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+
+            return $result;
+        } catch (PDOException $e){
+            return $e->getMessage();
+        }
     }
 
     public function getUsersLogsMonthsFilter(){
@@ -1562,15 +1567,15 @@ class DB
             SELECT MONTH({$this->dbname}.logs.login)
             FROM {$this->dbname}.users
             INNER JOIN {$this->dbname}.logs
-            ON {$this->dbname}.logs.userID={$this->dbname}.users.id";
+            ON {$this->dbname}.logs.userID={$this->dbname}.users.id
+            WHERE";
 
         $gender = $_POST['gender'];
-        if($gender == 'b'){
-            $gender="";
-        }
 
-        if (!empty($gender)){
-            $statement = $statement . " AND {$this->dbname}.users.gender=:gender";
+        if (!$gender =='b') {
+            $statement = $statement . " {$this->dbname}.users.gender=:gender";
+        } else {
+            $statement = $statement . " {$this->dbname}.users.gender IS NOT NULL";
         }
 
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
@@ -1604,7 +1609,7 @@ class DB
 
         $stmt = $this->conn->prepare($statement);
 
-        if (!empty($gender)) {
+        if (!$gender == 'b') {
             $stmt->bindParam(':gender', $gender);
         }
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
@@ -1644,15 +1649,15 @@ class DB
         $statement = "SELECT DAYOFWEEK ({$this->dbname}.logs.login)
             FROM {$this->dbname}.users
             INNER JOIN {$this->dbname}.logs
-            ON {$this->dbname}.logs.userID={$this->dbname}.users.id";
+            ON {$this->dbname}.logs.userID={$this->dbname}.users.id
+            WHERE";
 
         $gender = $_POST['gender'];
-        if($gender == 'b'){
-            $gender="";
-        }
 
-        if (!empty($gender)){
-            $statement = $statement . " AND {$this->dbname}.users.gender=:gender";
+        if (!$gender =='b') {
+            $statement = $statement . " {$this->dbname}.users.gender=:gender";
+        } else {
+            $statement = $statement . " {$this->dbname}.users.gender IS NOT NULL";
         }
 
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
@@ -1686,7 +1691,7 @@ class DB
 
         $stmt = $this->conn->prepare($statement);
 
-        if (!empty($gender)) {
+        if (!$gender=='b') {
             $stmt->bindParam(':gender', $gender);
         }
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
@@ -1727,15 +1732,15 @@ class DB
         $statement = "SELECT HOUR ({$this->dbname}.logs.login)
             FROM {$this->dbname}.users
             INNER JOIN {$this->dbname}.logs
-            ON {$this->dbname}.logs.userID={$this->dbname}.users.id";
+            ON {$this->dbname}.logs.userID={$this->dbname}.users.id
+            WHERE ";
 
         $gender = $_POST['gender'];
-        if($gender == 'b'){
-            $gender="";
-        }
 
-        if (!empty($gender)){
-            $statement = $statement . " AND {$this->dbname}.users.gender=:gender";
+        if (!$gender =='b') {
+            $statement = $statement . " {$this->dbname}.users.gender=:gender";
+        } else {
+            $statement = $statement . " {$this->dbname}.users.gender IS NOT NULL";
         }
 
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){
@@ -1770,7 +1775,7 @@ class DB
 
         $stmt = $this->conn->prepare($statement);
 
-        if (!empty($gender)) {
+        if (!$gender=='b') {
             $stmt->bindParam(':gender', $gender);
         }
         if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])){

@@ -418,7 +418,6 @@ class AdminController extends Controller
         //sort the array by month number
         ksort($years);
 
-
         echo json_encode($years);
     }
 
@@ -428,7 +427,7 @@ class AdminController extends Controller
         $days = array_count_values($this->getDaysLogsFilter());
         //sort the array by month number
         ksort($days);
-        $days = $this->convertDays($days);
+        $days = convertDays($days);
 
         echo json_encode($days);
     }
@@ -496,13 +495,8 @@ class AdminController extends Controller
     {
         $db = new DB();
         $yearsDB = $db->getUsersLogsYearsFilter();
-        $years = array();
         //create an array with months as string values
-        foreach ($yearsDB as $year){
-            foreach ($year as $r){
-                $years[]= $r;
-            }
-        }
+        $years = convertJoinDBReturns($yearsDB);
         return $years;
     }
 
