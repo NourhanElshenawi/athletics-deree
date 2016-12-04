@@ -14,7 +14,7 @@
 
 {% endblock head %}
 
-    {% block title %} Gym Stats{% endblock title %}
+    {% block title %} Visitation Stats{% endblock title %}
 
 
 {% block content %}
@@ -33,8 +33,8 @@
             <h2>Filter The Statistics Using The Filters Below</h2>
             <label for="gender">Choose gender: </label>
             <select name="gender" id="gender" style="display: block;" required>
-                <option value="m">Male</option>
-                <option value="f">Female</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
                 <option value="b">Both</option>
             </select>
             <label for="allAge" style="display: inline-block;">All Ages: </label>
@@ -278,9 +278,7 @@
                 }
             }
         });
-    </script>
 
-    <script>
         jQuery('#filter').click(function () {
             console.log("dfsgdfg");
 
@@ -365,11 +363,10 @@
             console.log(ageLower);
             console.log(ageUpper);
 
-            monthChart.destroy();
-
             yearsVals = '{{ years|json_encode|raw }}';
             var yearsValsEncoded = jQuery.parseJSON(yearsVals);
             if (jQuery('#years').hasClass('active')){
+                yearChart.destroy();
                 console.log("YEARS ACTIVE");
                 jQuery.ajax({
                     type: "POST",
@@ -426,6 +423,7 @@
             }
 
             if (jQuery('#months').hasClass('active')){
+                monthChart.destroy();
                 console.log("MONTHS ACTIVE");
                 jQuery.ajax({
                     type: "POST",
@@ -488,6 +486,7 @@
             daysVals = '{{ days|json_encode|raw }}';
             var daysValsEncoded = jQuery.parseJSON(daysVals);
             if (jQuery('#days').hasClass('active')){
+                dayChart.destroy();
                 console.log("DAYS ACTIVE");
                 jQuery.ajax({
                     type: "POST",
@@ -549,6 +548,7 @@
             hoursVals = '{{ hours|json_encode|raw }}';
             var hoursValsEncoded = jQuery.parseJSON(hoursVals);
             if (jQuery('#hours').hasClass('active')){
+                hourChart.destroy();
                 console.log("HOURS ACTIVE");
                 jQuery.ajax({
                     type: "POST",

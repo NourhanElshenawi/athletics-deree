@@ -77,22 +77,15 @@ class MainController extends Controller
         $db = new DB();
         $ageDB = $db->getUsersAge();
 
-        $age = array();
-        foreach ($ageDB as $ages){
-            foreach ($ages as $r){
-                $age[]= $r;
-            }
-        }
-        $age = array_count_values($age);
+        $age = array_count_values(convertJoinDBReturns($ageDB));
+        $age = convertAgesToAgeGroups($age);
 
         $genderDB = $db->getUsersGender();
-        $gender = array();
-        foreach ($genderDB as $genders){
-            foreach ($genders as $r){
-                $gender[]= $r;
-            }
-        }
+        $gender = convertJoinDBReturns($genderDB);
         $gender = array_count_values($gender);
+
+
+
 
         echo $this->twig->render('admin/userStats.twig', array('age'=>$age, 'gender'=> $gender));
     }

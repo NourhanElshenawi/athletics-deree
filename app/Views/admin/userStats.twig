@@ -14,31 +14,23 @@
 
 {% endblock head %}
 
-    {% block title %} Month Stats{% endblock title %}
+    {% block title %} User Characteristics{% endblock title %}
 
 
 {% block content %}
-
-    {{ dump(gender.M) }}
-
-    {#{% for gen in gender %}#}
-        {#{{ gen }}#}
-    {#{% endfor %}#}
-
-
     <div>
         <ul class="nav nav-tabs">
             <li id="age" role="presentation" class="active"><a href="#" style="font-weight: bold; font-size: large;">Age</a></li>
             <li id="gender" role="presentation"><a href="#" style="font-weight: bold; font-size: large;">Gender</a></li>
         </ul>
 
-        <div id="ageDiv" style="width: 80%; height: 50%; margin: auto;">
-            <h2>Visitation Ranking by Busiest Age</h2>
+        <div id="ageDiv" style="width: 80%; height: 50%;">
+            <h2>Age Diversity of Users</h2>
             <canvas id="ageChart"></canvas>
         </div>
 
-        <div id="genderDiv" style="width: 80%; height: 50%; margin: auto; display: none;">
-            <h2>Visitation Ranking by Gender</h2>
+        <div id="genderDiv" style="width: 80%; height: 50%; display: none;">
+            <h2>Gender Diversity of Users</h2>
             <canvas id="genderChart"></canvas>
         </div>
 
@@ -78,11 +70,6 @@
 
                     {% endfor %}
                 ],
-
-                {#{% for key,value in vals %}#}
-                {##}
-                {#{% endfor %}#}
-
                 datasets: [{
                     label: '# of Visits',
                     backgroundColor: "#26B99A",
@@ -100,7 +87,6 @@
 
                 ]
             },
-
             options: {
                 scales: {
                     yAxes: [{
@@ -219,14 +205,7 @@
         });
 
     </script>
-
-
-
-
 {% endblock content %}
-
-{% block info %}
-{% endblock info %}
 
 
 

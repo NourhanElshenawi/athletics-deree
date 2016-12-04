@@ -1484,10 +1484,11 @@ class DB
 
             $gender = $_POST['gender'];
 
-            if (!$gender =='b') {
-                $statement = $statement . " {$this->dbname}.users.gender=:gender";
-            } else {
+
+            if ($gender =='b') {
                 $statement = $statement . " {$this->dbname}.users.gender IS NOT NULL";
+            } else {
+                $statement = $statement . " {$this->dbname}.users.gender=:gender";
             }
 
             if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])) {
@@ -1518,11 +1519,10 @@ class DB
                 $statement = $statement . " AND {$this->dbname}.users.external=:external ";
             }
 
-
-//            return $statement;
             $stmt = $this->conn->prepare($statement);
 
-            if (!$gender =='b') {
+            if ($gender =='b') {
+            } else {
                 $stmt->bindParam(':gender', $gender);
             }
             if (isset($_POST['ageUpper']) && isset($_POST['ageLower'])) {

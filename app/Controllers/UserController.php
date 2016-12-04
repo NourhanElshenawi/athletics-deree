@@ -390,7 +390,7 @@ class UserController extends Controller
             $db = new DB();
             $program = $db->getUserCurrentProgram($_SESSION['user']['id']);
             $program = convertGoalsList($program);
-            
+
             echo $this->twig->render('customer/currentProgramRequest.twig', array('requests' => $program));
         } else{
             redirect('/');
@@ -403,14 +403,6 @@ class UserController extends Controller
 
     public function userLogs(){
 
-<<<<<<< HEAD
-        $db = new DB();
-        if(isset($_GET['keyword'])){
-            if(convertDayToNum($_GET['keyword']) != false){
-                $logs = $db->getUserLogsByKeyword($_SESSION['user']['id'],convertDayToNum($_GET['keyword']));
-            } else{
-                $logs = $db->getUserLogsByKeyword($_SESSION['user']['id'],$_GET['keyword']);
-=======
         if(isLoggedIn()) {
             $db = new DB();
             if (isset($_GET['keyword'])) {
@@ -421,7 +413,6 @@ class UserController extends Controller
                 }
             } else {
                 $logs = $db->getUserLogs($_SESSION['user']['id']);
->>>>>>> d81d8258f6bbfbaf4628f767e395bfc4c6756972
             }
             echo $this->twig->render('customer/logs.twig', array('logs' => $logs));
         } else {

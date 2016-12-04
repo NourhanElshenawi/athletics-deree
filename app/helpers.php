@@ -278,6 +278,28 @@ function convertDayToNum($day){
     }
 }
 
+function convertAgesToAgeGroups($ages){
+    $ageGroups = array(
+        '19-'=>0,
+        '20-29'=>0,
+        '30-39'=>0,
+        '40+'=>0
+    );
+    foreach ($ages as $key=>$value){
+        if($key <=19){
+            $ageGroups['19-'] = $ageGroups['19-'] +$value;
+        } else if($key > 20 && $key <=29){
+            $ageGroups['20-29'] = $ageGroups['20-29'] +$value;
+        } else if($key > 29 && $key <=39){
+            $ageGroups['30-39'] = $ageGroups['30-39'] +$value;
+        } else if($key > 39){
+            $ageGroups['40+'] = $ageGroups['40+'] +$value;
+        }
+    }
+
+    return $ageGroups;
+}
+
 
 function isLoggedIn(){
     return isset($_SESSION['user']);
@@ -286,3 +308,4 @@ function isLoggedIn(){
 function isAdmin(){
     return isset($_SESSION['user']['admin']);
 }
+
