@@ -175,13 +175,17 @@ class DB
     public function getUser($email, $password)
     {
         try {
-            $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE email = ? and password = ?");
+            $stmt = $this->conn->prepare("select *, instructors.id as instructorID from {$this->dbname}.users
+                                          LEFT JOIN {$this->dbname}.instructors
+                                          on {$this->dbname}.users.id = {$this->dbname}.instructors.userID 
+                                          WHERE users.email = ? and users.password = ?");
             $stmt->bindValue(1, $email);
             $stmt->bindValue(2, $password);
             $stmt->execute();
             // set the resulting array to associative
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetch();
+            d($result);
 
         } catch (PDOException $e) {
             $result["success"] = 0;
@@ -2050,6 +2054,42 @@ class DB
             $result['success'] = false;
             $result['message'] = $exception->getMessage();
         }
+        return $result;
+    }
+
+    public function getFinalizedProgramRequests()
+    {
+        $stmt = $this->conn->prepare("select *
+          from {$this->dbname}.users
+          join {$this->dbname}.program_requests
+          on users.id = program_requests.userID
+          WHERE program_requests.trainerResponse = 1 ORDER by program_requests.DATE  DESC ;");
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function searchFinalizedProgramRequests($keyword)
+    {
+        $stmt = $this->conn->prepare("select *
+                                      from {$this->dbname}.users
+                                      join {$this->dbname}.program_requests
+                                      on users.id = program_requests.userID
+                                      WHERE program_requests.trainerResponse = 1
+                                      AND (
+                                      users.name LIKE :keyword OR users.birthDate LIKE :keyword OR users.email LIKE :keyword
+                                      OR program_requests.date LIKE :keyword
+                                      )
+                                      ORDER by program_requests.DATE  DESC ;");
+        $stmt->bindParam(':keyword', $keyword);
+        $stmt->execute();
+        // set the resulting array to associative
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+
         return $result;
     }
 

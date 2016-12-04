@@ -27,7 +27,7 @@
 
 {% endblock head %}
 
-{% block title %} Pending Program Requests {% endblock title %}
+{% block title %} Finalized Program Requests {% endblock title %}
 
 {% block content %}
 
@@ -38,9 +38,9 @@
         {#<div class="col-md-12">#}
         <div class="x_panel2">
             <div class="x_title">
-                <h2 style="width: auto; margin-right: 3%;">Pending Requests</h2>
+                <h2 style="width: auto; margin-right: 3%;">Finalized Requests</h2>
 
-                <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/programRequests">
+                <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/finalizedRequests">
                     <label style="display: inline-block;">
                         <span class="screen-reader-text">Search for:</span>
                         <input style="margin: 0;" type="search" class="search-field" placeholder="Search …" value="" name="keyword">
@@ -123,11 +123,11 @@
                                                 <td style="border-top: none;">
                                                     <div>
                                                         <p>Gender:
-                                                        {% if request.gender == f %}
-                                                            Female
+                                                            {% if request.gender == f %}
+                                                                Female
                                                             {% else %}
-                                                            Male
-                                                        {% endif %}
+                                                                Male
+                                                            {% endif %}
                                                         </p>
                                                         <p>Height: {{ request.height }} cm</p>
                                                         <p>Weight: {{ request.weight }} Kg</p>
@@ -140,44 +140,44 @@
                                                         </p>
                                                         <p>Activities: {{ request.activities }}</p>
                                                         <p style=" display: inline-block;">Days: </p>
-                                                            <ul style="text-decoration: none; display: inline-block; vertical-align: top;">
+                                                        <ul style="text-decoration: none; display: inline-block; vertical-align: top;">
                                                             {% if request.monday == 1 %}
-                                                               <li>Monday</li>
+                                                                <li>Monday</li>
                                                             {% endif %}
                                                             {% if request.tuesday == 1 %}
-                                                               <li>Tuesday</li>
+                                                                <li>Tuesday</li>
                                                             {% endif %}
                                                             {% if request.wednesday == 1 %}
-                                                               <li>Wednesday</li>
+                                                                <li>Wednesday</li>
                                                             {% endif %}
                                                             {% if request.thursday == 1 %}
-                                                               <li>Thursday</li>
+                                                                <li>Thursday</li>
                                                             {% endif %}
                                                             {% if request.friday == 1 %}
-                                                               <li>Friday</li>
+                                                                <li>Friday</li>
                                                             {% endif %}
                                                             {% if request.saturday == 1 %}
-                                                               <li>Saturday</li>
+                                                                <li>Saturday</li>
                                                             {% endif %}
                                                             {% if request.sunday == 1 %}
-                                                               <li>Sunday</li>
+                                                                <li>Sunday</li>
                                                             {% endif %}
-                                                            </ul>
+                                                        </ul>
                                                         <br>
                                                         <br>
                                                         <p>Comments: {{ request.comments }}</p>
                                                         <p>Goal (ordered by highest importance):
-                                                            <ul>
+                                                        <ul>
                                                             {% for goal, priority in request.goals %}
                                                                 <li>{{ goal }}</li>
                                                             {% endfor %}
-                                                            </ul>
+                                                        </ul>
 
                                                         </p>
                                                     </div>
                                                 </td>
                                                 <td style="border-top: none;">
-                                                    <textarea id="trainerComments" placeholder="Propose Program" rows="15" cols="50" maxlength="500"></textarea>
+                                                    <textarea id="trainerComments" placeholder="{{ request.trainerComments }}" rows="15" cols="50" maxlength="500"></textarea>
                                                     <p>
                                                         <button type="submit" id="submitProgram" value="{{ request.id }}" name="submitProgram"> Submit Program</button>
                                                     </p>
@@ -319,8 +319,4 @@
     <script>jQuery.noConflict();</script>
     <script src="js/custom.min.js"></script>
 {% endblock content %}
-
-{% block info %}
-    {#{{ include('info.twig') }}#}
-{% endblock info %}
 

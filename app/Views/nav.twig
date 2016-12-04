@@ -81,16 +81,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Personal Programs</a>
-                                <ul class="sub-menu">
-                                    <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
-                                        <a href="/programRequests">Program Requests</a>
-                                    </li>
-                                    <li id="menu-item-35" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35">
-                                        <a href="/realtimelogs">Statistics</a>
-                                    </li>
-                                </ul>
-                            </li>
+
                             <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Users</a>
                                 <ul class="sub-menu">
                                     <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
@@ -170,7 +161,7 @@
                                     </li>
                                 </ul>
                             </li>
-                                {% elseif session.user.nurse %}
+                                {% if session.user.nurse == 1 %}
                                     <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Certificates</a>
                                         <ul class="sub-menu">
                                             <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
@@ -184,6 +175,20 @@
                                             </li>
                                         </ul>
                                     </li>
+                                    {% endif %}
+
+                            {% if session.user.instructorID is defined %}
+                                <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Programs Requests</a>
+                                    <ul class="sub-menu">
+                                        <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
+                                            <a href="/programRequests">Pending</a>
+                                        </li>
+                                        <li id="menu-item-35" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35">
+                                            <a href="/finalizedRequests">Finalized</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
                     {% endif %}
 
 

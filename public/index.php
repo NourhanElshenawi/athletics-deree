@@ -130,6 +130,7 @@ $router->post('/approveCertificate', 'NurseController', 'approveCertificate');
 $router->post('/rejectCertificate', 'NurseController', 'rejectCertificate');
 
 /** Trainer **/
+$router->get('/finalizedRequests', 'TrainerController', 'finalizedProgramRequests');
 $router->get('/programRequests', 'TrainerController', 'programRequests');
 $router->post('/trainerResponse', 'TrainerController', 'trainerResponse');
 

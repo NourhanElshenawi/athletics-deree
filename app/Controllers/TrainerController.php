@@ -34,5 +34,18 @@ class TrainerController extends Controller
 //        $db-> trainerResponse($_POST['id'], $_POST['trainerComments']);
 
     }
+
+    public function finalizedProgramRequests()
+    {
+        $db = new DB();
+        if (isset($_GET['keyword'])){
+            $finalizedRequests = $db->searchFinalizedProgramRequests($_GET['keyword']);
+        } else{
+            $finalizedRequests = $db->getFinalizedProgramRequests();
+        }
+        $finalizedRequests = convertGoalsList($finalizedRequests);
+
+        echo $this->twig->render('trainer/finalizedRequests.twig', array('requests'=>$finalizedRequests));
+    }
     
 }

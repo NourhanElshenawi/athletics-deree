@@ -101,6 +101,8 @@ class UserController extends Controller
         if(isLoggedIn()) {
             $db = new DB();
 
+            d($_SESSION['user']);
+
             $classes = $this->getUserClasses($_SESSION['user']['id']);
             $classes = beautifyClassesForCalendar($classes);
 
