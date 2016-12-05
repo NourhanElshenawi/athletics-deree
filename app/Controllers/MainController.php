@@ -17,11 +17,6 @@ class MainController extends Controller
         echo $this->twig->render('login.twig');
     }
 
-    public function test()
-    {
-        echo $this->twig->render('master2.twig');
-    }
-
     public function calendar()
     {
         echo $this->twig->render('calendar.twig');
