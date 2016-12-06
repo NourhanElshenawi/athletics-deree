@@ -162,14 +162,33 @@ function LogTimeAnalysis($logTimes){
         $seconds[] = $diff->s;
     }
 
+
     $totalHours = array_sum($hours);
-    $avgHours = $totalHours/count($hours);
+
+    if (count($hours) == 0){
+        $hours[] = 0;
+        $avgHours = 0;
+    } else {
+        $avgHours = $totalHours/count($hours);
+    }
 
     $totalMins = array_sum($minutes);
-    $avgMins = $totalMins/count($minutes);
+
+    if (count($minutes) == 0){
+        $minutes[] = 0;
+        $avgMins = 0;
+    } else {
+        $avgMins = $totalMins/count($minutes);
+    }
 
     $totalSecs = array_sum($seconds);
-    $avgSecs = $totalSecs/count($seconds);
+
+    if (count($seconds) == 0){
+        $seconds[] = 0;
+        $avgSecs = 0;
+    } else {
+        $avgSecs = $totalSecs/count($seconds);
+    }
 
     $min = array(
         'hours' => min($hours),
@@ -202,6 +221,10 @@ function LogMonthAnalysis($logMonths){
     $logMonths = convertJoinDBReturns($logMonths);
     $logMonths = array_count_values($logMonths);
 
+    if(count($logMonths) == 0){
+        $logMonths[]= 0 ;
+    }
+
     $analysis = array(
         'min'=> min($logMonths),
         'avg'=> array_sum($logMonths)/count($logMonths),
@@ -210,6 +233,12 @@ function LogMonthAnalysis($logMonths){
 
     return $analysis;
 }
+
+
+/**
+ * @param array $months An array containing Months in number format
+ * @return array The Initial array of months in letter format
+ */
 
 function convertMonths($months)
 {
@@ -308,4 +337,5 @@ function isLoggedIn(){
 function isAdmin(){
     return isset($_SESSION['user']['admin']);
 }
+
 

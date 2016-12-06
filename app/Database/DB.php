@@ -185,7 +185,6 @@ class DB
             // set the resulting array to associative
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetch();
-            d($result);
 
         } catch (PDOException $e) {
             $result["success"] = 0;
@@ -1883,6 +1882,26 @@ class DB
 
         return $result;
 
+    }
+
+    public function getClassesRegistrations()
+    {
+        try{
+            $stmt = $this->conn->prepare("select * 
+                                      from {$this->dbname}.registrations
+                                      join {$this->dbname}.classes
+                                      on registrations.classID = classes.id");
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+            d($result);
+            return $result;
+        } catch (PDOException $e){
+            $result['success'] = false;
+            $result['msg'] = "Error: ".$e;
+            return $result;
+        }
     }
 
 

@@ -111,6 +111,7 @@ $router->post('/adminstatsyear', 'AdminController', 'postStatsYear');
 $router->post('/adminstatsmonth', 'AdminController', 'postStatsMonth');
 $router->post('/adminstatsday', 'AdminController', 'postStatsDay');
 $router->post('/adminstatshour', 'AdminController', 'postStatsHour');
+$router->get('/adminclassstats', 'AdminController', 'registrationStats');
 
 //Logs
 $router->get('/adminstatsuser', 'MainController', 'userStats');

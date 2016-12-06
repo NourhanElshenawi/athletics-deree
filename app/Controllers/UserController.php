@@ -330,6 +330,7 @@ class UserController extends Controller
     {
         if(isLoggedIn()) {
             $visitAnalysis = $this->TimeSpentPerVisitAnalysis();
+            d($visitAnalysis);
             $monthVisitationAnalysis = $this->numberOfVisitsMonth();
             $graphValues = $this->monthVisitsGraph();
 
@@ -374,6 +375,7 @@ class UserController extends Controller
     {
         $db = new DB();
         $logTimes = $db->getUserLogsTime($_SESSION['user']['id']);
+        d($logTimes);
         $LogTimeAnalysis = LogTimeAnalysis($logTimes);
 
         return $LogTimeAnalysis;

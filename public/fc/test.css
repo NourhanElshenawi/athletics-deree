@@ -4058,8 +4058,9 @@ fieldset legend {
     transition: opacity .5s .5s ease;
     opacity: 0
 }
-.secondary-navigation {
-    display: none
+.secondary-navigation li {
+    /*display: none*/
+    display: block;
 }
 button.menu-toggle {
     cursor: pointer;
@@ -5011,7 +5012,7 @@ img {
 @media (max-width: 970px) {
     .main-navigation ul.menu, .main-navigation ul.nav-menu { display:none; }
     .headerright { display:none; }
-    .secondary-navigation { position: absolute; left: 40%; top:10px; display:none; }
+    /*.secondary-navigation { position: absolute; left: 40%; top:10px; display:none; }*/
     #primary { width:100%; }
     #secondary { display:none; }
     .ms-layer { width:95%!important; height:80px!important; display:none; }

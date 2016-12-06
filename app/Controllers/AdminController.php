@@ -12,98 +12,6 @@ use Nourhan\Database\DB;
 
 class AdminController extends Controller
 {
-
-    public function beautifyClasses($classes){
-
-        $db = new DB();
-
-        foreach ($classes as $key=>$class ){
-
-            if ($class['capacity'] != 0){
-
-
-            $temp = ($class['currentCapacity']*100)/$class['capacity'];
-            $temp2 = $class['currentCapacity'];
-
-            $classes[$key]['currentCapacityPercentage'] = $temp;
-            $classes[$key]['currentCapacity'] = $temp2;
-            } else {
-                $classes[$key]['currentCapacity'] = 0;
-                $classes[$key]['currentCapacityPercentage'] = 0;
-            }
-
-            $classes[$key]['users'] = $db->getRegisteredUsers($class['id']);
-
-            $class['days']=array();
-
-            if($class['monday']){
-                $classes[$key]['days']['monday']="1";
-//                $classes[$key]['days'][]="monday";
-//                echo $class['monday'];
-            } else {
-                $classes[$key]['days']['monday']="0";
-            }
-            if($class['tuesday']){
-                $classes[$key]['days']['tuesday']="1";
-//                $classes[$key]['days'][]="tuesday";
-            }else {
-                $classes[$key]['days']['tuesday']="0";
-            }
-            if($class['wednesday']){
-                $classes[$key]['days']['wednesday']="1";
-//                $classes[$key]['days'][]="wednesday";
-            }else {
-                $classes[$key]['days']['wednesday']="0";
-            }
-            if($class['thursday']){
-                $classes[$key]['days']['thursday']="1";
-//                $classes[$key]['days'][]="thursday";
-            }else {
-                $classes[$key]['days']['thursday']="0";
-            }
-            if($class['friday']){
-                $classes[$key]['days']['friday']="1";
-//                $classes[$key]['days'][]="friday";
-            }else {
-                $classes[$key]['days']['friday']="0";
-            }
-        }
-
-        return $classes;
-    }
-
-    public function beautifyClassesForCalendar($classes) {
-        foreach ($classes as $key=>$class) {
-//            var_dump($class);
-
-            $class['days']=array();
-
-            if($class['monday']){
-                $classes[$key]['days'][]="1";
-//                $classes[$key]['days'][]="monday";
-//                echo $class['monday'];
-            }
-            if($class['tuesday']){
-                $classes[$key]['days'][]="2";
-//                $classes[$key]['days'][]="tuesday";
-            }
-            if($class['wednesday']){
-                $classes[$key]['days'][]="3";
-//                $classes[$key]['days'][]="wednesday";
-            }
-            if($class['thursday']){
-                $classes[$key]['days'][]="4";
-//                $classes[$key]['days'][]="thursday";
-            }
-            if($class['friday']){
-                $classes[$key]['days'][]="5";
-//                $classes[$key]['days'][]="friday";
-            }
-        }
-
-        return $classes;
-    }
-
     /***********ADMIN************/
 
     ////////EDIT CLASS SCHEDULE
@@ -111,8 +19,13 @@ class AdminController extends Controller
     {
         if(isAdmin()) {
             $db = new DB();
-            $classes = $db->getClasses();
-            $classes = $this->beautifyClasses($classes);
+
+            if(isset($_GET['keyword'])){
+                $classes = $db->searchClasses($_GET['keyword']);
+            } else{
+                $classes = $db->getClasses();
+            }
+            $classes = beautifyClasses($classes);
             $allInstructors = $db->getInstructors();
 
             echo $this->twig->render('admin/editSchedule.twig', array('classes' => $classes, 'allInstructors' => $allInstructors));
@@ -127,7 +40,7 @@ class AdminController extends Controller
         $db = new DB();
 
         $classes = $db->getClasses();
-        $classes = $this->beautifyClasses($classes);
+        $classes = beautifyClasses($classes);
         $allInstructors = $db->getInstructors();
 
         $testingConflict = $db->searchClassesForConflict($_POST['instructorID'],$_POST['startTime'], $_POST['endTime'],
@@ -167,7 +80,7 @@ class AdminController extends Controller
             $db = new DB();
 
             $classes = $db->searchClasses($_GET['keyword']);
-            $classes = $this->beautifyClasses($classes);
+            $classes = beautifyClasses($classes);
             $allInstructors = $db->getInstructors();
 
             echo $this->twig->render('admin/editSchedule.twig', array('classes' => $classes, 'allInstructors' => $allInstructors));
@@ -221,6 +134,12 @@ class AdminController extends Controller
      * @param $users
      * @return mixed -> all the registrations of the given users
      */
+
+    /**
+     * @param array $users An array of users
+     * @return array The initial array of users with each user having an array of classes that they're registered fot
+     */
+
     public function getUsersWithRegistrations($users)
     {
         $db = new DB();
@@ -414,7 +333,7 @@ class AdminController extends Controller
         //sort the array by month number
         ksort($months);
 
-        $months = $this->convertMonths($months);
+        $months = convertMonths($months);
 
         echo json_encode($months);
     }
@@ -553,19 +472,30 @@ class AdminController extends Controller
         return $hours;
     }
 
-    public function convertMonths($months)
+    /**
+     * @return array
+     */
+    public function getRegistrations()
     {
-        foreach ($months as $monthNum=>$value){
+        $db = new DB();
 
-            //convert month number to name
-            $dateObj   = \DateTime::createFromFormat('!m', $monthNum);
-            //use name of the month as the new key of the array
-            $months[$dateObj->format('F')] = $months[$monthNum]; // March
-            //unset old array key
-            unset($months[$monthNum]);
+        $registrations = convertJoinDBReturns($db->getClassesRegistrations());
 
-        }
-        return $months;
+        return $registrations;
+    }
+
+    public function registrationStats()
+    {
+        //get how many times a day was repeated aka the number of visits per day by users
+        $classRegistrations = array_count_values($this->getRegistrations());
+        ddd($classRegistrations);
+
+        //sort the array by year
+        ksort($classRegistrations);
+
+        ddd($classRegistrations);
+
+        echo $this->twig->render('admin/classStats.twig', array('classRegistrations'=>$classRegistrations));
     }
 
     //Logs
@@ -615,6 +545,9 @@ class AdminController extends Controller
         echo $this->twig->render('admin/manualLogUser.twig', array('users'=> $users));
     }
 
+    /**
+     * Log user in using NFC
+     */
     public function signin()
     {
         $db = new DB();
@@ -631,6 +564,10 @@ class AdminController extends Controller
             echo json_encode($result);
         }
     }
+
+    /**
+     * Log user out using NFC
+     */
     public function signout()
     {
         $db = new DB();
