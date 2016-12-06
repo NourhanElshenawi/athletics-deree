@@ -23,8 +23,6 @@ if (file_exists($path . '/.env'))
 $router = new Router\Router();
 
 
-$router->get('/test', 'MainController', 'test');
-
 
 /** PUBLIC **/
 $router->get('/', 'MainController', 'index');
