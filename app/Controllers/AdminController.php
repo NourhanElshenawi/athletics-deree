@@ -250,8 +250,7 @@ class AdminController extends Controller
         var_dump($_POST);
 
 
-        if($DB->updateUser($_POST['id'],$_POST['name'],$_POST['email'],$_POST['password'], $_POST['birthDate'],
-            $_POST['gender'], $_POST['membershipType'], $_POST['admin']))
+        if($DB->updateUser($_POST))
         {
             header('Location: /editusers');
         }

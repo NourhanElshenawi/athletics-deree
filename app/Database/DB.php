@@ -175,7 +175,7 @@ class DB
     public function getUser($email, $password)
     {
         try {
-            $stmt = $this->conn->prepare("select *, instructors.id as instructorID from {$this->dbname}.users
+            $stmt = $this->conn->prepare("select *, users.id AS id, instructors.id as instructorID from {$this->dbname}.users
                                           LEFT JOIN {$this->dbname}.instructors
                                           on {$this->dbname}.users.id = {$this->dbname}.instructors.userID 
                                           WHERE users.email = ? and users.password = ?");
@@ -946,20 +946,28 @@ class DB
 
     }
 
-    public function updateUser($id, $name, $email, $password, $birthDate, $gender, $membershipType, $admin)
+    public function updateUser($data)
     {
-        $stmt = $this->conn->prepare("update {$this->dbname}.users set name = ?, email = ?, password = ?, birthDate = ?,
- gender = ?, membershipType = ?, admin = ? WHERE id = ? ");
+        $stmt = $this->conn->prepare("update {$this->dbname}.users 
+                                      set name =:name, email =:email, password =:password, birthDate =:birthDate,
+                                      gender =:gender, external =:external, admin =:admin, faculty =:faculty,
+                                      student =:student, staff =:staff, alumni =:alumni, nurse =:nurse
+                                      WHERE id =:id ");
 
         try{
-            $stmt->bindValue(1, $name);
-            $stmt->bindValue(2, $email);
-            $stmt->bindValue(3, $password);
-            $stmt->bindValue(4, $birthDate);
-            $stmt->bindValue(5, $gender);
-            $stmt->bindValue(6, $membershipType);
-            $stmt->bindValue(7, $admin);
-            $stmt->bindValue(8, $id);
+            $stmt->bindParam(':id', $data['id']);
+            $stmt->bindParam(':name', $data['name']);
+            $stmt->bindParam(':email', $data['email']);
+            $stmt->bindParam(':password', $data['password']);
+            $stmt->bindParam(':birthDate', $data['birthDate']);
+            $stmt->bindParam(':gender', $data['gender']);
+            $stmt->bindValue(':external', (int) in_array('external', $data['classification']));
+            $stmt->bindValue(':admin', (int) in_array('admin', $data['classification']));
+            $stmt->bindValue(':faculty', (int) in_array('faculty', $data['classification']));
+            $stmt->bindValue(':student', (int) in_array('student', $data['classification']));
+            $stmt->bindValue(':staff', (int) in_array('staff', $data['classification']));
+            $stmt->bindValue(':alumni', (int) in_array('alumni', $data['classification']));
+            $stmt->bindValue(':nurse', (int) in_array('nurse', $data['classification']));
             $stmt->execute();
             return true;
         } catch (Exception $e) {

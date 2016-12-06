@@ -174,7 +174,7 @@
     <div>
         <form action="/pay" method="post" style="display: inline-block;">
             <button type="submit" style="font-weight: bold; display: inline-block;"
-                    {% if needToPay == true %}
+                    {% if user.externeedToPay == true %}
                     class="btn btn-danger">
             Click to Pay the Gym Fee!
                 {% else %}
@@ -186,7 +186,7 @@
     </div>
     <div>
         <button
-        {% if certificate == true %}
+        {% if certificate == false %}
             class="btn btn-danger upload" style="font-weight: bold; display: inline-block;">
             You need to upload your Dr. Certificate to be able to use the athletics facilities!
         {% else %}
