@@ -186,12 +186,19 @@
     </div>
     <div>
         <button
-        {% if certificate == false %}
+        {% if attribute(certificate, "YEAR (user_certificates.uploaded_at)") == false %}
             class="btn btn-danger upload" style="font-weight: bold; display: inline-block;">
             You need to upload your Dr. Certificate to be able to use the athletics facilities!
-        {% else %}
+        {% elseif attribute(certificate, "YEAR (user_certificates.uploaded_at)") == true and certificate.certificate_status == "0"  %}
             class="btn btn-success" disabled>
-            Certificate uploaded!
+            Certificate uploaded and awaiting confirmation!
+        {% elseif attribute(certificate, "YEAR (user_certificates.uploaded_at)") == true and certificate.certificate_status == "1" %}
+            class="btn btn-primary" disabled>
+            Certificate uploaded and Approved by The Nurse!
+            {% elseif attribute(certificate, "YEAR (user_certificates.uploaded_at)") == true and certificate.certificate_status == "2" %}
+                class="btn btn-danger upload" style="font-weight: bold; display: inline-block;">
+                Your previous Certificate has been rejected by the Nurse!
+                You need to upload another Dr. Certificate to be able to use the athletics facilities!
         {% endif %}
         </button>
 

@@ -113,7 +113,10 @@ class UserController extends Controller
                 $needToPay = false;
             }
 
-            $certificate = date('Y') == $this->getLatestCertificate()['msg']['YEAR (user_certificates.uploaded_at)'];
+//            $certificate = date('Y') == $this->getLatestCertificate()['msg']['YEAR (user_certificates.uploaded_at)'];
+            $certificate = $this->getLatestCertificate()['msg'];
+            $certificate['YEAR (user_certificates.uploaded_at)'] = date('Y') == $certificate['YEAR (user_certificates.uploaded_at)'];
+            d($certificate);
 
             $paymentSuccess = $db->getLastPaymentByUser($_SESSION['user']['id']);
             if (isset($_GET['success'])) {

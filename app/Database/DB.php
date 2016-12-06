@@ -287,7 +287,7 @@ class DB
     public function getUserLatestCertificateYear($id)
     {
         try {
-            $stmt = $this->conn->prepare("select YEAR (user_certificates.uploaded_at)
+            $stmt = $this->conn->prepare("select YEAR (user_certificates.uploaded_at), user_certificates.certificate_status
                                       from {$this->dbname}.user_certificates
                                       WHERE user_certificates.userID =:id
                                       ORDER BY user_certificates.uploaded_at DESC limit 1;");
@@ -298,6 +298,7 @@ class DB
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $row = $stmt->fetch();
 
+            d($row);
             $result['success'] = true;
             $result['msg'] = $row;
 
