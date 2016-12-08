@@ -65,9 +65,7 @@
                                 </td>
                                 <td>
                                     {% if user.certificate_file is not null %}
-                                        {#<a target="_blank" href="/certificates/{{ user.certificate_file }}">{{ user.certificate_file }}</a>#}
-                                        {#<a target="_blank" href="../../storage/certificates/{{ user.certificate_file }}">{{ user.certificate_file }}</a>#}
-                                        <a target="_blank" href="/certificates/{{ user.certificate_file }}">{{ user.certificate_file }}</a>
+                                      <a target="_blank" href="/certificates/{{ user.certificate_file }}">{{ user.certificate_file }}</a>
                                     {% else %}
                                         Not uploaded yet
                                     {% endif %}
@@ -77,20 +75,6 @@
                                     <button value="{{ user.id }}" type="button" class="approve_btn btn btn-success btn-xs" name="{{ user.name|title }}"><i class="fa fa-check" id="{{ user.email }}"></i> Approve</button>
                                     <button value="{{ user.id }}" type="button" class="reject_btn btn btn-danger btn-xs" name="{{ user.name|title }}"><i class="fa fa-close" id="{{ user.email }}"></i> Reject</button>
                                 </td>
-                                {# I can change the above td to the one below #}
-                                {#<td>#}
-                                    {#<ul class="nav navbar-right panel_toolbox">#}
-                                        {#<li class="dropdown">#}
-                                            {#<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">#}
-                                                {#<i class="fa fa-check"></i>#}
-                                            {#</a>#}
-                                        {#</li>#}
-                                        {#<li>#}
-                                            {#<a class="close-link delete" value="{{ class.id }}">#}
-                                                {#<i class="fa fa-close"></i></a>#}
-                                        {#</li>#}
-                                    {#</ul>#}
-                                {#</td>#}
                             </tr>
                         {% endfor %}
 
@@ -157,9 +141,6 @@
 
             var approve_btn = this;
 
-            console.log(jQuery(this).find('i').attr('id'));
-            console.log(jQuery(this).attr('name'));
-            confirm("check mail");
             if (confirm("Are you sure you want to reject this certificate?")) {
                 console.log("The id is: " + jQuery(this).attr('value'));
 
