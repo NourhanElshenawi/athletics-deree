@@ -319,7 +319,7 @@ class DB
                 VALUES (:userID, :certificate_file);
             ");
                 $stmt->bindParam(':userID', $id);
-                $stmt->bindValue(':certificate_file', date("Y-m-d H:i:s")."_".$_SESSION['user']['id']."_".$file_name);
+                $stmt->bindValue(':certificate_file', date("Y-m-d H:i:s")."_".$_SESSION['user']['email']."_".$file_name);
                 $stmt->execute();
 
                 $result['success'] = 1;
@@ -488,8 +488,8 @@ class DB
 
     public function getUserMonthlyVisits($id)
     {
-        $stmt = $this->conn->prepare("select MONTH(login) from {$this->dbname}.logs WHERE userID = ?");
-        $stmt->bindValue(1, $id);
+        $stmt = $this->conn->prepare("select MONTH(login) from {$this->dbname}.logs WHERE userID =:id");
+        $stmt->bindParam(':id', $id);
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -841,11 +841,13 @@ class DB
         try{
             $stmt->bindValue(1, '2');
             $stmt->bindValue(2, $id);
-            $result = $stmt->execute();
+            $result['success'] = $stmt->execute();
 
             return $result;
         } catch (Exception $e) {
-            return false;
+            $result['success'] = false;
+            $result['message'] = "Error rejecting certificate! Please contact support";
+            return $result;
         }
     }
 

@@ -173,7 +173,8 @@ class UserController extends Controller
 
         //If file was NOT uploaded show message to user and exit
         if ($result['success'] == false){
-            redirect('/404Certificate');
+            d($result['message']);
+//            redirect('/404Certificate');
         } else {
             $db->uploadUserCertificate($_SESSION['user']['id'],$_FILES['users_file']['name'])   ;
             redirect('/profile');

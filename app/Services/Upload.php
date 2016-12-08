@@ -103,7 +103,7 @@ class Upload
 
     public function uploadCertificate($file)
     {
-        $target_dir = __DIR__ . "/../storage/certificates/";
+        $target_dir = __DIR__ . "/../../public/certificates/";
 
         $target_file = $target_dir . date("Y-m-d H:i:s"). "_".$_SESSION['user']['email']."_". basename($file["name"]);
 

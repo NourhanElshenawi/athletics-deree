@@ -67,14 +67,15 @@
                                     {% if user.certificate_file is not null %}
                                         {#<a target="_blank" href="/certificates/{{ user.certificate_file }}">{{ user.certificate_file }}</a>#}
                                         {#<a target="_blank" href="../../storage/certificates/{{ user.certificate_file }}">{{ user.certificate_file }}</a>#}
-                                        <a target="_blank" href="../../storage/certificates/arrows.png">{{ user.certificate_file }}</a>
+                                        <a target="_blank" href="/certificates/{{ user.certificate_file }}">{{ user.certificate_file }}</a>
                                     {% else %}
                                         Not uploaded yet
                                     {% endif %}
                                 </td>
+                                <input type="hidden" class="email" value="{{ user.email }}">
                                 <td>
-                                    <button value="{{ user.id }}" type="button" class="approve_btn btn btn-success btn-xs"><i class="fa fa-check"></i> Approve</button>
-                                    <button value="{{ user.id }}" type="button" class="reject_btn btn btn-danger btn-xs"><i class="fa fa-close"></i> Reject</button>
+                                    <button value="{{ user.id }}" type="button" class="approve_btn btn btn-success btn-xs" name="{{ user.name|title }}"><i class="fa fa-check" id="{{ user.email }}"></i> Approve</button>
+                                    <button value="{{ user.id }}" type="button" class="reject_btn btn btn-danger btn-xs" name="{{ user.name|title }}"><i class="fa fa-close" id="{{ user.email }}"></i> Reject</button>
                                 </td>
                                 {# I can change the above td to the one below #}
                                 {#<td>#}
@@ -103,6 +104,22 @@
         </div>
     </div>
 
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+    <!-- Bootstrap -->
+    <script src="js/bootstrap.js"></script>
+    <!-- FastClick -->
+    <script src="js/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="js/nprogress.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script>jQuery.noConflict();</script>
+    <script src="js/bootstrap-progressbar.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script>jQuery.noConflict();</script>
+    <script src="js/custom.min.js"></script>
+
     <script>
         jQuery('.approve_btn').click(function() {
 
@@ -115,16 +132,21 @@
                     type: 'POST',
                     url: '/approveCertificate',
                     data: {
-                        user_certificate_id: jQuery(this).attr('value')
+                        user_certificate_id: jQuery(this).attr('value'),
+                        name: jQuery(this).attr('name'),
+                        email: jQuery(this).find("i").attr('id'),
+                        message: "Your certificate has been approved by the nurse. Enjoy using the " +
+                        "DEREE Athletic Facilities."
                     },
                     success: function (data) {
-                        console.log("data returned: " + data);
+                        data = jQuery.parseJSON(data);
+                        console.log(data);
 
-                        if (data=='true') {
+                        if (data['success']==true) {
                             approve_btn.closest('.user_row').remove();
                         } else {
                             jQuery(approve_btn).closest('.user_row').css('opacity', '0.3');
-                            alert('Operation Failed! Please contact support.');
+                            alert(data['message']);
                         }
                     }
                 });
@@ -135,6 +157,9 @@
 
             var approve_btn = this;
 
+            console.log(jQuery(this).find('i').attr('id'));
+            console.log(jQuery(this).attr('name'));
+            confirm("check mail");
             if (confirm("Are you sure you want to reject this certificate?")) {
                 console.log("The id is: " + jQuery(this).attr('value'));
 
@@ -142,16 +167,20 @@
                     type: 'POST',
                     url: '/rejectCertificate',
                     data: {
-                        user_certificate_id: jQuery(this).attr('value')
+                        user_certificate_id: jQuery(this).attr('value'),
+                        name: jQuery(this).attr('name'),
+                        email: jQuery(this).find("i").attr('id'),
+                        message: "Your certificate has been rejected by the nurse. Please upload a new one in " +
+                        "order to use the DEREE Athletic Facilities."
                     },
                     success: function (data) {
-                        console.log("data returned: " + data);
+                        data = jQuery.parseJSON(data);
 
-                        if (data=='true') {
+                        if (data['success']==true) {
                             approve_btn.closest('.user_row').remove();
                         } else {
                             jQuery(approve_btn).closest('.user_row').css('opacity', '0.3');
-                            alert('Operation Failed! Please contact support.');
+                            alert(data['message']);
                         }
                     }
                 });
@@ -159,21 +188,6 @@
         });
     </script>
 
-    <!-- jQuery -->
-    <script src="js/jquery.min.js"></script>
-    <!-- Bootstrap -->
-    <script src="js/bootstrap.min.js"></script>
-    <!-- FastClick -->
-    <script src="js/fastclick.js"></script>
-    <!-- NProgress -->
-    <script src="js/nprogress.js"></script>
-    <!-- bootstrap-progressbar -->
-    <script>jQuery.noConflict();</script>
-    <script src="js/bootstrap-progressbar.js"></script>
-
-    <!-- Custom Theme Scripts -->
-    <script>jQuery.noConflict();</script>
-    <script src="js/custom.min.js"></script>
 
 {% endblock content %}
 

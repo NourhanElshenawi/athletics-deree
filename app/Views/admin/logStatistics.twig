@@ -367,6 +367,7 @@
             var yearsValsEncoded = jQuery.parseJSON(yearsVals);
             if (jQuery('#years').hasClass('active')){
                 yearChart.destroy();
+                jQuery("#yearChart").empty();
                 console.log("YEARS ACTIVE");
                 jQuery.ajax({
                     type: "POST",

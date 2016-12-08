@@ -82,7 +82,7 @@
                                             <ul class="list-inline">
                                                 <li>
                                                     <a href="/editusers?keyword={{ request.userID }}">
-                                                        <img src="images/{{ request.picture }}" class="avatar" alt="Avatar" value="{{ request.name }}">
+                                                        <img src="images/profilePictures/{{ request.picture }}" class="avatar" alt="Avatar" value="{{ request.name }}">
                                                     </a>
                                                 </li>
                                             </ul>
@@ -122,6 +122,9 @@
                                             <tr style="border-top: none;">
                                                 <td style="border-top: none;">
                                                     <div>
+                                                        <p>
+                                                            Age: {{ "now"|date('Y') - request.birthDate|date('Y')}}
+                                                        </p>
                                                         <p>Gender:
                                                         {% if request.gender == f %}
                                                             Female
