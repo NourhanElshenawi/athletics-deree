@@ -38,7 +38,7 @@ class SwiftMailer
             return $result;
         }
         // Create the Transport
-        $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 587, 'tsl')
+        $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
             ->setUsername(getenv('MAIL'))
 //            ->setUsername("nourhanelshenawy@gmail.com")
             ->setPassword(getenv('MAIL_PASS'))
