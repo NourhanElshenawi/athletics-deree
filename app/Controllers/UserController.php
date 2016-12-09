@@ -437,7 +437,7 @@ class UserController extends Controller
             $db = new DB();
             if (isset($_GET['keyword'])) {
                 if (convertDayToNum($_GET['keyword']) != false) {
-                    $logs = $db->getUserLogsByKeyword(convertDayToNum($_GET['keyword']));
+                    $logs = $db->getUserLogsByKeyword($_SESSION['user']['id'],convertDayToNum($_GET['keyword']));
                 } else {
                     $logs = $db->getUserLogsByKeyword($_GET['keyword']);
                 }
