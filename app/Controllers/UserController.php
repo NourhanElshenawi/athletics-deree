@@ -28,7 +28,7 @@ class UserController extends Controller
 {
 
 
-/** Signin **/
+/** Signin with NFC **/
     public function signin() {
         $db = new DB();
         $date = date_create();
@@ -38,15 +38,19 @@ class UserController extends Controller
         //check if user is already in gym
         $test = $db->userInGym($_GET['userID']);
 
+
         if($test) {
             //if user is in the gym log him out
             $db->signout($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
-//            echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes));
 
         } else {
             //if user is not in the gym log him in
             $db->signin($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
-            echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes));
+
+            $certificate = $this->getLatestCertificate()['msg'];
+            $certificate['YEAR (user_certificates.uploaded_at)'] = date('Y') == $certificate['YEAR (user_certificates.uploaded_at)'];
+
+            echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes, 'certificate'=>$certificate));
         }
 
 //        2012-06-18 10:34:09

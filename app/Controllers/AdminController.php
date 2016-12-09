@@ -560,7 +560,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Log user in using NFC
+     * Log user in without using NFC
      */
     public function signin()
     {
@@ -580,7 +580,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Log user out using NFC
+     * Log user out without using NFC
      */
     public function signout()
     {

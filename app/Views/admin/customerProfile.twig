@@ -147,44 +147,9 @@
                 {% endfor %}
 
                 {% endfor %}
-//                $('#fullcalendar').fullCalendar( 'addEventSource',
-//                        function(start, end, callback) {
-//                            // When requested, dynamically generate a
-//                            // repeatable event for every monday.
-//                            var events = [];
-//                            var monday = 1;
-//                            var one_day = (24 * 60 * 60 * 1000);
-//
-//                            for (loop = start.getTime();
-//                                 loop <= end.getTime();
-//                                 loop = loop + one_day) {
-//
-//                                var column_date = new Date(loop);
-//
-//                                if (column_date.getDay() == monday) {
-//                                    // we're in Moday, create the event
-//                                    events.push({
-//                                        title: 'Morning Meeting',
-//                                        start: new Date(column_date.setHours(10, 00)),
-//                                        end: new Date(column_date.setHours(10, 40)),
-//                                        allDay: false
-//                                    });
-//                                }
-//
-//
-//
-//
-//                            } // for loop
-//
-//                            // return events generated
-//                            callback( events );
-//                        }
-//                );
                 $('#fullcalendar').fullCalendar('changeView', 'agendaWeek');
-//                $('#calendar').fullCalendar('option', 'aspectRatio', 0.5);
 
             }());
-        });//]]>
 
 
 
@@ -203,6 +168,23 @@
         <img src="images/{{ user.picture }}" style="width: 15%; height: 20%;" alt="">
         <p style="font-weight: bold; font-size: large; padding: 0;">Name: {{ user.name }}</p>
         <p style="font-weight: bold; font-size: large; padding: 0;">ID: {{ user.id }}</p>
+
+        <button
+                {% if attribute(certificate, "YEAR (user_certificates.uploaded_at)") == false %}
+                class="btn btn-danger upload" style="font-weight: bold; display: inline-block;">
+            You need to upload your Dr. Certificate to be able to use the athletics facilities!
+            {% elseif attribute(certificate, "YEAR (user_certificates.uploaded_at)") == true and certificate.certificate_status == "0"  %}
+                class="btn btn-success" disabled>
+                Certificate uploaded and awaiting confirmation!
+            {% elseif attribute(certificate, "YEAR (user_certificates.uploaded_at)") == true and certificate.certificate_status == "1" %}
+                class="btn btn-primary" disabled>
+                Certificate uploaded and Approved by The Nurse!
+            {% elseif attribute(certificate, "YEAR (user_certificates.uploaded_at)") == true and certificate.certificate_status == "2" %}
+                class="btn btn-danger upload" style="font-weight: bold; display: inline-block;">
+                Your previous Certificate has been rejected by the Nurse!
+                You need to upload another Dr. Certificate to be able to use the athletics facilities!
+            {% endif %}
+        </button>
 
     </div>
 
