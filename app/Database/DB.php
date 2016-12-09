@@ -108,7 +108,8 @@ class DB
     //get a specific class offered by the gym using its id as well as the information for the instructor giving the class
     public function getClass($id)
     {
-        $stmt = $this->conn->prepare("select *, classes.name AS className, 
+        try {
+            $stmt = $this->conn->prepare("select *, classes.name AS className, 
                                       classes.id AS classID, instructors.id AS instructorID,
                                       users.name as instructorName
                                       from {$this->dbname}.classes
@@ -117,13 +118,16 @@ class DB
                                       join {$this->dbname}.users
                                       on instructors.userID = users.id
                                       WHERE classes.id =:classID");
-        $stmt->bindParam(':classID',$id);
-        $stmt->execute();
-        // set the resulting array to associative
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetch();
+            $stmt->bindParam(':classID', $id);
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetch();
 
-        return $result;
+            return $result;
+        } catch (PDOException $e){
+            return $e->getMessage();
+        }
     }
 
     //get a specific class offered by the gym using its id as well as the information for the instructor giving the class

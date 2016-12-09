@@ -38,7 +38,6 @@ class TrainerController extends Controller
             $result = $mailer->sendEmail($_POST);
         }
         echo json_encode($result);
-//        $db-> trainerResponse($_POST['id'], $_POST['trainerComments']);
 
     }
 

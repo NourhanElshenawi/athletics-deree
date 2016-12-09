@@ -191,14 +191,11 @@ class AdminController extends Controller
     {
         $DB = new DB();
 
-        var_dump($_POST);
-
-
         if($DB->updateUser($_POST))
         {
-            header('Location: /editusers');
-        }
-
+            redirect('/editusers');
+        } else
+            redirect('/error404');
     }
 
     public function deleteUser()
@@ -507,12 +504,10 @@ class AdminController extends Controller
     {
         //get how many times a day was repeated aka the number of visits per day by users
         $classRegistrations = array_count_values($this->getRegistrations());
-        ddd($classRegistrations);
 
         //sort the array by year
         ksort($classRegistrations);
 
-        ddd($classRegistrations);
 
         echo $this->twig->render('admin/classStats.twig', array('classRegistrations'=>$classRegistrations));
     }

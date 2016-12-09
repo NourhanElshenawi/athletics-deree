@@ -65,8 +65,6 @@
                                     </li>
                                     <li id="menu-item-35" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35"><a href="/adminstatsuser">User Characteristics</a>
                                     </li>
-                                    <li id="menu-item-35" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35"><a href="/adminclassstats">Class Registrations</a>
-                                    </li>
                                 </ul>
                             </li>
                             <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Gym Logs</a>
@@ -88,9 +86,6 @@
                                     <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
                                         <a href="/editusers">Edit Users</a>
                                     </li>
-                                    <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
-                                        <a href="/logs">View Statistics</a>
-                                    </li>
                                 </ul>
                             </li>
                             <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Classes</a>
@@ -101,18 +96,12 @@
                                     <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
                                         <a href="/registrations">Registrations</a>
                                     </li>
-                                    <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
-                                        <a href="/fitnessProgram">View Fitness Program</a>
-                                    </li>
                                 </ul>
                             </li>
                             <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Instructors</a>
                                 <ul class="sub-menu">
                                     <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
                                         <a href="/editInstructors">Edit Instructors</a>
-                                    </li>
-                                    <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
-                                        <a href="/logs">View Statistics</a>
                                     </li>
                                 </ul>
                             </li>
@@ -137,9 +126,6 @@
                             </li>
                             <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Gym Logs</a>
                                 <ul class="sub-menu">
-                                    <li id="menu-item-35" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35">
-                                        <a href="/friendsRealTime">Friends at The Gym Now!</a>
-                                    </li>
                                     <li id="menu-item-35" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35">
                                         <a href="/realtimelogs">Real-Time Logs</a>
                                     </li>
@@ -175,7 +161,7 @@
                                     </li>
                                     {% endif %}
 
-                            {% if session.user.instructorID is defined %}
+                            {% if session.user.instructorID is not null %}
                                 <li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-25"><a>Programs Requests</a>
                                     <ul class="sub-menu">
                                         <li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36">
@@ -188,7 +174,6 @@
                                 </li>
                             {% endif %}
                     {% endif %}
-
 
                         </ul>
                     </div>

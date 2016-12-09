@@ -6,7 +6,7 @@
      "birthDate": "1994-10-01",
      "gender": "f",
      "membershipType": "0",
-     "picture": "headshot.jpg",
+     "picture": "n@acg.edu.jpeg",
      "admin": "1",
      "active": "1"
    },
@@ -17,7 +17,7 @@
      "birthDate": "1994-06-01",
      "gender": "f",
      "membershipType": "1",
-     "picture": "headshot.jpg",
+     "picture": "f@acg.edu.jpeg",
      "admin": "0",
      "active": "0"
    },
@@ -28,7 +28,7 @@
      "birthDate": "1991-09-16",
      "gender": "m",
      "membershipType": "0",
-     "picture": "headshot.jpg",
+     "picture": "n@acg.edu.jpeg",
      "admin": "1",
      "active": "1"
    },
@@ -39,7 +39,7 @@
      "birthDate": "1991-09-16",
      "gender": "f",
      "membershipType": "0",
-     "picture": "headshot.jpg",
+     "picture": "jane@example.com.jpeg",
      "admin": "0",
      "active": "1"
    },
@@ -50,7 +50,7 @@
      "birthDate": "1994-10-01",
      "gender": "f",
      "membershipType": "0",
-     "picture": "headshot.jpg",
+     "picture": "kate@acg.edu.jpg",
      "admin": "0",
      "active": "1"
    },
@@ -61,7 +61,7 @@
      "birthDate": "1994-10-01",
      "gender": "m",
      "membershipType": "0",
-     "picture": "headshot.jpg",
+     "picture": "robin@acg.edu.jpg",
      "admin": "0",
      "active": "1"
    },
@@ -72,10 +72,12 @@
      "birthDate": "1980-10-01",
      "gender": "m",
      "membershipType": "0",
-     "picture": "headshot.jpg",
+     "picture": "p.jack@acg.edu.jpeg",
      "admin": "0",
      "active": "1"
    }
+
+
 ]
 
 

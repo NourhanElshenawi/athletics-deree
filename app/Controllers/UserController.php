@@ -113,7 +113,6 @@ class UserController extends Controller
                 $needToPay = false;
             }
 
-//            $certificate = date('Y') == $this->getLatestCertificate()['msg']['YEAR (user_certificates.uploaded_at)'];
             $certificate = $this->getLatestCertificate()['msg'];
             $certificate['YEAR (user_certificates.uploaded_at)'] = date('Y') == $certificate['YEAR (user_certificates.uploaded_at)'];
 
@@ -142,9 +141,10 @@ class UserController extends Controller
         $classes = array();
 
         foreach ($userRegistrations as $registration){
-
-            $classes[] = $db->getClass($registration['classID']);
-
+            $class = $db->getClass($registration['classID']);
+            if (!empty($class)){
+                $classes[] = $class;
+            }
         }
 
         return $classes;
@@ -396,6 +396,7 @@ class UserController extends Controller
         $db = new DB();
 
         $db->createProgramRequest($_POST);
+        redirect('/profile');
     }
 
 
