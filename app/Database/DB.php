@@ -365,6 +365,9 @@ class DB
     }
 
     public function getUserLogsByKeyword($id, $keyword){
+        if (empty($keyword)){
+            $keyword = " ";
+        }
 
         $stmt = $this->conn->prepare("select * from {$this->dbname}.logs
                                       WHERE userID= :id 
