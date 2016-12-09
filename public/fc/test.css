@@ -4126,7 +4126,8 @@ button.menu-toggle:after {
     opacity: 0
 }
 .primary-navigation {
-    display: none
+    /*display: none*/
+    display: block;
 }
 .main-navigation::after {
     clear: both;
@@ -4973,7 +4974,7 @@ img {
     .weather { display:none; }
     .footer-links { display:block; height:50px; }
     .yearsplayermobile img { margin-top:35px; border-top:2px solid #4d515b; }
-    .menu-toggle { display:none; }
+    .menu-toggle { display:block; }
     .hentry.type-post .entry-meta .author, .hentry.type-post .entry-meta .cat-links { display:none; }
     .entry-meta { margin-bottom: 20px; }
     .leftcolumn, .rightcolumn { width:100%; }
@@ -5010,7 +5011,7 @@ img {
     #mg_full_overlay .one_third { width:100%!important; }
 }
 @media (max-width: 970px) {
-    .main-navigation ul.menu, .main-navigation ul.nav-menu { display:none; }
+    .main-navigation ul.menu, .main-navigation ul.nav-menu { display:block; }
     .headerright { display:none; }
     /*.secondary-navigation { position: absolute; left: 40%; top:10px; display:none; }*/
     #primary { width:100%; }
