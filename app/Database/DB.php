@@ -319,7 +319,6 @@ class DB
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $row = $stmt->fetch();
 
-            d($row);
             $result['success'] = true;
             $result['msg'] = $row;
 
@@ -448,7 +447,6 @@ class DB
         }
         catch (PDOException $exception)
         {
-            ddd($exception->getMessage());
             $result['success'] = 0;
             $result['message'] = $exception->getMessage();
         }
@@ -499,7 +497,6 @@ class DB
         }
         catch (PDOException $exception)
         {
-            ddd($exception->getMessage());
             $result['success'] = 0;
             $result['message'] = $exception->getMessage();
         }
@@ -2003,7 +2000,6 @@ class DB
             // set the resulting array to associative
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
-            d($result);
             return $result;
         } catch (PDOException $e){
             $result['success'] = false;
@@ -2176,7 +2172,6 @@ class DB
         }
         catch (PDOException $exception)
         {
-            ddd($exception->getMessage());
             $result['success'] = false;
             $result['message'] = $exception->getMessage();
         }
