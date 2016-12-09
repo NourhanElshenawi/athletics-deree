@@ -91,7 +91,7 @@ class UserController extends Controller
     {
         //remove session user variable as the user will logout
         unset($_SESSION['user']);
-        redirect('/login');
+        redirect('/');
     }
 
 
