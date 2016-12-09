@@ -47,7 +47,7 @@ class UserController extends Controller
             //if user is not in the gym log him in
             $db->signin($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
 
-            $certificate = $this->getLatestCertificate()['msg'];
+            $certificate = $db->getUserLatestCertificateYear($_GET['userID'])['msg'];
             $certificate['YEAR (user_certificates.uploaded_at)'] = date('Y') == $certificate['YEAR (user_certificates.uploaded_at)'];
 
             echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes, 'certificate'=>$certificate));
