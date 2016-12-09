@@ -33,6 +33,7 @@
     <script type="text/javascript" src="js/fullcalendar/jquery-ui.min.js"></script>
     {#<script type="text/javascript" src="//code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script>#}
 
+
     <script type="text/javascript">//<![CDATA[
         $(window).load(function(){
 // Setup FullCalendar
@@ -72,20 +73,17 @@
 //                    width: 100,
                     buttons: false,
                     header: false
-//                    {
-//                        left: 'title',
-//                        center: '',
-//                        right: 'today prev,next'
-//                    }
                     ,
                     minTime: "07:00:00",
                     maxTime: "21:00:00",
 
                     eventClick: function(data, event, view) {
                         var content = '<h3>'+data.title+'       </h3>' +
-                                '<p><b>Start:</b> '+data.time+'<br />' +
-                                '<p><b>Duration:</b> '+data.duration+' Min<br /></p>'+
-                                '<p><b>Location:</b> '+data.location+'<br /></p>';
+                                        '<p><b>Start:</b> '+data.time+'<br />' +
+                                        '<p><b>End:</b> '+data.endTime+'<br /></p>'+
+                                        '<p><b>Location:</b> '+data.location+'<br /></p>'+
+                                        '<p><b>Instructor:</b> '+data.instructor+'<br /></p>'
+                                ;
 
                         tooltip.set({
                             'content.text': content
@@ -99,7 +97,6 @@
                 });
 
                 {% for class in classes %}
-
                 {% for key, value in class.days %}
 
                 $('#fullcalendar').fullCalendar( 'addEventSource',
@@ -118,42 +115,37 @@
 
                                 if (column_date.getDay() == {{ value }}) {
                                     // we're in Monday, create the event
-                                    var time = "{{ class.startTime }}";
-                                    var parseTime = time.split(":");
-                                    console.log(parseTime[0]);
+                                    var startTime = "{{ class.startTime }}";
+                                    var endTime = "{{ class.endTime }}";
+                                    var parseStartTime = startTime.split(":");
+                                    var parseEndTime = endTime.split(":");
+                                    console.log(parseStartTime[0]);
+                                    console.log(parseEndTime[0]);
                                     events.push({
-                                        title: '{{ class.name }}',
-                                        start: new Date(column_date.setHours(parseTime[0], parseTime[1])),
-                                        end: new Date(column_date.setMinutes({{ class.duration }})),
+                                        title: '{{ class.className }}',
+                                        start: new Date(column_date.setHours(parseStartTime[0], parseStartTime[1])),
+                                        end: new Date(column_date.setHours(parseEndTime[0], parseEndTime[1])),
+                                        {#end: new Date(column_date.setMinutes({{ class.duration }})),#}
 //                                        end: new Date(column_date.setMinutes(90)),
                                         allDay: false,
                                         location: "{{ class.location }}",
                                         time: "{{ class.startTime }}",
-                                        duration: "{{ class.duration }}"
+                                        endTime: "{{ class.endTime }}",
+                                        instructor: "{{ class.instructorName }}",
                                     });
                                 }
-
-
-
-
                             } // for loop
 
                             // return events generated
                             callback( events );
                         }
                 );
-                {#{% endif %}#}
-
                 {% endfor %}
-
                 {% endfor %}
                 $('#fullcalendar').fullCalendar('changeView', 'agendaWeek');
 
             }());
-
-
-
-
+        });
     </script>
 
 {% endblock head %}
@@ -165,7 +157,7 @@
 
     <div>
         {#<img src="http://placehold.it/300x300" alt="">#}
-        <img src="images/{{ user.picture }}" style="width: 15%; height: 20%;" alt="">
+        <img src="images/profilePictures/{{ user.picture }}" style="width: 15%; height: 20%;" alt="">
         <p style="font-weight: bold; font-size: large; padding: 0;">Name: {{ user.name }}</p>
         <p style="font-weight: bold; font-size: large; padding: 0;">ID: {{ user.id }}</p>
 
@@ -188,13 +180,7 @@
 
     </div>
 
-    <div style="width: 50%; height: 50%;">
-        <canvas id="mybarChart">
-
-        </canvas>
-    </div>
-
-
+    <h2 style="color: lightcoral; font-size: large; font-weight: bold;">Your Schedule of Classes Registered For: </h2>
     <div id="fullcalendar"></div>
 
     <!-- jQuery -->
@@ -211,72 +197,6 @@
 
     <!-- Custom Theme Scripts -->
     <script src="js/custom.min.js"></script>
-
-
-    <script>
-        Chart.defaults.global.legend = {
-            enabled: false
-        };
-
-        var ctx = document.getElementById("mybarChart");
-        var mybarChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [
-                    {% for key,value in vals %}
-//                        "January", "February", "March", "April", "May", "June", "July"
-                    {% if loop.last %}
-                    "{{ key }}"
-                    {% else %}
-                    "{{ key }}",
-                    {% endif %}
-
-                    {% endfor %}
-                ],
-
-                {#{% for key,value in vals %}#}
-                {##}
-                {#{% endfor %}#}
-
-                datasets: [{
-                    label: '# of Visits',
-                    backgroundColor: "#26B99A",
-                    data: [
-//                            51, 30, 40, 28, 92, 50, 45
-                        {% for key,value in vals %}
-//                        "January", "February", "March", "April", "May", "June", "July"
-                        {% if loop.last %}
-                        {{ value }}
-                        {% else %}
-                        {{ value }},
-                        {% endif %}
-
-                        {% endfor %}
-                    ]
-                }
-//                , {
-//                    label: '# of Votes',
-//                    backgroundColor: "#03586A",
-//                    data: [41, 56, 25, 48, 72, 34, 12]
-//                }
-
-                ]
-            },
-
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
-
-
-
 
 {% endblock content %}
 
