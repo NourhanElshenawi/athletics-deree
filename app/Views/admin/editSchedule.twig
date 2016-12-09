@@ -212,19 +212,13 @@
                                                 </a>
                                                 <ul class="dropdown-menu" role="menu">
 
-                                                    {#<form action="/editclass" method="post" style="margin: 0;">#}
                                                     <li>
 
                                                         <input type="hidden" id="edit" name="edit" value="{{ class.classID }}">
                                                         <a href="#" class="edit" value="{{ class.classID }}">Edit Class</a>
 
                                                     </li>
-                                                    <li>
-                                                        <input type="hidden" name="hold" value="{{ class.classID }}">
-                                                        <a href="#" class="hold" value="{{ class.classID }}" >Hold</a>
-                                                    </li>
 
-                                                    {#</form>#}
                                                 </ul>
                                             </li>
                                             <li>
