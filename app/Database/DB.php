@@ -501,13 +501,13 @@ class DB
     public function getUserProgramRequests($id)
     {
         try {
-            $stmt = $this->conn->prepare("select *, instructors.id as instructorID, program_requests.id as id
+            $stmt = $this->conn->prepare("select *, program_requests.userID as userID, instructors.userID as instructorsuserID, 
+                                      instructors.id as instructorID, program_requests.id as id
                                       from {$this->dbname}.program_requests
-                                      join {$this->dbname}.instructors
+                                      left join {$this->dbname}.instructors
                                       on program_requests.instructorID = instructors.id
                                       WHERE program_requests.userID =:id
                                       ORDER BY program_requests.date DESC;");
-
             $stmt->bindParam(':id', $id);
             $stmt->execute();
             // set the resulting array to associative
@@ -515,7 +515,9 @@ class DB
             $result = $stmt->fetchAll();
             return $result;
         } catch (PDOException $e){
-            ddd($e);
+            $result['success']=false;
+            $result['message']='Error loading requests, please contact support.';
+            return $result;
         }
     }
 
@@ -1422,7 +1424,7 @@ class DB
 
     }
 
-    public function searchFriendsRealTime($keyword)
+    public function searchFriendsRealTime($id,$keyword)
     {
         $stmt = $this->conn->prepare("select * from {$this->dbname}.logs 
                                       JOIN {$this->dbname}.users
@@ -1430,9 +1432,10 @@ class DB
                                       JOIN {$this->dbname}.friends
                                       ON friends.followsID = users.id
                                       WHERE friends.userID=:id and logs.logout is NULL
-                                      AND (users.id LIKE :id OR users.name LIKE :name or 
+                                      AND (users.id LIKE :friendID OR users.name LIKE :name or 
                                       users.email like :email or users.gender like :gender or users.birthDate like :birthDate) GROUP BY logs.userID ");
-        $stmt->bindParam(':id', $keyword);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':friendID', $id);
         $stmt->bindParam(':name', $keyword);
         $stmt->bindParam(':email', $keyword);
         $stmt->bindParam(':gender', $keyword);
@@ -2076,7 +2079,6 @@ class DB
             $stmt->execute();
 
             $result['success'] = true;
-            $result['message'] = "Request Successfully Submitted!";
         }
         catch (PDOException $exception)
         {

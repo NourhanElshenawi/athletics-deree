@@ -43,12 +43,12 @@
                                     <div class="col-md-2" style="width:50%; margin-bottom: 5%;">
                                         <div class="thumbnail">
                                             <div class="image view view-first">
-                                                <img style="width: 100%; height: 150%; display: block;" src="images/{{ user.picture }}" alt="image" />
+                                                <img style="width: 100%; height: 150%; display: block;" src="images/profilePictures/{{ user.picture }}" alt="image" />
                                                 <div class="mask">
                                                     <p>Email User?</p>
                                                     <div class="tools tools-bottom">
                                                         {#EMAILLLLL!!!#}
-                                                        <a href="/email"><i class="fa fa-pencil"></i></a>
+                                                        <a href="mailto:{{ user.email }}" target="_top"><i class="fa fa-pencil"></i></a>
                                                     </div>
                                                 </div>
                                             </div>

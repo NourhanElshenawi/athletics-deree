@@ -44,14 +44,11 @@
                 <div class="clearfix"></div>
             </div>
             <div>
-                <!-- start project list -->
                 <table class="table table-striped projects">
                     <thead>
                     <tr>
-
                         <th>#</th>
                         <th>Date of The Request</th>
-
                     </tr>
                     </thead>
                     <tbody>
@@ -70,7 +67,7 @@
                                         </div>
 
                                         <div class="split">
-                                            {{ request.name|capitalize }}
+                                            {{ request.name|title }}
                                         </div>
                                     </div>
                                 </div>
@@ -135,6 +132,7 @@
                                 </div>
                             </td>
                             <td style="border-top: none;">
+                                <p>{{ "Trainer: " }} {{ request.name|title }} </p>
                                 <p style="color: lightcoral; opacity: 0.8;">{{ request.trainerComments }}</p>
                             </td>
 
@@ -148,49 +146,12 @@
 
                     </tbody>
                 </table>
-                <!-- end project list -->
-
             </div>
         </div>
     </div>
-    </div>
 
 
 
-    <script>
-        jQuery(document).ready(function() {
-            jQuery('.collapse-link').click(function() {
-                toggle(this);
-            });
-        });
-
-        function toggle($this) {
-            var $BOX_PANEL = jQuery($this).closest('.x_panel'),
-                    $ICON = jQuery($this).find('i'),
-                    $BOX_CONTENT = $BOX_PANEL.find('.x_content');
-
-//            console.log($ICON);
-            if ($BOX_PANEL.attr('style')) {
-                $BOX_CONTENT.slideToggle(200, function(){
-                    $BOX_PANEL.removeAttr('style');
-
-                    $ICON.toggleClass('fa-chevron-down');
-                    $ICON.addClass('fa-chevron-up');
-                });
-            } else {
-                $BOX_CONTENT.slideToggle(200);
-                $BOX_PANEL.css('height', 'auto');
-                $ICON.toggleClass('fa-chevron-up');
-                $ICON.addClass('fa-chevron-down');
-            }
-            jQuery('.x_title').css('border-bottom', '2px solid');
-        }
-
-
-    </script>
-
-    <!-- jQuery -->
-    {#<script src="js/jquery.min.js"></script>#}
     <!-- Bootstrap -->
     <script src="js/bootstrap.min.js"></script>
     <!-- FastClick -->

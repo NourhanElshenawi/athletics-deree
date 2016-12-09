@@ -27,20 +27,16 @@
 
 {% endblock head %}
 
-{#{% block title %} Pending Program Requests {% endblock title %}#}
+{% block title %} Program Requests History{% endblock title %}
 
 {% block content %}
 
-    {#{{ dump(classes.1.users) }}#}
-
-    {% set requestExample = requests|first %}
     <div class="clearfix"></div>
 
     <div class="row">
-        {#<div class="col-md-12">#}
         <div class="x_panel2">
             <div class="x_title">
-                <h2 style="width: auto; margin-right: 3%;">Pending Requests</h2>
+                <h2 style="width: auto; margin-right: 3%;">Previously sent Requests</h2>
 
                 <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/adminsearchclasses">
                     <label style="display: inline-block;">
@@ -60,9 +56,8 @@
 
                         <th>#</th>
                         <th>Date of The Request</th>
+                        <th>Status</th>
                         <th></th>
-                        {#<th>Team Members</th>#}
-                        {#<th>Project Progress</th>#}
 
                     </tr>
                     </thead>
@@ -84,7 +79,14 @@
                                         </div>
 
                                         <div class="split">
-                                            {{ request.name|capitalize }}
+                                            {{ request.name|title }}
+                                        </div>
+                                        <div class="split" style="margin-left: 49%; color: lightcoral;">
+                                            {% if request.trainerResponse == 0 %}
+                                                {{ "Pending" }}
+                                                {% else %}
+                                                {{ "Answered" }}
+                                            {% endif %}
                                         </div>
 
 
@@ -93,12 +95,6 @@
                                         <ul class="nav navbar-right panel_toolbox">
                                             <li>
                                                 <a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
-                                            </li>
-                                            <li class="dropdown">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                                    <i class="fa fa-wrench"></i>
-                                                </a>
-
                                             </li>
                                             <li>
                                                 <a class="close-link delete" value="{{ request.id }}">
@@ -175,7 +171,11 @@
                                                     </div>
                                                 </td>
                                                 <td style="border-top: none;">
-                                                   <p style="color: lightcoral; opacity: 0.8;">{{ request.trainerComments }}</p>
+
+                                                    {% if request.trainerResponse == 1 %}
+                                                        {{ "Trainer's Name: " }} {{ request.name|title }}
+                                                        <p style="color: lightcoral; opacity: 0.8;">{{ request.trainerComments }}</p>
+                                                    {% endif %}
                                                 </td>
 
                                             </tr>
@@ -186,23 +186,13 @@
                                 </div>
                             </td>
                         </tr>
-
-
                     {% endfor %}
-
-
-
-
                     </tbody>
                 </table>
                 <!-- end project list -->
-
             </div>
         </div>
     </div>
-    </div>
-
-
 
     <script>
         jQuery(document).ready(function() {
@@ -210,10 +200,10 @@
                 toggle(this);
             });
 
+            //delete workout program request
             jQuery('.delete').click(function() {
                 var element = jQuery(this);
                 if(confirm("Are you sure you want to permanently remove this program?")){
-
                     jQuery.ajax(
                             {
                                 type: 'POST',
@@ -236,12 +226,12 @@
 
         });
 
+        //expand and compress the request information
         function toggle($this) {
             var $BOX_PANEL = jQuery($this).closest('.x_panel'),
                     $ICON = jQuery($this).find('i'),
                     $BOX_CONTENT = $BOX_PANEL.find('.x_content');
 
-//            console.log($ICON);
             if ($BOX_PANEL.attr('style')) {
                 $BOX_CONTENT.slideToggle(200, function(){
                     $BOX_PANEL.removeAttr('style');

@@ -10,6 +10,7 @@ namespace Nourhan\Controllers;
 
 
 use Nourhan\Database\DB;
+use Nourhan\Services\SwiftMailer;
 
 class TrainerController extends Controller
 {
@@ -30,7 +31,13 @@ class TrainerController extends Controller
     public function trainerResponse()
     {
         $db = new DB();
-        echo json_encode($db-> trainerResponse($_POST['id'], $_POST['trainerComments'], $_SESSION['user']['id']));
+
+        $result = $db-> trainerResponse($_POST['id'], $_POST['trainerComments'], $_SESSION['user']['id']);
+        if($result){
+            $mailer = new SwiftMailer();
+            $result = $mailer->sendEmail($_POST);
+        }
+        echo json_encode($result);
 //        $db-> trainerResponse($_POST['id'], $_POST['trainerComments']);
 
     }
