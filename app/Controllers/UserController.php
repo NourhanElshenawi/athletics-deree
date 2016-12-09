@@ -116,7 +116,6 @@ class UserController extends Controller
 //            $certificate = date('Y') == $this->getLatestCertificate()['msg']['YEAR (user_certificates.uploaded_at)'];
             $certificate = $this->getLatestCertificate()['msg'];
             $certificate['YEAR (user_certificates.uploaded_at)'] = date('Y') == $certificate['YEAR (user_certificates.uploaded_at)'];
-            d($certificate);
 
             $paymentSuccess = $db->getLastPaymentByUser($_SESSION['user']['id']);
             if (isset($_GET['success'])) {
@@ -173,8 +172,7 @@ class UserController extends Controller
 
         //If file was NOT uploaded show message to user and exit
         if ($result['success'] == false){
-            d($result['message']);
-//            redirect('/404Certificate');
+            redirect('/404');
         } else {
             $db->uploadUserCertificate($_SESSION['user']['id'],$_FILES['users_file']['name'])   ;
             redirect('/profile');
@@ -187,8 +185,11 @@ class UserController extends Controller
         if(isLoggedIn()) {
             $db = new DB();
 
-            $calendarClasses = $db->getClasses();
-            $classes = $db->getClasses();
+            if (isset($_GET['keyword'])){
+                $classes = $db->searchClasses($_GET['keyword']);
+            }else{
+                $classes = $db->getClasses();
+            }
             //get user's friends who are also registered for available classes
             $classes = $this->getFriendsRegisteredForClasses($classes);
 
@@ -197,14 +198,10 @@ class UserController extends Controller
 
             $classes = beautifyClasses($classes);
             $userClasses = beautifyClasses($userClasses);
-            $calendarClasses = beautifyClassesForCalendar($calendarClasses);
 
-            d($classes);
-            d($userClasses);
-
-            echo $this->twig->render('customer/register.twig', array('calendarClasses' => $calendarClasses, 'classes' => $classes, 'userClasses' => $userClasses));
+            echo $this->twig->render('customer/register.twig', array('classes' => $classes, 'userClasses' => $userClasses));
         } else {
-            redirect('/');
+            redirect('/404');
         }
     }
 
@@ -473,17 +470,30 @@ class UserController extends Controller
             }
             echo $this->twig->render('customer/friends.twig', array('friends' => $friends));
         } else {
-            redirect('/');
+            redirect('/404');
         }
     }
 
     public function addFriend()
     {
-        $db = new DB();
-        $friend = $db->getUserByEmail($_POST['email']);
-        $db->addUserFriend($_SESSION['user']['id'], $friend['id']);
-
-        redirect('/myfriends');
+        if(isLoggedIn()) {
+            $db = new DB();
+            $friend = $db->getUserByEmail($_POST['email']);
+            if ($friend){
+                if ($db->addUserFriend($_SESSION['user']['id'], $friend['id'])){
+                    $result['message']= "User added successfully!";
+                }
+            } else{
+                $result['message']= "User cannot be added as a friend. The user is not registered!";
+            }
+            $friends = $db->getUserFriends($_SESSION['user']['id']);
+            foreach ($friends as $key => $friend) {
+                $friends[$key]['classes'] = $db->getUserRegistrations($friend['friendID']);
+            }
+            echo $this->twig->render('customer/friends.twig', array('friends' => $friends, 'result'=>$result));
+        } else {
+            redirect('/404');
+        }
     }
 
     public function removeFriend()
@@ -625,13 +635,10 @@ class UserController extends Controller
                 )
             );
         }catch (Exception $e){
-//            d($e);
-//            ddd($e->getMessage());
         }
 
         $paymentURL = $payment->getApprovalLink();
 
-//        redirect($payment->getApprovalLink());
-//        redirect('/testing');
+        redirect($payment->getApprovalLink());
     }
 }

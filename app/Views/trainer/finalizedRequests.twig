@@ -82,7 +82,7 @@
                                             <ul class="list-inline">
                                                 <li>
                                                     <a href="/editusers?keyword={{ request.userID }}">
-                                                        <img src="images/{{ request.picture }}" class="avatar" alt="Avatar" value="{{ request.name }}">
+                                                        <img src="images/profilePictures/{{ request.picture }}" class="avatar" alt="Avatar" value="{{ request.name }}">
                                                     </a>
                                                 </li>
                                             </ul>
@@ -177,7 +177,9 @@
                                                     </div>
                                                 </td>
                                                 <td style="border-top: none;">
-                                                    <textarea id="trainerComments" placeholder="{{ request.trainerComments }}" rows="15" cols="50" maxlength="500"></textarea>
+                                                    <textarea id="trainerComments"  rows="15" cols="50" maxlength="500">{{ request.trainerComments }}</textarea>
+                                                    <input type="hidden" value="{{ request.name|title }}" name="name">
+                                                    <input type="hidden" value="{{ request.email }}" name="email">
                                                     <p>
                                                         <button type="submit" id="submitProgram" value="{{ request.id }}" name="submitProgram"> Submit Program</button>
                                                     </p>
@@ -246,6 +248,8 @@
 
             var $id = jQuery(this).attr('value');
             var $trainerComments = jQuery(this).parent().parent().children(':first-child').val();
+            var $name = jQuery(this).parent().parent().children(':nth-child(2)').val();
+            var $email = jQuery(this).parent().parent().children(':nth-child(3)').val();
             var $button = jQuery(this);
             if($trainerComments == ""){
                 alert("You're proposing an empty program. Please write an appropriate program for the user");
@@ -256,15 +260,18 @@
                             url: '/trainerResponse',
                             data: {
                                 id: $id,
-                                trainerComments: $trainerComments
-
+                                trainerComments: $trainerComments,
+                                name: $name,
+                                email: $email,
+                                message: "Your personalized workout program has been updated! " +
+                                "\nYou can log into your account anytime to check it out."
                             },
                             success: function (data) {
-                                console.log(data);
                                 var $returnedValue = jQuery.parseJSON(data);
-                                console.log($returnedValue['success']);
                                 if ($returnedValue['success'] == true) {
                                     $button.closest('.x_panel').remove();
+                                }else {
+                                    alert($returnedValue['message']);
                                 }
                             }
                         }

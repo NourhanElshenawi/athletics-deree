@@ -334,6 +334,9 @@ function isLoggedIn(){
     return isset($_SESSION['user']);
 }
 
+/**
+ * @return bool true if user logged in is admin
+ */
 function isAdmin(){
     return isset($_SESSION['user']['admin']);
 }

@@ -2,8 +2,6 @@
 
 
 {% block head %}
-    <!-- Bootstrap -->
-    {#<link href="css/bootstrap.css" rel="stylesheet">#}
     <!-- Font Awesome -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
@@ -28,13 +26,13 @@
 
 {% endblock head %}
 
-    {% block title %} Profile{% endblock title %}
+    {% block title %} Register {% endblock title %}
 
 
 {% block content %}
 
     <div>
-        <img src="images/{{ session.user.picture }}" style="width: 5%; height: 10%;" alt="">
+        <img src="images/profilePictures/{{ session.user.picture }}" style="width: 5%; height: 10%;" alt="">
         <p style="font-weight: bold; font-size: large; padding: 0;">Name: {{ session.user.name }}</p>
         <p style="font-weight: bold; font-size: large; padding: 0;">ID: {{ session.user.id }}</p>
 
@@ -52,7 +50,7 @@
                 {#
                 TODO: Search for classes to register for
                 #}
-                <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/registersearchclasses">
+                <form style="margin: 0; border-left: 1px solid #5F656A;" role="search" method="get" class="search-form" action="/register">
                     <label style="display: inline-block;">
                         <span class="screen-reader-text">Search for:</span>
                         <input style="margin: 0;" type="search" class="search-field" placeholder="Search …" value="" name="keyword">
@@ -99,14 +97,11 @@
                                             </small>
                                         </div>
 
-                                        {#
-                                        TODO: Sample of users/friends registered for the class
-                                        #}
                                         <div class="split" style="width: 25%; margin: 0;">
                                             <ul class="list-inline">
                                                 {% for friend in class.registeredFriends %}
                                                     <li>
-                                                        <img title="{{ friend.name|title }}" src="images/{{ friend.picture }}" class="avatar" alt="Avatar">
+                                                        <img title="{{ friend.name|title }}" src="images/profilePictures/{{ friend.picture }}" class="avatar" alt="Avatar">
                                                     </li>
                                                 {% endfor %}
 
@@ -185,7 +180,7 @@
                                             <tr>
 
                                                 <td>
-                                                    {{ class.instructorName|capitalize }}
+                                                    {{ class.instructorName|title }}
                                                 </td>
                                                 <td>{{ class.startTime }}</td>
                                                 <td>{{ class.endTime }}</td>
@@ -214,7 +209,6 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <!-- end project list -->
             </div>
         </div>
     </div>
@@ -243,13 +237,7 @@
 
 
             if (confirm("Are you sure you want to unregister for this class?")) {
-
-
-//                jQuery(this).closest('.x_panel').remove();
-                console.log(jQuery(this).attr('value'));
-                console.log({{ session.user.id }});
                 var $icon = jQuery(this);
-
                 jQuery.ajax(
                         {
                             type: 'POST',
@@ -259,10 +247,7 @@
                                 userID: {{ session.user.id }}
                             },
                             success: function (msg) {
-
-                                console.log(msg);
-                                confirm(JSON.parse(msg)['msg']);
-
+                                alert(JSON.parse(msg)['msg']);
                             }
                         }
                 );
@@ -276,9 +261,6 @@
         });
 
         jQuery('.registerClass').click(function() {
-//                jQuery(this).closest('.x_panel').remove();
-                console.log(jQuery(this).attr('value'));
-            console.log({{ session.user.id }});
             var $icon = jQuery(this);
                 jQuery.ajax(
                         {
@@ -330,7 +312,6 @@
         function toggleOnce($this) {
 
             var $BOX_PANEL = jQuery($this).closest('.x_panel'),
-//                    $ICON = jQuery($this).parent().parent().parent().first().find('i'),
                     $ICON = jQuery($this).closest('.collapse-link'),
                     $BOX_CONTENT = $BOX_PANEL.find('.x_content');
 
@@ -352,25 +333,10 @@
 
         }
 
-        function toggleUpdate($this) {
-
-            var $B = jQuery($this).closest('.x_content').closest('.x_content');
-            console.log($B);
-
-        }
 
 
     </script>
 
-    <script>
-        jQuery('.full').click(function() {
-            alert("The Class is Full! You cannot register.");
-
-        });
-
-    </script>
-    <!-- jQuery -->
-    {#<script src="js/jquery.min.js"></script>#}
     <!-- Bootstrap -->
     <script src="js/bootstrap.min.js"></script>
     <!-- FastClick -->

@@ -8,6 +8,7 @@
 
 namespace Nourhan\Controllers;
 
+use Nourhan\Services\Upload;
 use Nourhan\Database\DB;
 
 class AdminController extends Controller
@@ -17,15 +18,20 @@ class AdminController extends Controller
     ////////EDIT CLASS SCHEDULE
     public function editSchedule()
     {
+        //check if user logged in is admin
         if(isAdmin()) {
             $db = new DB();
 
+            //if the admin is searching for a specific class, look for a match
             if(isset($_GET['keyword'])){
                 $classes = $db->searchClasses($_GET['keyword']);
             } else{
+                // if the admin is not searching for a specific class, get all of them
                 $classes = $db->getClasses();
             }
+            //beatify the classes means to convert the days from number format to letter format
             $classes = beautifyClasses($classes);
+            //get all instructors for the edit class option
             $allInstructors = $db->getInstructors();
 
             echo $this->twig->render('admin/editSchedule.twig', array('classes' => $classes, 'allInstructors' => $allInstructors));
@@ -36,41 +42,46 @@ class AdminController extends Controller
 
     public function addClass()
     {
+        if (isAdmin()) {
+            $db = new DB();
 
-        $db = new DB();
+            //preparing the page
+            $classes = $db->getClasses();
+            $classes = beautifyClasses($classes);
+            $allInstructors = $db->getInstructors();
 
-        $classes = $db->getClasses();
-        $classes = beautifyClasses($classes);
-        $allInstructors = $db->getInstructors();
+            //testing for any conflicts with the pre-existing classes
+            $testingConflict = $db->searchClassesForConflict($_POST['instructorID'], $_POST['startTime'], $_POST['endTime'],
+                $_POST['period'], $_POST['location'], (int)in_array('monday', $_POST['days']),
+                (int)in_array('tuesday', $_POST['days']), (int)in_array('wednesday', $_POST['days']),
+                (int)in_array('thursday', $_POST['days']), (int)in_array('friday', $_POST['days']));
 
-        $testingConflict = $db->searchClassesForConflict($_POST['instructorID'],$_POST['startTime'], $_POST['endTime'],
-            $_POST['period'],$_POST['location'],(int)in_array('monday',$_POST['days']),
-            (int)in_array('tuesday',$_POST['days']), (int)in_array('wednesday',$_POST['days']),
-            (int)in_array('thursday',$_POST['days']), (int)in_array('friday',$_POST['days']));
+            if ($testingConflict == false) {
 
-        if ($testingConflict == false){
-
-            $testInsert = $db->addClass($_POST['name'], $_POST['instructorID'], $_POST['startTime'], $_POST['endTime'],
-                $_POST['period'],
-                $_POST['capacity'],$_POST['location'],(int)in_array('monday',$_POST['days']),
-                (int)in_array('tuesday',$_POST['days']), (int)in_array('wednesday',$_POST['days']),
-                (int)in_array('thursday',$_POST['days']), (int)in_array('friday',$_POST['days']));
-            if($testInsert){
-                $result = "Class Successfully Added!";
-            } else{
-                $result = "There was an issue adding the class. please contact support!";
-            }
-        } else{
-            $result = "Could not add class! There is a conflict with the following class(es): ";
-                foreach ($testingConflict as $conflict){
-                    if($conflict === end($testingConflict)){
+                $testInsert = $db->addClass($_POST['name'], $_POST['instructorID'], $_POST['startTime'], $_POST['endTime'],
+                    $_POST['period'],
+                    $_POST['capacity'], $_POST['location'], (int)in_array('monday', $_POST['days']),
+                    (int)in_array('tuesday', $_POST['days']), (int)in_array('wednesday', $_POST['days']),
+                    (int)in_array('thursday', $_POST['days']), (int)in_array('friday', $_POST['days']));
+                if ($testInsert) {
+                    $result = "Class Successfully Added!";
+                } else {
+                    $result = "There was an issue adding the class. please contact support!";
+                }
+            } else {
+                $result = "Could not add class! There is a conflict with the following class(es): ";
+                foreach ($testingConflict as $conflict) {
+                    if ($conflict === end($testingConflict)) {
                         $result = $result . $conflict['name'] . ".";
                     } else {
                         $result = $result . $conflict['name'] . ", ";
                     }
                 }
+            }
+            echo $this->twig->render('admin/editSchedule.twig', array('classes' => $classes, 'allInstructors' => $allInstructors, 'result' => $result));
+        } else{
+            redirect('/404');
         }
-        echo $this->twig->render('admin/editSchedule.twig', array('classes'=> $classes, 'allInstructors'=> $allInstructors, 'result'=>$result));
 
 
     }
@@ -175,6 +186,70 @@ class AdminController extends Controller
 
     }
 
+
+    public function updateUser()
+    {
+        $DB = new DB();
+
+        var_dump($_POST);
+
+
+        if($DB->updateUser($_POST))
+        {
+            header('Location: /editusers');
+        }
+
+    }
+
+    public function deleteUser()
+    {
+        $db = new DB();
+        $db->deleteUser($_POST['id']);
+    }
+
+    public function addMultipleUsers()
+    {
+        $uploadService = new Upload();
+        $db = new DB();
+
+        $result = $uploadService->uploadFile($_FILES['users_file']);
+
+
+
+        //prepare to redirect
+        $users = $db->getUsers();
+        $classes = $db->getClasses();
+        $users = $this->getUsersWithRegistrations($users);
+
+        //If file was NOT uploaded show message to user and exit
+        if ($result['success'] == false){
+            echo $this->twig->render('admin/editUsers.twig', ['result'=>$result, 'users'=>$users, 'classes'=>$classes]);
+
+            die();
+        }
+
+        $encodedUsers = file_get_contents(__DIR__.'/../storage/users.json');
+
+        $decodedUsers = json_decode($encodedUsers);
+
+        foreach ($decodedUsers as $user)
+        {
+            $result = $db->addMutlipleUsers($user);
+        }
+
+        echo $this->twig->render('admin/editUsers.twig', ['result'=>$result, 'users'=>$users, 'classes'=>$classes]);
+    }
+
+    public function addUser()
+    {
+        $db = new DB();
+
+        $result = $db->addUser($_POST, $_FILES['picture']);
+
+        echo $this->twig->render('admin/editUsers.twig', ['result'=>$result]);
+    }
+
+
     /**
      * Edit Instructors
      */
@@ -242,61 +317,6 @@ class AdminController extends Controller
         redirect('/editInstructors');
     }
 
-
-    public function updateUser()
-    {
-        $DB = new DB();
-
-        var_dump($_POST);
-
-
-        if($DB->updateUser($_POST))
-        {
-            header('Location: /editusers');
-        }
-
-    }
-
-    public function deleteUser()
-    {
-        $db = new DB();
-        $db->deleteUser($_POST['id']);
-    }
-
-    public function addMultipleUsers()
-    {
-        $uploadService = new Upload();
-        $db = new DB();
-
-        $result = $uploadService->uploadFile($_FILES['users_file']);
-
-        //If file was NOT uploaded show message to user and exit
-        if ($result['success'] == false){
-            echo $this->twig->render('admin/editUsers.twig', ['result'=>$result]);
-
-            die();
-        }
-
-        $encodedUsers = file_get_contents(__DIR__.'/../storage/users.json');
-
-        $decodedUsers = json_decode($encodedUsers);
-
-        foreach ($decodedUsers as $user)
-        {
-            $result = $db->addMutlipleUsers($user);
-        }
-
-        echo $this->twig->render('admin/editUsers.twig', ['result'=>$result]);
-    }
-
-    public function addUser()
-    {
-        $db = new DB();
-
-        $result = $db->addUser($_POST, $_FILES['picture']);
-
-        echo $this->twig->render('admin/editUsers.twig', ['result'=>$result]);
-    }
 
     ///////STATS
     public function stats(){

@@ -178,7 +178,7 @@
                                                 </td>
                                                 <td style="border-top: none;">
                                                     <textarea id="trainerComments" placeholder="Propose Program" rows="15" cols="50" maxlength="500"></textarea>
-                                                    <input type="hidden" value="{{ request.name }}" name="name">
+                                                    <input type="hidden" value="{{ request.name|title }}" name="name">
                                                     <input type="hidden" value="{{ request.email }}" name="email">
                                                     <p>
                                                         <button type="submit" class="submitProgram" value="{{ request.id }}" name="submitProgram"> Submit Program</button>
@@ -250,8 +250,6 @@
             var $trainerComments = jQuery(this).parent().parent().children(':first-child').val();
             var $name = jQuery(this).parent().parent().children(':nth-child(2)').val();
             var $email = jQuery(this).parent().parent().children(':nth-child(3)').val();
-            console.log($name);
-            console.log($email);
             var $button = jQuery(this);
             if($trainerComments == ""){
                 alert("You're proposing an empty program. Please write an appropriate program for the user");
@@ -266,12 +264,10 @@
                                 name: $name,
                                 email: $email,
                                 message: "Your new personalized workout program is ready! " +
-                                "\n You can log into your account anytime to check it out."
+                                "\nYou can log into your account anytime to check it out."
                             },
                             success: function (data) {
-                                console.log(data);
                                 var $returnedValue = jQuery.parseJSON(data);
-                                console.log($returnedValue['success']);
                                 if ($returnedValue['success'] == true) {
                                     $button.closest('.x_panel').remove();
                                 }else {

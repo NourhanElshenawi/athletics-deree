@@ -64,6 +64,17 @@
      "picture": "headshot.jpg",
      "admin": "0",
      "active": "1"
+   },
+   {
+     "name":"Hotch",
+     "email":"hotch@acg.edu",
+     "password":"1234",
+     "birthDate": "1980-10-01",
+     "gender": "m",
+     "membershipType": "0",
+     "picture": "headshot.jpg",
+     "admin": "0",
+     "active": "1"
    }
 ]
 

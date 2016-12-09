@@ -4,10 +4,12 @@
         <div class="menu-top-menu-container">
             <ul id="menu-top-menu" class="menu">
 
+                {% if session.user is defined %}
                 <li id="menu-item-291" class="top-general menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-6 current_page_item menu-item-291">
                     <i class="fa fa-home" style="margin-right: 4px;"></i>
-                    <a href="/">home</a>
+                    <a href="/profile">Profile</a>
                 </li>
+                {% endif %}
                 <li id="menu-item-15534" class="top-general menu-item menu-item-type-custom menu-item-object-custom menu-item-15534"><i class="fa fa-list-alt" style="margin-right: 4px;"></i>
                     <a href="/fitnessProgram">Fitness Program</a>
                 </li>

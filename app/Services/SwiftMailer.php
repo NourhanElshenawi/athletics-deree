@@ -57,7 +57,7 @@ class SwiftMailer
                 // Set the To addresses with an associative array
                 ->setFrom('athletics.deree@gmail.com')
                 // Give it a body
-                ->setBody("Dear ". $cleanName. ",\n \n". $cleanMessage . "\n \n Best, \n Deree Nurse");
+                ->setBody("Dear ". $cleanName. ",\n \n". $cleanMessage . "\n \n Best, \n Deree Athletics");
             // Optionally add any attachments
 //			->attach(Swift_Attachment::fromPath('my-document.pdf'))
             // Send the message

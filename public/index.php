@@ -26,17 +26,17 @@ $router = new Router\Router();
 
 /** PUBLIC **/
 $router->get('/', 'MainController', 'index');
-$router->get('/login', 'UserController', 'login');
+$router->get('/404', 'MainController', 'error404');
 $router->get('/calendar', 'MainController', 'calendar');
 $router->get('/fitnessProgram', 'MainController', 'fitnessProgram');
-$router->get('/realtimelogs', 'MainController', 'realtimeLogs');
-$router->post('/deleteProgramRequest', 'MainController', 'deleteProgramRequest');
 
 /** USER **/
 $router->get('/profile', 'UserController', 'profile');
 $router->post('/login', 'UserController', 'userLogin');
 $router->get('/logout', 'UserController', 'logout');
 $router->get('/signin', 'UserController', 'signin');
+$router->get('/realtimelogs', 'MainController', 'realtimeLogs');
+$router->post('/deleteProgramRequest', 'MainController', 'deleteProgramRequest');
 
 //Dr Certificate
 

@@ -17,6 +17,11 @@ class MainController extends Controller
         echo $this->twig->render('login.twig');
     }
 
+    public function error404()
+    {
+        echo $this->twig->render('error404.twig');
+    }
+
     public function calendar()
     {
         echo $this->twig->render('calendar.twig');

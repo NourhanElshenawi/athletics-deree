@@ -79,10 +79,14 @@ class DB
     }
 
     //get all the classes offered by the gym as well as the information for the instructor giving the class
+    /**
+     * @return array all fitness classes offered
+     */
     public function getClasses()
     {
-        //joining the classes and instructors tables to get the information on the classes plus the instructor giving the class
-        $stmt = $this->conn->prepare("select *, classes.name AS className, users.name AS instructorName,
+        try {
+            //joining the classes and instructors tables to get the information on the classes plus the instructor giving the class
+            $stmt = $this->conn->prepare("select *, classes.name AS className, users.name AS instructorName,
                                       classes.id AS classID, instructors.id AS instructorID
                                       from {$this->dbname}.classes
                                       join {$this->dbname}.instructors
@@ -90,13 +94,15 @@ class DB
                                       join {$this->dbname}.users
                                       on instructors.userID = users.id");
 
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
 
-        $stmt->execute();
-        // set the resulting array to associative
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetchAll();
-
-        return $result;
+            return $result;
+        } catch (PDOException $e){
+            return false;
+        }
     }
 
     //get a specific class offered by the gym using its id as well as the information for the instructor giving the class
@@ -143,33 +149,48 @@ class DB
 
 
 
+    /**
+     * @return array an array of all the instructors
+     */
     //get all the instructors at the gym
     public function getInstructors()
     {
-        $stmt = $this->conn->prepare("select *, instructors.id as id, 
+        try {
+            $stmt = $this->conn->prepare("select *, instructors.id as id, 
                                       users.id as userID, users.name as name
                                       from {$this->dbname}.instructors
                                       join {$this->dbname}.users
                                       on instructors.userID = users.id");
-        $stmt->execute();
-        // set the resulting array to associative
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetchAll();
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
 
-        return $result;
+            return $result;
+        } catch (PDOException $e){
+            return false;
+        }
     }
 
+    /**
+     * @param int $id instructor ID
+     * @return array matching instructor or false otherwise
+     */
     //get a specific instructor using his id
     public function getInstructor($id)
     {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.instructors WHERE id=?");
-        $stmt->bindValue(1,$id);
-        $stmt->execute();
-        // set the resulting array to associative
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetch();
+        try {
+            $stmt = $this->conn->prepare("select * from {$this->dbname}.instructors WHERE id=:id");
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            // set the resulting array to associative
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetch();
 
-        return $result;
+            return $result;
+        } catch (PDOException $e){
+            return false;
+        }
     }
 
     public function getUser($email, $password)
@@ -178,9 +199,9 @@ class DB
             $stmt = $this->conn->prepare("select *, users.id AS id, instructors.id as instructorID from {$this->dbname}.users
                                           LEFT JOIN {$this->dbname}.instructors
                                           on {$this->dbname}.users.id = {$this->dbname}.instructors.userID 
-                                          WHERE users.email = ? and users.password = ?");
-            $stmt->bindValue(1, $email);
-            $stmt->bindValue(2, $password);
+                                          WHERE users.email =:email and users.password =:password");
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':password', $password);
             $stmt->execute();
             // set the resulting array to associative
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -188,7 +209,7 @@ class DB
 
         } catch (PDOException $e) {
             $result["success"] = 0;
-            $result["message"] = "Database Error1. Please Try Again!";
+            $result["message"] = "Database Error! Please Try Again!";
         }
 
         return $result;
@@ -215,9 +236,9 @@ class DB
     public function androidLogin($email, $password)
     {
         try {
-            $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE email = ? and password = ?");
-            $stmt->bindValue(1, $email);
-            $stmt->bindValue(2, $password);
+            $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE email =:email and password =:password");
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':password', $password);
             $stmt->execute();
             // set the resulting array to associative
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -274,8 +295,8 @@ class DB
 
     public function getUserProfile($id)
     {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE id = ?");
-        $stmt->bindValue(1,$id);
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE id =:id");
+        $stmt->bindParam(':id',$id);
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -665,9 +686,9 @@ class DB
 
     public function getUserCredentials($username, $password)
     {
-        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE email = ? and password = ?");
-        $stmt->bindValue(1,$username);
-        $stmt->bindValue(2,$password);
+        $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE email =:email and password =:password");
+        $stmt->bindParam(':email',$username);
+        $stmt->bindParam(':password',$password);
         $stmt->execute();
         // set the resulting array to associative
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -699,9 +720,14 @@ class DB
     }
 
 
+    /**
+     * @param string $keyword search keyword
+     * @return array $results classes that match the keyword
+     */
     public function searchClasses($keyword)
     {
-        $stmt = $this->conn->prepare("select *, classes.name AS className, users.name AS instructorName,
+        try {
+            $stmt = $this->conn->prepare("select *, classes.name AS className, users.name AS instructorName,
                                       classes.id AS classID, instructors.id AS instructorID
                                       from {$this->dbname}.classes
                                       join {$this->dbname}.instructors
@@ -715,9 +741,26 @@ class DB
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
 
-        return $result;
+            return $result;
+        } catch (PDOException $e){
+            return false;
+        }
 
     }
+
+    /**
+     * @param int $instructorID instructorID
+     * @param time $startTime starting time of class
+     * @param time $endTime ending time of class
+     * @param time $period semester
+     * @param $location
+     * @param bool $monday
+     * @param bool $tuesday
+     * @param bool $wednesday
+     * @param bool $thursday
+     * @param bool $friday
+     * @return array empty if no conflict
+     */
     public function searchClassesForConflict($instructorID,$startTime, $endTime, $period, $location,
                                              $monday, $tuesday, $wednesday, $thursday, $friday)
     {
@@ -755,6 +798,21 @@ class DB
 
     }
 
+    /**
+     * @param string $name name of class
+     * @param int $instructorID instructorID
+     * @param time $startTime starting time of class
+     * @param time $endTime ending time of class
+     * @param string $period semester
+     * @param int $capacity max capacity of class
+     * @param string $location
+     * @param bool $monday
+     * @param bool $tuesday
+     * @param bool $wednesday
+     * @param bool $thursday
+     * @param bool $friday
+     * @return bool true if successful
+     */
     public function addClass($name, $instructorID, $startTime, $endTime, $period, $capacity, $location,
                              $monday, $tuesday, $wednesday, $thursday, $friday)
     {
@@ -788,10 +846,13 @@ class DB
 
     }
 
+    /**
+     * @param int $id classID
+     */
     public function deleteClass($id)
     {
-        $stmt = $this->conn->prepare("delete from {$this->dbname}.classes WHERE id = ?");
-        $stmt->bindValue(1,$id);
+        $stmt = $this->conn->prepare("delete from {$this->dbname}.classes WHERE id =:id");
+        $stmt->bindParam(':id',$id);
         $stmt->execute();
     }
 
@@ -801,7 +862,7 @@ class DB
      */
 
     /**
-     * @return mixed
+     * @return array of all pending certificates
      */
     public function getUserCertificates()
     {
@@ -821,6 +882,10 @@ class DB
         return $result;
     }
 
+    /**
+     * @param int $id certificateID
+     * @return bool true if successful
+     */
     public function approveUserCertificate($id)
     {
         $stmt = $this->conn->prepare("update {$this->dbname}.user_certificates set certificate_status = ? WHERE id = ? ");
@@ -836,6 +901,10 @@ class DB
         }
     }
 
+    /**
+     * @param int $id certificateID
+     * @return mixed
+     */
     public function rejectUserCertificate($id)
     {
         $stmt = $this->conn->prepare("update {$this->dbname}.user_certificates set certificate_status = ? WHERE id = ? ");
@@ -853,6 +922,9 @@ class DB
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function getApprovedCertificates()
     {
         $stmt = $this->conn->prepare("
@@ -871,6 +943,9 @@ class DB
         return $result;
     }
 
+    /**
+     * @return array of rejected certificates, empty if none exist
+     */
     public function getRejectedCertificates()
     {
         $stmt = $this->conn->prepare("
@@ -893,6 +968,9 @@ class DB
      * Edit Users
     */
 
+    /**
+     * @return array of users
+     */
     public function getUsers()
     {
         $stmt = $this->conn->prepare("select *
@@ -904,6 +982,10 @@ class DB
         return $result;
     }
 
+    /**
+     * @param string $email user's email
+     * @return mixed
+     */
     public function userExists($email)
     {
         $stmt = $this->conn->prepare("
@@ -923,6 +1005,10 @@ class DB
         }
     }
 
+    /**
+     * @param int $id user's id
+     * @return mixed
+     */
     public function getUsersByID($id)
     {
         $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE id = ?");
@@ -935,6 +1021,10 @@ class DB
         return $result;
     }
 
+    /**
+     * @param string $keyword search keyword
+     * @return mixed
+     */
     public function searchUsers($keyword)
     {
         $stmt = $this->conn->prepare("select * from {$this->dbname}.users WHERE name LIKE ? OR id LIKE ? OR email LIKE ?");
@@ -951,6 +1041,10 @@ class DB
 
     }
 
+    /**
+     * @param array $data post array
+     * @return bool true is successful, false otherwise
+     */
     public function updateUser($data)
     {
         $stmt = $this->conn->prepare("update {$this->dbname}.users 
@@ -976,7 +1070,7 @@ class DB
             $stmt->execute();
             return true;
         } catch (Exception $e) {
-            //redirect error!
+            return false;
         }
     }
 
