@@ -174,7 +174,7 @@
     <div>
         <form action="/pay" method="post" style="display: inline-block;">
             <button type="submit" style="font-weight: bold; display: inline-block;"
-                    {% if user.externeedToPay == true %}
+                    {% if needToPay == true %}
                     class="btn btn-danger">
             Click to Pay the Gym Fee!
                 {% else %}

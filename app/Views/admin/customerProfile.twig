@@ -161,6 +161,16 @@
         <p style="font-weight: bold; font-size: large; padding: 0;">Name: {{ user.name }}</p>
         <p style="font-weight: bold; font-size: large; padding: 0;">ID: {{ user.id }}</p>
 
+        <button type="submit" style="font-weight: bold; display: inline-block;"
+                {% if needToPay == true %}
+                class="btn btn-danger">
+            Click to Pay the Gym Fee!
+            {% else %}
+                class="btn btn-success" disabled>
+                Gym Fee Paid!
+            {% endif %}
+        </button>
+
         <button
                 {% if attribute(certificate, "YEAR (user_certificates.uploaded_at)") == false %}
                 class="btn btn-danger upload" style="font-weight: bold; display: inline-block;">

@@ -47,10 +47,21 @@ class UserController extends Controller
             //if user is not in the gym log him in
             $db->signin($_GET['userID'],date_format($date, 'Y-m-d H:i:s'));
 
+
+            $dateOfPayment = explode(" ", $db->getLastPaymentByUser($_GET['userID'])['date'])[0];
+            $periodCoveredByPayment = daysDateDifference(date("Y-m-d"), $dateOfPayment);
+
+            if ($periodCoveredByPayment >= 31 || $periodCoveredByPayment == 0) {
+                $needToPay = true;
+            } else {
+                $needToPay = false;
+            }
+
+
             $certificate = $db->getUserLatestCertificateYear($_GET['userID'])['msg'];
             $certificate['YEAR (user_certificates.uploaded_at)'] = date('Y') == $certificate['YEAR (user_certificates.uploaded_at)'];
 
-            echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes, 'certificate'=>$certificate));
+            echo $this->twig->render('admin/customerProfile.twig', array('user'=>$user, 'classes'=>$classes, 'needToPay'=>$needToPay, 'certificate'=>$certificate));
         }
 
 //        2012-06-18 10:34:09
@@ -62,7 +73,11 @@ class UserController extends Controller
 
     public function login()
     {
-        echo $this->twig->render('login.twig');
+        if(isset($_SESSION['user'])){
+        redirect('/profile');
+        } else{
+            echo $this->twig->render('login.twig');
+        }
     }
 
     public function userLogin()
@@ -111,7 +126,7 @@ class UserController extends Controller
             $dateOfPayment = explode(" ", $db->getLastPaymentByUser($_SESSION['user']['id'])['date'])[0];
             $periodCoveredByPayment = daysDateDifference(date("Y-m-d"), $dateOfPayment);
 
-            if ($periodCoveredByPayment >= 31) {
+            if ($periodCoveredByPayment >= 31 || $periodCoveredByPayment == 0) {
                 $needToPay = true;
             } else {
                 $needToPay = false;
